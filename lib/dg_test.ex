@@ -25,6 +25,8 @@ defmodule DgTest do
 
   def parse_post(post) do
     %{
+      id: Map.get(post, "id"),
+      slug: Map.get(post, "slug"),
       title: Map.get(post, "title"),
       tags: parse_tags(post),
       authors: parse_authors(post)
