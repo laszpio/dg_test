@@ -36,7 +36,7 @@ defmodule DgTest do
   end
 
   def parse_tags(post) do
-
+    post |> Map.get("tags") |> Enum.map(&Map.get(&1, "name"))
   end
 
   def ghost_url do
