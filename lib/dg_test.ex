@@ -6,6 +6,9 @@ defmodule DgTest do
 
   def posts() do
     page = posts(1)
+
+    1..page_max(page)
+    |> Enum.map(&posts/1)
   end
 
   def posts(page) do
