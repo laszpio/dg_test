@@ -8,11 +8,14 @@ defmodule DgTest do
 
   ## Examples
 
-      iex> DgTest.hello()
-      :world
+      iex> DgTest.posts_url()
+      "https://ghost.local/api/v3/content/posts/?key=secret"
 
   """
-  def hello do
-    :world
+  def posts_url do
+    {:ok, url} = Application.fetch_env(:dg_test, :ghost_url)
+    {:ok, auth} = Application.fetch_env(:dg_test, :ghost_key)
+
+    "#{url}/posts/?key=#{auth}"
   end
 end
