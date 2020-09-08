@@ -1,26 +1,18 @@
 defmodule DgTest do
   use Tesla
 
-  plug Tesla.Middleware.BaseUrl, posts_url
+  plug Tesla.Middleware.BaseUrl, ghost_url()
   plug Tesla.Middleware.JSON
 
-  def posts do
-    get("")
+  def posts() do
+    get("/posts/", query: [key: ghost_key(), include: "authors,tags"])
   end
 
-  @doc """
-  Hello world.
+  def ghost_url do
+    Application.fetch_env!(:dg_test, :ghost_url)
+  end
 
-  ## Examples
-
-      iex> DgTest.posts_url()
-      "https://ghost.local/api/v3/content/posts/?key=secret"
-
-  """
-  def posts_url do
-    {:ok, url} = Application.fetch_env(:dg_test, :ghost_url)
-    {:ok, auth} = Application.fetch_env(:dg_test, :ghost_key)
-
-    "#{url}/posts/?key=#{auth}"
+  def ghost_key do
+    Application.fetch_env!(:dg_test, :ghost_key)
   end
 end
