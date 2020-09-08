@@ -7,7 +7,7 @@ defmodule DgTest do
   def posts() do
     page = posts(1)
 
-    1..1
+    1..page_max(page)
     |> Enum.map(&posts/1)
     |> Enum.map(&parse_posts/1)
     |> Enum.to_list()
@@ -29,7 +29,8 @@ defmodule DgTest do
       slug: Map.get(post, "slug"),
       title: Map.get(post, "title"),
       tags: parse_tags(post),
-      authors: parse_authors(post)
+      authors: parse_authors(post),
+      content: parse_content(post)
     }
   end
 
@@ -39,6 +40,10 @@ defmodule DgTest do
 
   def parse_tags(post) do
     post |> Map.get("tags") |> Enum.map(&Map.get(&1, "name"))
+  end
+
+  def parse_content(post) do
+    post |> Map.get("html") |> HtmlSanitizeEx.strip_tags()
   end
 
   def ghost_url do
