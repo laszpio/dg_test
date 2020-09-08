@@ -1,7 +1,12 @@
 defmodule DgTest do
-  @moduledoc """
-  Documentation for `DgTest`.
-  """
+  use Tesla
+
+  plug Tesla.Middleware.BaseUrl, posts_url
+  plug Tesla.Middleware.JSON
+
+  def posts do
+    get("")
+  end
 
   @doc """
   Hello world.
