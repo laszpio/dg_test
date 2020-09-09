@@ -22,3 +22,5 @@ erl_crash.dump
 # Ignore package tarball (built via "mix hex.build").
 dg_test-*.tar
 
+# Local configuration via env
+.env
