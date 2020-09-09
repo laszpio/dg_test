@@ -6,9 +6,9 @@ defmodule DgTest do
 
   def posts() do
     page = posts(1)
+    pages = [page | 2..page_max(page) |> Enum.map(&posts/1)]
 
-    1..page_max(page)
-    |> Enum.map(&posts/1)
+    pages
     |> Enum.map(&parse_posts/1)
     |> Enum.to_list()
     |> List.flatten()
