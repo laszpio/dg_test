@@ -24,7 +24,8 @@ defmodule DgTest.MixProject do
       {:tesla, "~> 1.3.0"},
       {:hackney, "~> 1.15.2"},
       {:jason, ">= 1.0.0"},
-      {:html_sanitize_ex, "~> 1.3.0-rc3"}
+      {:html_sanitize_ex, "~> 1.3.0-rc3"},
+      {:hui, "~> 0.1"}
     ]
   end
 end
