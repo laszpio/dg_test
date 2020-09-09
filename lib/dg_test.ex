@@ -4,6 +4,27 @@ defmodule DgTest do
   plug Tesla.Middleware.BaseUrl, ghost_url()
   plug Tesla.Middleware.JSON
 
+  def reindex_posts() do
+    Hui.update(posts_target(), posts())
+  end
+
+  def posts_target() do
+    headers = [{"Content-type", "application/json"}]
+    %Hui.URL{url: "http://localhost:8983/solr/posts", handler: "update", headers: headers}
+  end
+
+  def target_url() do
+    Enum.join([solr_url(), solr_core()], "/")
+  end
+
+  def solr_url() do
+    Application.fetch_env!(:dg_test, :solr_url)
+  end
+
+  def solr_core() do
+    Application.fetch_env!(:dg_test, :solr_core)
+  end
+
   def posts() do
     page = posts(1)
     pages = [page | 2..page_max(page) |> Enum.map(&posts/1)]
@@ -30,7 +51,7 @@ defmodule DgTest do
       title: Map.get(post, "title"),
       tags: parse_tags(post),
       authors: parse_authors(post),
-      content: parse_content(post)
+      html: parse_content(post)
     }
   end
 
