@@ -46,7 +46,7 @@ defmodule DgTest do
 
   def parse_post(post) do
     %{
-      id: Map.get(post, "id"),
+      id: parse_id(post),
       slug: Map.get(post, "slug"),
       title: Map.get(post, "title"),
       tags: parse_tags(post),
@@ -55,12 +55,22 @@ defmodule DgTest do
     }
   end
 
+  def parse_id(post) do
+    post |> Map.get("id") |> HtmlSanitizeEx.strip_tags()
+  end
+
   def parse_authors(post) do
-    post |> Map.get("authors") |> Enum.map(&Map.get(&1, "name"))
+    post
+    |> Map.get("authors")
+    |> Enum.map(&Map.get(&1, "name"))
+    |> Enum.map(&HtmlSanitizeEx.strip_tags(&1))
   end
 
   def parse_tags(post) do
-    post |> Map.get("tags") |> Enum.map(&Map.get(&1, "name"))
+    post
+    |> Map.get("tags")
+    |> Enum.map(&Map.get(&1, "name"))
+    |> Enum.map(&HtmlSanitizeEx.strip_tags(&1))
   end
 
   def parse_content(post) do
