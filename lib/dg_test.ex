@@ -29,9 +29,11 @@ defmodule DgTest do
 
   def posts() do
     page = posts(1)
-    pages = [page | 2..page_max(page) |> Enum.map(&posts/1)]
 
-    pages
+    case page_max(page) do
+      1 -> [page]
+      n -> [page | 2..page_max(page) |> Enum.map(&posts/1)]
+    end
     |> Enum.map(&parse_posts/1)
     |> Enum.to_list()
     |> List.flatten()
