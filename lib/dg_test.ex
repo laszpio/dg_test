@@ -3,6 +3,8 @@ defmodule DgTest do
 
   plug Tesla.Middleware.BaseUrl, ghost_url()
   plug Tesla.Middleware.JSON
+  plug Tesla.Middleware.Logger, log_level: :info
+
 
   def reindex_posts() do
     Hui.update(posts_target(), posts())
@@ -57,6 +59,14 @@ defmodule DgTest do
 
   def parse_id(post) do
     post |> Map.get("id") |> HtmlSanitizeEx.strip_tags()
+  end
+
+  def parse_slug(post) do
+    post |> Map.get("slug") |> HtmlSanitizeEx.strip_tags()
+  end
+
+  def parse_title(post) do
+    post |> Map.get("title") |> HtmlSanitizeEx.strip_tags()
   end
 
   def parse_authors(post) do
