@@ -1,4 +1,6 @@
 defmodule DgTest do
+  import HtmlSanitizeEx
+
   use Tesla
 
   plug Tesla.Middleware.BaseUrl, ghost_url()
@@ -60,33 +62,33 @@ defmodule DgTest do
   end
 
   def parse_id(post) do
-    post |> Map.get("id") |> HtmlSanitizeEx.strip_tags()
+    post |> Map.get("id") |> strip_tags()
   end
 
   def parse_slug(post) do
-    post |> Map.get("slug") |> HtmlSanitizeEx.strip_tags()
+    post |> Map.get("slug") |> strip_tags()
   end
 
   def parse_title(post) do
-    post |> Map.get("title") |> HtmlSanitizeEx.strip_tags()
+    post |> Map.get("title") |> strip_tags()
   end
 
   def parse_authors(post) do
     post
     |> Map.get("authors")
     |> Enum.map(&Map.get(&1, "name"))
-    |> Enum.map(&HtmlSanitizeEx.strip_tags(&1))
+    |> Enum.map(&strip_tags/1)
   end
 
   def parse_tags(post) do
     post
     |> Map.get("tags")
     |> Enum.map(&Map.get(&1, "name"))
-    |> Enum.map(&HtmlSanitizeEx.strip_tags(&1))
+    |> Enum.map(&strip_tags/1)
   end
 
   def parse_content(post) do
-    post |> Map.get("html") |> HtmlSanitizeEx.strip_tags()
+    post |> Map.get("html") |> strip_tags()
   end
 
   def ghost_url do
