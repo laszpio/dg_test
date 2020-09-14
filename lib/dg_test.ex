@@ -53,6 +53,7 @@ defmodule DgTest do
   def parse_post(post) do
     %{
       id: parse_id(post),
+      domain: "https://productmarketingalliance.com",
       slug: Map.get(post, "slug"),
       title: Map.get(post, "title"),
       tags: parse_tags(post),

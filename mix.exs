@@ -25,7 +25,8 @@ defmodule DgTest.MixProject do
       {:hackney, "~> 1.15.2"},
       {:jason, ">= 1.0.0"},
       {:html_sanitize_ex, "~> 1.3.0-rc3"},
-      {:hui, "~> 0.1"}
+      {:hui, "~> 0.1"},
+      {:flow, "~> 1.0"}
     ]
   end
 end
