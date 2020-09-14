@@ -34,7 +34,7 @@ defmodule DgTest do
 
     case page_max(page) do
       1 -> [page]
-      n -> [page | 2..page_max(page) |> Enum.map(&posts/1)]
+      n -> [page | 2..n |> Enum.map(&posts/1)]
     end
     |> Enum.map(&parse_posts/1)
     |> Enum.to_list()
