@@ -14,7 +14,7 @@ defmodule DgTest do
 
   def posts_target() do
     headers = [{"Content-type", "application/json"}]
-    %Hui.URL{url: "http://localhost:8983/solr/posts", handler: "update", headers: headers}
+    %Hui.URL{url: target_url(), handler: "update", headers: headers}
   end
 
   def target_url() do
