@@ -58,7 +58,8 @@ defmodule DgTest do
       title: Map.get(post, "title"),
       tags: parse_tags(post),
       authors: parse_authors(post),
-      content: parse_content(post)
+      content: parse_content(post),
+      created_at: parse_created_at(post)
     }
   end
 
@@ -90,6 +91,10 @@ defmodule DgTest do
 
   def parse_content(post) do
     post |> Map.get("html") |> strip_tags()
+  end
+
+  def parse_created_at(post) do
+    post |> Map.get("created_at") |> strip_tags()
   end
 
   def ghost_url do
