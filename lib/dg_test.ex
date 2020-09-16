@@ -58,7 +58,7 @@ defmodule DgTest do
       title: Map.get(post, "title"),
       tags: parse_tags(post),
       authors: parse_authors(post),
-      html: parse_content(post)
+      content: parse_content(post)
     }
   end
 
