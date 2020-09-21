@@ -3,10 +3,9 @@ defmodule DgTest do
 
   use Tesla
 
-  plug Tesla.Middleware.BaseUrl, ghost_url()
-  plug Tesla.Middleware.JSON
-  plug Tesla.Middleware.Logger, log_level: :info
-
+  plug(Tesla.Middleware.BaseUrl, ghost_url())
+  plug(Tesla.Middleware.JSON)
+  plug(Tesla.Middleware.Logger, log_level: :info)
 
   def reindex_posts() do
     Hui.update(posts_target(), posts())
