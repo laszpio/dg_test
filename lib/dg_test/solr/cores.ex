@@ -1,13 +1,15 @@
 defmodule DgTest.Solr.Cores do
+  alias DgTest.Solr.AdminApi
+
   def status do
-    case Tesla.get(client(), "/cores", action: "STATUS") do
+    case Tesla.get(AdminApi.client(), "/cores", action: "STATUS") do
       {:ok, %Tesla.Env{status: 200, body: body}} -> {:ok, body}
       {:error, msg} -> {:error, msg}
     end
   end
 
   def status(core) do
-    case Tesla.get(client(), "/cores", action: "STATUS", core: core) do
+    case Tesla.get(AdminApi.client(), "/cores", action: "STATUS", core: core) do
       {:ok, %Tesla.Env{status: 200, body: body}} -> {:ok, body}
       {:error, msg} -> {:error, msg}
     end
@@ -32,14 +34,5 @@ defmodule DgTest.Solr.Cores do
       {_, 0} -> {:ok, "Deleted core '#{core}'"}
       {_, 1} -> {:error, "Failed to delete core '#{core}'"}
     end
-  end
-
-  def client do
-    middleware = [
-      {Tesla.Middleware.BaseUrl, "#{DgTest.solr_url()}/admin"},
-      Tesla.Middleware.JSON
-    ]
-
-    Tesla.client(middleware)
   end
 end
