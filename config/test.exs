@@ -7,3 +7,5 @@ config :dg_test,
   solr_core: System.get_env("SOLR_CORE")
 
 config :logger, level: :info
+
+config :tesla, adapter: Tesla.Mock

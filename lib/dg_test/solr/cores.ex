@@ -7,14 +7,14 @@ defmodule DgTest.Solr.Cores do
 
   def status do
     case get("/cores", action: "STATUS") do
-      {:ok, %{status: 200, body: body}} -> {:ok, body}
+      {:ok, %Tesla.Env{status: 200, body: body}} -> {:ok, body}
       {:error, msg} -> {:error, msg}
     end
   end
 
   def status(core) do
     case get("/cores", action: "STATUS", core: core) do
-      {:ok, %{status: 200, body: body}} -> {:ok, body}
+      {:ok, %Tesla.Env{status: 200, body: body}} -> {:ok, body}
       {:error, msg} -> {:error, msg}
     end
   end
