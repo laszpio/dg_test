@@ -4,7 +4,6 @@ defmodule DgTest.Solr.CoresTest do
   import Mock
   import Tesla.Mock
 
-  alias DgTest.Solr
   alias DgTest.Solr.Cores
 
   doctest DgTest.Solr.Cores
@@ -29,13 +28,13 @@ defmodule DgTest.Solr.CoresTest do
 
   describe "status" do
     test "status/0" do
-      assert Cores.status == {:ok, @status}
+      assert Cores.status() == {:ok, @status}
     end
   end
 
   describe "cores" do
     test "cores/0 returns list of cores" do
-      assert Cores.cores == ["core_1", "core_2", "core_3"]
+      assert Cores.cores() == ["core_1", "core_2", "core_3"]
     end
   end
 
