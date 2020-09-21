@@ -6,9 +6,9 @@ defmodule DgTest.Solr.Cores do
   plug Tesla.Middleware.Logger, log_level: :info
 
   def status do
-    get("/cores", action: "STATUS")
-  end
-
-  def status(name) do
+    case get("/cores", action: "STATUS") do
+      {:error, msg} -> {:error, msg}
+      {:ok, resp} -> resp
+    end
   end
 end
