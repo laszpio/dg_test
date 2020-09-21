@@ -1,5 +1,5 @@
 defmodule DgTest.Solr.Cores do
-  use Tesla
+  use Tesla, only: [:get]
 
   plug Tesla.Middleware.BaseUrl, "#{DgTest.solr_url()}/admin"
   plug Tesla.Middleware.JSON
@@ -29,10 +29,14 @@ defmodule DgTest.Solr.Cores do
   def create(core) do
     case System.cmd("solr", ["create", "-c", core], stderr_to_stdout: true) do
       {output, 0} -> {:ok, "Created new core '#{core}'"}
-      {output, 1} -> {:error, "Core '#{core}' already exists"}
+      {_, 1} -> {:error, "Core '#{core}' already exists"}
     end
   end
 
   def delete(core) do
+    case System.cmd("solr", ["delete", "-c", core], stderr_to_stdout: true) do
+      {output, 0} -> {:ok, "Deleted core '#{core}'"}
+      {_, 1} -> {:error, "Failed to delete core '#{core}'"}
+    end
   end
 end
