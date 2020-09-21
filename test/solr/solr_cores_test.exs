@@ -27,8 +27,12 @@ defmodule DgTest.Solr.CoresTest do
   end
 
   describe "status" do
-    test "status/0" do
+    test "status no core name given" do
       assert Cores.status() == {:ok, @status}
+    end
+
+    test "status" do
+      assert Cores.status("core_1") == {:ok, @status}
     end
   end
 

@@ -1,14 +1,7 @@
 defmodule DgTest.Solr.Cores do
   alias DgTest.Solr.AdminApi
 
-  def status do
-    case Tesla.get(AdminApi.client(), "/cores", action: "STATUS") do
-      {:ok, %Tesla.Env{status: 200, body: body}} -> {:ok, body}
-      {:error, msg} -> {:error, msg}
-    end
-  end
-
-  def status(core) do
+  def status(core \\ nil) do
     case Tesla.get(AdminApi.client(), "/cores", action: "STATUS", core: core) do
       {:ok, %Tesla.Env{status: 200, body: body}} -> {:ok, body}
       {:error, msg} -> {:error, msg}
