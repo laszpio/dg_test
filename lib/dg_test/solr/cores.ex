@@ -7,8 +7,15 @@ defmodule DgTest.Solr.Cores do
 
   def status do
     case get("/cores", action: "STATUS") do
+      {:ok, %{status: 200, body: body}} -> body
       {:error, msg} -> {:error, msg}
-      {:ok, resp} -> resp
+    end
+  end
+
+  def status(core) do
+    case get("/cores", action: "STATUS", core: core) do
+      {:ok, %{status: 200, body: body}} -> body
+      {:error, msg} -> {:error, msg}
     end
   end
 end
