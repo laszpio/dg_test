@@ -25,4 +25,14 @@ defmodule DgTest.Solr.Cores do
   end
 
   def exists?(core), do: core in cores
+
+  def create(core) do
+    case System.cmd("solr", ["create", "-c", core], stderr_to_stdout: true) do
+      {output, 0} -> {:ok, "Created new core '#{core}'"}
+      {output, 1} -> {:error, "Core '#{core}' already exists"}
+    end
+  end
+
+  def delete(core) do
+  end
 end
