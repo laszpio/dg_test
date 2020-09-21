@@ -23,4 +23,6 @@ defmodule DgTest.Solr.Cores do
     {:ok, %{"status" => status}} = status()
     Map.keys(status)
   end
+
+  def exists?(core), do: core in cores
 end
