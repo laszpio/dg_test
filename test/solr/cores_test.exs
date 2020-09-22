@@ -33,7 +33,11 @@ defmodule DgTest.Solr.CoresTest do
       %{method: :get, url: @solr_url, query: [action: "STATUS", core: "nocore"]} ->
         %Tesla.Env{status: 200, body: @status_nocore}
 
-      %{method: :get, url: @solr_url, query: [action: "RENAME", core: "test_rename_a", other: "test_rename_b"]} ->
+      %{
+        method: :get,
+        url: @solr_url,
+        query: [action: "RENAME", core: "test_rename_a", other: "test_rename_b"]
+      } ->
         %Tesla.Env{status: 200, body: @status_core_1}
     end)
 
@@ -42,7 +46,13 @@ defmodule DgTest.Solr.CoresTest do
 
   describe "status" do
     test "status/0 returns status for all cores" do
-      assert Cores.status() == {:ok, @status}
+      assert Cores.status() ==
+               {:ok,
+                %{
+                  "core_1" => %{"name" => "core_1"},
+                  "core_2" => %{"name" => "core_2"},
+                  "core_3" => %{"name" => "core_3"}
+                }}
     end
 
     test "status/1 returns core status" do
