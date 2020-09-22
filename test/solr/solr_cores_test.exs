@@ -27,6 +27,9 @@ defmodule DgTest.Solr.CoresTest do
 
       %{method: :get, url: @solr_url, query: [action: "STATUS", core: "core_1"]} ->
         %Tesla.Env{status: 200, body: @status_core_1}
+
+      %{method: :get, url: @solr_url, query: [action: "RENAME", core: "test_rename_a", other: "test_rename_b"]} ->
+        %Tesla.Env{status: 200, body: @status_core_1}
     end)
 
     :ok
@@ -79,5 +82,8 @@ defmodule DgTest.Solr.CoresTest do
   end
 
   describe "rename" do
+    test "rename/2 renames a core" do
+      assert {:ok, _} = Cores.rename("test_rename_a", "test_rename_b")
+    end
   end
 end
