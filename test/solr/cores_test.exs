@@ -18,7 +18,9 @@ defmodule DgTest.Solr.CoresTest do
     }
   }
 
-  @status_core_1 %{"status" => %{"name" => "core1"}}
+  @status_core_1 %{"status" => %{"name" => "core_1"}}
+
+  @status_nocore %{"status" => %{"nocore" => %{}}}
 
   setup do
     mock(fn
@@ -28,6 +30,9 @@ defmodule DgTest.Solr.CoresTest do
       %{method: :get, url: @solr_url, query: [action: "STATUS", core: "core_1"]} ->
         %Tesla.Env{status: 200, body: @status_core_1}
 
+      %{method: :get, url: @solr_url, query: [action: "STATUS", core: "nocore"]} ->
+        %Tesla.Env{status: 200, body: @status_nocore}
+
       %{method: :get, url: @solr_url, query: [action: "RENAME", core: "test_rename_a", other: "test_rename_b"]} ->
         %Tesla.Env{status: 200, body: @status_core_1}
     end)
@@ -36,12 +41,16 @@ defmodule DgTest.Solr.CoresTest do
   end
 
   describe "status" do
-    test "status no core name given" do
+    test "status/0 returns status for all cores" do
       assert Cores.status() == {:ok, @status}
     end
 
-    test "status" do
-      assert Cores.status("core_1") == {:ok, @status_core_1}
+    test "status/1 returns core status" do
+      assert Cores.status("core_1") == {:ok, %{"name" => "core_1"}}
+    end
+
+    test "status/1 returns error when core doesn't exist" do
+      assert Cores.status("nocore") == {:error, "Core 'nocore' doesn't exist."}
     end
   end
 
