@@ -12,8 +12,15 @@ defmodule DgTest.Solr.Cores do
 
   def status(core) do
     case get(AdminApi.client(), "/cores", query: [action: "STATUS", core: core]) do
-      {:ok, %Tesla.Env{status: 200, body: body}} -> {:ok, body}
+      {:ok, %Tesla.Env{status: 200, body: body}} -> parse_status(body, core)
       {:error, msg} -> {:error, msg}
+    end
+  end
+
+  def parse_status(%{"status" => status}, core) do
+    case Map.get(status, core) == %{} do
+      true -> {:error, "Core '#{core}' doesn't exist."}
+      false -> {:ok, status}
     end
   end
 
