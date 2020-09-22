@@ -18,9 +18,15 @@ defmodule DgTest.Solr.CoresTest do
     }
   }
 
+  @status_core_1 %{"status" => %{"name" => "core1"}}
+
   setup do
     mock(fn
-      %{method: :get, url: @solr_url} -> %Tesla.Env{status: 200, body: @status}
+      %{method: :get, url: @solr_url, query: [action: "STATUS"]} ->
+        %Tesla.Env{status: 200, body: @status}
+
+      %{method: :get, url: @solr_url, query: [action: "STATUS", core: "core_1"]} ->
+        %Tesla.Env{status: 200, body: @status_core_1}
     end)
 
     :ok
@@ -32,7 +38,7 @@ defmodule DgTest.Solr.CoresTest do
     end
 
     test "status" do
-      assert Cores.status("core_1") == {:ok, @status}
+      assert Cores.status("core_1") == {:ok, @status_core_1}
     end
   end
 
@@ -70,5 +76,8 @@ defmodule DgTest.Solr.CoresTest do
         assert called(System.cmd("solr", ["delete", "-c", "test"]))
       end
     end
+  end
+
+  describe "rename" do
   end
 end
