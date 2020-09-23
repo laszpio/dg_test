@@ -3,7 +3,7 @@ defmodule DgTest.Solr.Schema do
 
   def info(core) do
     case get!(client(), "/#{core}/schema/") do
-      %Tesla.Env{status: 200, body: body} -> Jason.decode(body)
+      %Tesla.Env{status: 200, body: body} -> body
       %Tesla.Env{status: 404} -> {:error, "Core '#{core}' doesn't exist."}
     end
   end
@@ -18,8 +18,8 @@ defmodule DgTest.Solr.Schema do
     }
 
     case post!(client(), "/#{core}/schema", data) do
-      %Tesla.Env{status: 200, body: body} -> Jason.decode!(body) |> parse_response()
-      %Tesla.Env{status: 400, body: body} -> Jason.decode!(body) |> parse_response()
+      %Tesla.Env{status: 200, body: body} -> parse_response(body)
+      %Tesla.Env{status: 400, body: body} -> parse_response(body)
     end
   end
 
@@ -27,8 +27,8 @@ defmodule DgTest.Solr.Schema do
     data = %{"delete-field" => %{"name" => name}}
 
     case post!(client(), "/#{core}/schema", data) do
-      %Tesla.Env{status: 200, body: body} -> Jason.decode!(body) |> parse_response()
-      %Tesla.Env{status: 400, body: body} -> Jason.decode!(body) |> parse_response()
+      %Tesla.Env{status: 200, body: body} -> parse_response(body)
+      %Tesla.Env{status: 400, body: body} -> parse_response(body)
     end
   end
 
