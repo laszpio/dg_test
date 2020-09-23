@@ -8,11 +8,11 @@ defmodule DgTest.Solr.Schema do
     end
   end
 
-  def add_field(core, name) do
+  def add_field(core, name, type) do
     data = %{
       "add-field" => %{
         name: name,
-        type: "pdate",
+        type: type,
         stored: true
       }
     }
