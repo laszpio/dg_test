@@ -32,6 +32,20 @@ defmodule DgTest.Solr.Schema do
     end
   end
 
+  def add_copy_field(core, source, dest) do
+    data = %{
+      "add-copy-field" => %{
+        source: source,
+        dest: dest
+      }
+    }
+
+    case post!(client(), "/#{core}/schema", data) do
+      %Tesla.Env{status: 200, body: body} -> parse_response(body)
+      %Tesla.Env{status: 400, body: body} -> parse_response(body)
+    end
+  end
+
   def parse_response(%{"responseHeader" => %{"status" => 0}}) do
     :ok
   end
