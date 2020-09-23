@@ -20,6 +20,14 @@ defmodule DgTest.Solr.SchemaTest do
     }
   }
 
+  @schema_add_test_field %{
+    "add-field" => %{
+      name: "test",
+      type: "string",
+      stored: true
+    }
+  }
+
   setup do
     mock(fn
       %{method: :get, url: @schema_api} ->
@@ -28,6 +36,8 @@ defmodule DgTest.Solr.SchemaTest do
       %{method: :get, url: @nocore_api} ->
         %Tesla.Env{status: 404, body: ""}
 
+      %{method: :post, url: @schema_api, @schema_add_test_field} ->
+        %Tesla.Env{status: 200, body: ""}
     end)
 
     :ok
@@ -40,6 +50,12 @@ defmodule DgTest.Solr.SchemaTest do
 
     test "info/1 when core doesn't exist" do
       assert Schema.info("nocore") == {:error, "Core 'nocore' doesn't exist."}
+    end
+  end
+
+  describe "add_field" do
+    test "add_field/3" do
+      assert Schema.add_field("test", "test_field", "string") == :ok
     end
   end
 end
