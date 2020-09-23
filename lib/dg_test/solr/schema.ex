@@ -2,7 +2,7 @@ defmodule DgTest.Solr.Schema do
   use Tesla, only: [:get, :post]
 
   def info(core) do
-    case get!(client(), "/#{core}/schema/") do
+    case get!(client(), "/#{core}/schema") do
       %Tesla.Env{status: 200, body: body} -> body
       %Tesla.Env{status: 404} -> {:error, "Core '#{core}' doesn't exist."}
     end
