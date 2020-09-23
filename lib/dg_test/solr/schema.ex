@@ -18,13 +18,17 @@ defmodule DgTest.Solr.Schema do
     }
 
     case post!(client(), "/#{core}/schema", data) do
-      %Tesla.Env{status: 200, body: body} -> parse_response(body)
-      %Tesla.Env{status: 400, body: body} -> parse_response(body)
+      %Tesla.Env{status: 200, body: body} -> Jason.decode!(body) |> parse_response()
+      %Tesla.Env{status: 400, body: body} -> Jason.decode!(body) |> parse_response()
     end
   end
 
-  def parse_response(body) do
-    Jason.decode(body)
+  def parse_response(%{"responseHeader" => %{"status" => 0}}) do
+    {:ok, "Field added."}
+  end
+
+  def parse_response(%{"error" => %{"details" => details}}) do
+    {:error, details}
   end
 
   def client() do
