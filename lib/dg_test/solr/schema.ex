@@ -23,8 +23,17 @@ defmodule DgTest.Solr.Schema do
     end
   end
 
+  def remove_field(core, name) do
+    data = %{"delete-field" => %{"name" => name}}
+
+    case post!(client(), "/#{core}/schema", data) do
+      %Tesla.Env{status: 200, body: body} -> Jason.decode!(body) |> parse_response()
+      %Tesla.Env{status: 400, body: body} -> Jason.decode!(body) |> parse_response()
+    end
+  end
+
   def parse_response(%{"responseHeader" => %{"status" => 0}}) do
-    {:ok, "Field added."}
+    :ok
   end
 
   def parse_response(%{"error" => %{"details" => details}}) do
