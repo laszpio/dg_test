@@ -47,7 +47,7 @@ defmodule DgTest.Solr.Schema do
   def middleware() do
     [
       {Tesla.Middleware.BaseUrl, DgTest.solr_url()},
-      Tesla.Middleware.JSON,
+      {Tesla.Middleware.JSON, decode_content_types: ["text/plain"]},
       {Tesla.Middleware.Logger, log_level: :info}
     ]
   end
