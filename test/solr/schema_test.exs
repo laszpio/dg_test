@@ -28,6 +28,8 @@ defmodule DgTest.Solr.SchemaTest do
     }
   }
 
+  @schema_ok_response %{"responseHeader" => %{"status" => 0}}
+
   setup do
     mock(fn
       %{method: :get, url: @schema_api} ->
@@ -36,8 +38,8 @@ defmodule DgTest.Solr.SchemaTest do
       %{method: :get, url: @nocore_api} ->
         %Tesla.Env{status: 404, body: ""}
 
-      %{method: :post, url: @schema_api, @schema_add_test_field} ->
-        %Tesla.Env{status: 200, body: ""}
+      %{method: :post, url: @schema_api} ->
+        %Tesla.Env{status: 200, body: @schema_ok_response}
     end)
 
     :ok
@@ -56,6 +58,11 @@ defmodule DgTest.Solr.SchemaTest do
   describe "add_field" do
     test "add_field/3" do
       assert Schema.add_field("test", "test_field", "string") == :ok
+    end
+
+    test "add_field/3 when field already exist" do
+      assert Schema.add_field("test", "test_field", "string") == :ok
+      assert Schema.add_field("test", "test_field", "string") == :error
     end
   end
 end
