@@ -8,4 +8,4 @@ config :dg_test,
 
 config :logger, level: :info
 
-#config :tesla, adapter: Tesla.Mock
+# config :tesla, adapter: Tesla.Mock
