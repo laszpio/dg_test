@@ -15,8 +15,6 @@ defmodule DgTest.Solr.CoresTest do
   def cleanup_solr do
     Cores.delete("core_1")
     Cores.delete("core_2")
-    Cores.delete("org_core")
-    Cores.delete("org_core_new")
 
     :ok
   end
@@ -86,8 +84,20 @@ defmodule DgTest.Solr.CoresTest do
   end
 
   describe "rename" do
+    setup do
+      Cores.create("org_core")
+
+      on_exit(fn ->
+        Cores.delete("org_core")
+        Cores.delete("org_core_new")
+      end)
+
+      :ok
+    end
+
     test "rename/2 renames a core" do
-      assert {:ok, _} = Cores.create("org_core")
+      assert Cores.exists?("org_core")
+      refute Cores.exists?("org_core_new")
 
       assert {:ok, _} = Cores.rename("org_core", "org_core_new")
       assert Cores.exists?("org_core_new")
