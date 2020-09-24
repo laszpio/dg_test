@@ -99,7 +99,7 @@ defmodule DgTest.Solr.CoresTest do
       assert Cores.exists?("org_core")
       refute Cores.exists?("org_core_new")
 
-      assert {:ok, _} = Cores.rename("org_core", "org_core_new")
+      assert Cores.rename("org_core", "org_core_new")
       assert Cores.exists?("org_core_new")
       refute Cores.exists?("org_core")
 

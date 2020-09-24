@@ -53,7 +53,7 @@ defmodule DgTest.Solr.Cores do
     query = [action: "RENAME", core: core, other: other]
 
     case get(AdminApi.client(), "/cores", query: query) do
-      {:ok, %Tesla.Env{status: 200, body: body}} -> {:ok, body}
+      {:ok, %Tesla.Env{status: 200, body: _}} -> :ok
       {:error, msg} -> {:error, msg}
     end
   end
