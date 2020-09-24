@@ -1,27 +1,14 @@
 defmodule DgTest.Solr.SchemaTest do
-  use ExUnit.Case, async: true
+  use ExUnit.Case
 
   alias DgTest.Solr.Schema
   alias DgTest.Solr.Cores
-
-  @schema_add_test_field %{
-    "add-field" => %{
-      name: "test",
-      type: "string",
-      stored: true
-    }
-  }
-
-  @schema_ok_response %{
-    "responseHeader" => %{
-      "status" => 0
-    }
-  }
 
   def prepare_solr do
     case Cores.exists?("test") do
       false ->
         Cores.create("test")
+
       true ->
         Cores.delete("test")
         Cores.create("test")
@@ -51,6 +38,7 @@ defmodule DgTest.Solr.SchemaTest do
 
     test "add_field/3 when field already exist" do
       assert Schema.add_field("test", "test_field", "string") == :ok
+
       assert Schema.add_field("test", "test_field", "string") ==
                {:error,
                 [
@@ -92,6 +80,22 @@ defmodule DgTest.Solr.SchemaTest do
       assert Schema.add_field("test", "test_other", "string") == :ok
 
       assert Schema.add_copy_field("test", "test_field", "test_other") == :ok
+    end
+
+    test "add_copy_field/3 fails when source field doesn't exist" do
+      assert Schema.add_copy_field("test", "test_field", "test_other") ==
+               {:error,
+                [
+                  %{
+                    "add-copy-field" => %{
+                      "source" => "test_field",
+                      "dest" => "test_other"
+                    },
+                    "errorMessages" => [
+                      "copyField source :'test_field' is not a glob and doesn't match any explicit field or dynamicField.\n"
+                    ]
+                  }
+                ]}
     end
   end
 end
