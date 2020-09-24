@@ -12,8 +12,17 @@ defmodule DgTest.Solr.CoresTest do
     :ok
   end
 
+  def cleanup_solr do
+    Cores.delete("core_1")
+    Cores.delete("core_2")
+
+    :ok
+  end
+
   setup_all do
     prepare_solr()
+
+    on_exit(fn -> cleanup_solr() end)
   end
 
   describe "status" do
@@ -40,7 +49,6 @@ defmodule DgTest.Solr.CoresTest do
 
       assert "core_1" in cores
       assert "core_2" in cores
-      assert "core_3" in cores
     end
   end
 
@@ -48,7 +56,6 @@ defmodule DgTest.Solr.CoresTest do
     test "exists?/1 returns true when core exists" do
       assert Cores.exists?("core_1")
       assert Cores.exists?("core_2")
-      assert Cores.exists?("core_3")
     end
 
     test "exists?/1 returns false when core doesn't exist" do
