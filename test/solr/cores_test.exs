@@ -15,16 +15,12 @@ defmodule DgTest.Solr.CoresTest do
   setup_all do
     prepare_solr()
   end
+
   describe "status" do
-    @tag :skip
     test "status/0 returns status for all cores" do
-      assert Cores.status() ==
-               {:ok,
-                %{
-                  "core_1" => %{"name" => "core_1"},
-                  "core_2" => %{"name" => "core_2"},
-                  "core_3" => %{"name" => "core_3"}
-                }}
+      assert {:ok, status} = Cores.status()
+      assert status["core_1"]
+      assert status["core_2"]
     end
 
     @tag :skip
