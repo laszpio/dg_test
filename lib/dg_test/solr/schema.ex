@@ -9,7 +9,7 @@ defmodule DgTest.Solr.Schema do
   end
 
   def add_field(core, name, type) do
-    data = %{
+    change = %{
       "add-field" => %{
         name: name,
         type: type,
@@ -17,44 +17,39 @@ defmodule DgTest.Solr.Schema do
       }
     }
 
-    case post!(client(), "/#{core}/schema", data) do
-      %Tesla.Env{status: 200, body: body} -> parse_response(body)
-      %Tesla.Env{status: 400, body: body} -> parse_response(body)
-    end
+    apply_change(core, change)
   end
 
   def remove_field(core, name) do
-    data = %{"delete-field" => %{"name" => name}}
+    change = %{"delete-field" => %{"name" => name}}
 
-    case post!(client(), "/#{core}/schema", data) do
-      %Tesla.Env{status: 200, body: body} -> parse_response(body)
-      %Tesla.Env{status: 400, body: body} -> parse_response(body)
-    end
+    apply_change(core, change)
   end
 
   def add_copy_field(core, source, dest) do
-    data = %{
+    change = %{
       "add-copy-field" => %{
         source: source,
         dest: dest
       }
     }
 
-    case post!(client(), "/#{core}/schema", data) do
-      %Tesla.Env{status: 200, body: body} -> parse_response(body)
-      %Tesla.Env{status: 400, body: body} -> parse_response(body)
-    end
+    apply_change(core, change)
   end
 
   def remove_copy_field(core, source, dest) do
-    data = %{
+    change = %{
       "add-copy-field" => %{
         source: source,
         dest: dest
       }
     }
 
-    case post!(client(), "/#{core}/schema", data) do
+    apply_change(core, change)
+  end
+
+  def apply_change(core, change) do
+    case post!(client(), "/#{core}/schema", change) do
       %Tesla.Env{status: 200, body: body} -> parse_response(body)
       %Tesla.Env{status: 400, body: body} -> parse_response(body)
     end
