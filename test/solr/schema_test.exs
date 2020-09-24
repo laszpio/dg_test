@@ -18,34 +18,6 @@ defmodule DgTest.Solr.SchemaTest do
     }
   }
 
-  @schema_add_test_field_fail %{
-    "error" => %{
-      "details" => [
-        %{
-          "add-field" => %{
-            "name" => "test_field",
-            "stored" => true,
-            "type" => "string"
-          },
-          "errorMessages" => ["Field 'test_field' already exists.\n"]
-        }
-      ]
-    }
-  }
-
-  @schema_remove_test_field_fail %{
-    "error" => %{
-      "details" => [
-        %{
-          "delete-field" => %{"name" => "test_field"},
-          "errorMessages" => [
-            "The field 'test_field' is not present in this schema, and so cannot be deleted.\n"
-          ]
-        }
-      ]
-    }
-  }
-
   def prepare_solr do
     case Cores.exists?("test") do
       false ->
