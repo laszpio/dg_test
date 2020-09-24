@@ -30,7 +30,7 @@ defmodule DgTest.Solr.SchemaTest do
     :ok
   end
 
-  setup_all do
+  setup do
     prepare_solr()
   end
 
@@ -49,10 +49,8 @@ defmodule DgTest.Solr.SchemaTest do
       assert Schema.add_field("test", "test_field", "string") == :ok
     end
 
-    @tag :skip
     test "add_field/3 when field already exist" do
       assert Schema.add_field("test", "test_field", "string") == :ok
-
       assert Schema.add_field("test", "test_field", "string") ==
                {:error,
                 [
