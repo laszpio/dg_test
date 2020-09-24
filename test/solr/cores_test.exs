@@ -29,7 +29,6 @@ defmodule DgTest.Solr.CoresTest do
       assert Map.keys(status) == ["config", "dataDir", "index", "instanceDir", "name", "schema", "startTime", "uptime"]
     end
 
-    @tag :skip
     test "status/1 returns error when core doesn't exist" do
       assert Cores.status("nocore") == {:error, "Core 'nocore' doesn't exist."}
     end
