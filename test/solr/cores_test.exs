@@ -35,7 +35,17 @@ defmodule DgTest.Solr.CoresTest do
     test "status/1 returns core status" do
       assert {:ok, %{"core_1" => status}} = Cores.status("core_1")
       assert status["name"] == "core_1"
-      assert Map.keys(status) == ["config", "dataDir", "index", "instanceDir", "name", "schema", "startTime", "uptime"]
+
+      assert Map.keys(status) == [
+               "config",
+               "dataDir",
+               "index",
+               "instanceDir",
+               "name",
+               "schema",
+               "startTime",
+               "uptime"
+             ]
     end
 
     test "status/1 returns error when core doesn't exist" do

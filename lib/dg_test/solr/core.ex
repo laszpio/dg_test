@@ -1,6 +1,4 @@
 defmodule DgTest.Solr.Core do
-  import DgTest.Solr.Utils
-
   defstruct [
     :name,
     :schema,
