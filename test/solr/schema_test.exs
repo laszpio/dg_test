@@ -66,7 +66,7 @@ defmodule DgTest.Solr.SchemaTest do
   end
 
   describe "add_field" do
-    test "add_field/3" do
+    test "add_field/3 add nonexisting field" do
       assert Schema.add_field("test", "test_field", "string") == :ok
     end
 
@@ -78,6 +78,12 @@ defmodule DgTest.Solr.SchemaTest do
       end)
 
       assert Schema.add_field("test", "test_field", "string") == {:error, []}
+    end
+  end
+
+  describe "remove_field" do
+    test "remove_field/2 remove existin field" do
+      assert Schema.remove_field("test", "test_field") == :ok
     end
   end
 end
