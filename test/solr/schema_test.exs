@@ -40,6 +40,17 @@ defmodule DgTest.Solr.SchemaTest do
     }
   }
 
+  @schema_remove_test_field_fail %{
+    "error" => %{
+      "details" => [
+        %{
+          "delete-field" => %{"name" => "test_field"},
+          "errorMessages" => ["The field 'test_field' is not present in this schema, and so cannot be deleted.\n"]
+        }
+      ]
+    }
+  }
+
   setup do
     mock(fn
       %{method: :get, url: @schema_api} ->
@@ -82,8 +93,23 @@ defmodule DgTest.Solr.SchemaTest do
   end
 
   describe "remove_field" do
-    test "remove_field/2 remove existin field" do
+    test "remove_field/2 remove existing field" do
       assert Schema.remove_field("test", "test_field") == :ok
+    end
+
+    test "remove_field/2 field doesn't exist" do
+      assert Schema.remove_field("test", "test_field") == :ok
+
+      mock(fn %{method: :post, url: @schema_api} ->
+          %Tesla.Env{status: 400, body: @schema_remove_test_field_fail}
+      end)
+
+      assert Schema.remove_field("test", "test_field") == {:error, [
+        %{
+          "delete-field" => %{"name" => "test_field"},
+          "errorMessages" => ["The field 'test_field' is not present in this schema, and so cannot be deleted.\n"]
+        }
+      ]}
     end
   end
 end
