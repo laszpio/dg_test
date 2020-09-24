@@ -34,9 +34,18 @@ defmodule DgTest.Solr.SchemaTest do
     }
   }
 
-  @schema_fail_response %{
+  @schema_add_test_field_fail %{
     "error" => %{
-      "details" => []
+      "details" => [
+        %{
+          "add-field" => %{
+            "name" => "test_field",
+            "stored" => true,
+            "type" => "string"
+          },
+          "errorMessages" => ["Field 'test_field' already exists.\n"]
+        }
+      ]
     }
   }
 
@@ -45,7 +54,9 @@ defmodule DgTest.Solr.SchemaTest do
       "details" => [
         %{
           "delete-field" => %{"name" => "test_field"},
-          "errorMessages" => ["The field 'test_field' is not present in this schema, and so cannot be deleted.\n"]
+          "errorMessages" => [
+            "The field 'test_field' is not present in this schema, and so cannot be deleted.\n"
+          ]
         }
       ]
     }
@@ -85,10 +96,21 @@ defmodule DgTest.Solr.SchemaTest do
       assert Schema.add_field("test", "test_field", "string") == :ok
 
       mock(fn %{method: :post, url: @schema_api} ->
-          %Tesla.Env{status: 400, body: @schema_fail_response}
+        %Tesla.Env{status: 400, body: @schema_add_test_field_fail}
       end)
 
-      assert Schema.add_field("test", "test_field", "string") == {:error, []}
+      assert Schema.add_field("test", "test_field", "string") ==
+               {:error,
+                [
+                  %{
+                    "add-field" => %{
+                      "name" => "test_field",
+                      "stored" => true,
+                      "type" => "string"
+                    },
+                    "errorMessages" => ["Field 'test_field' already exists.\n"]
+                  }
+                ]}
     end
   end
 
@@ -101,15 +123,19 @@ defmodule DgTest.Solr.SchemaTest do
       assert Schema.remove_field("test", "test_field") == :ok
 
       mock(fn %{method: :post, url: @schema_api} ->
-          %Tesla.Env{status: 400, body: @schema_remove_test_field_fail}
+        %Tesla.Env{status: 400, body: @schema_remove_test_field_fail}
       end)
 
-      assert Schema.remove_field("test", "test_field") == {:error, [
-        %{
-          "delete-field" => %{"name" => "test_field"},
-          "errorMessages" => ["The field 'test_field' is not present in this schema, and so cannot be deleted.\n"]
-        }
-      ]}
+      assert Schema.remove_field("test", "test_field") ==
+               {:error,
+                [
+                  %{
+                    "delete-field" => %{"name" => "test_field"},
+                    "errorMessages" => [
+                      "The field 'test_field' is not present in this schema, and so cannot be deleted.\n"
+                    ]
+                  }
+                ]}
     end
   end
 end
