@@ -28,7 +28,17 @@ defmodule DgTest.Solr.SchemaTest do
     }
   }
 
-  @schema_ok_response %{"responseHeader" => %{"status" => 0}}
+  @schema_ok_response %{
+    "responseHeader" => %{
+      "status" => 0
+    }
+  }
+
+  @schema_fail_response %{
+    "error" => %{
+      "details" => []
+    }
+  }
 
   setup do
     mock(fn
@@ -62,7 +72,12 @@ defmodule DgTest.Solr.SchemaTest do
 
     test "add_field/3 when field already exist" do
       assert Schema.add_field("test", "test_field", "string") == :ok
-      assert Schema.add_field("test", "test_field", "string") == :error
+
+      mock(fn %{method: :post, url: @schema_api} ->
+          %Tesla.Env{status: 400, body: @schema_fail_response}
+      end)
+
+      assert Schema.add_field("test", "test_field", "string") == {:error, []}
     end
   end
 end
