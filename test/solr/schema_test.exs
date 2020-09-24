@@ -1,24 +1,8 @@
 defmodule DgTest.Solr.SchemaTest do
   use ExUnit.Case, async: true
 
-  import Tesla.Mock
-
   alias DgTest.Solr.Schema
   alias DgTest.Solr.Cores
-
-  doctest DgTest.Solr.Schema
-
-  @nocore_api "http://localhost:8983/solr/nocore/schema"
-
-  @schema_api "http://localhost:8983/solr/test/schema"
-
-  @schema_info %{
-    "schema" => %{
-      "copyFields" => [],
-      "dynamicFields" => [],
-      "fields" => []
-    }
-  }
 
   @schema_add_test_field %{
     "add-field" => %{
@@ -70,6 +54,8 @@ defmodule DgTest.Solr.SchemaTest do
         Cores.delete("test")
         Cores.create("test")
     end
+
+    :ok
   end
 
   setup_all do
@@ -78,7 +64,7 @@ defmodule DgTest.Solr.SchemaTest do
 
   describe "info" do
     test "info/1" do
-      assert Schema.info("test") == @schema_info
+      assert %{} = Schema.info("test")
     end
 
     test "info/1 when core doesn't exist" do
@@ -86,18 +72,15 @@ defmodule DgTest.Solr.SchemaTest do
     end
   end
 
-  @tag :skip
   describe "add_field" do
+    @tag :skip
     test "add_field/3 add nonexisting field" do
       assert Schema.add_field("test", "test_field", "string") == :ok
     end
 
+    @tag :skip
     test "add_field/3 when field already exist" do
       assert Schema.add_field("test", "test_field", "string") == :ok
-
-      mock(fn %{method: :post, url: @schema_api} ->
-        %Tesla.Env{status: 400, body: @schema_add_test_field_fail}
-      end)
 
       assert Schema.add_field("test", "test_field", "string") ==
                {:error,
@@ -114,18 +97,15 @@ defmodule DgTest.Solr.SchemaTest do
     end
   end
 
-  @tag :skip
   describe "remove_field" do
+    @tag :skip
     test "remove_field/2 remove existing field" do
       assert Schema.remove_field("test", "test_field") == :ok
     end
 
+    @tag :skip
     test "remove_field/2 field doesn't exist" do
       assert Schema.remove_field("test", "test_field") == :ok
-
-      mock(fn %{method: :post, url: @schema_api} ->
-        %Tesla.Env{status: 400, body: @schema_remove_test_field_fail}
-      end)
 
       assert Schema.remove_field("test", "test_field") ==
                {:error,
@@ -140,8 +120,8 @@ defmodule DgTest.Solr.SchemaTest do
     end
   end
 
-  @tag :skip
   describe "add_copy_field" do
+    @tag :skip
     test "add_copy_field/3" do
       assert Schema.add_copy_field("test", "test_field", "test_other") == :ok
     end
