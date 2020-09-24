@@ -5,6 +5,16 @@ defmodule DgTest.Solr.CoresTest do
 
   alias DgTest.Solr.Cores
 
+  def prepare_solr do
+    Cores.create("core_1")
+    Cores.create("core_2")
+
+    :ok
+  end
+
+  setup_all do
+    prepare_solr()
+  end
   describe "status" do
     @tag :skip
     test "status/0 returns status for all cores" do
