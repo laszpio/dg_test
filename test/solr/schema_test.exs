@@ -137,4 +137,10 @@ defmodule DgTest.Solr.SchemaTest do
                 ]}
     end
   end
+
+  describe "add_copy_field" do
+    test "add_copy_field/3" do
+      assert Schema.add_copy_field("test", "test_field", "test_other") == :ok
+    end
+  end
 end
