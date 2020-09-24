@@ -57,7 +57,6 @@ defmodule DgTest.Solr.CoresTest do
   end
 
   describe "create" do
-    @tag :skip
     test "create/1 creates new core using command interface" do
       with_mock System,
         cmd: fn "solr", ["create", "-c", "test"], stderr_to_stdout: true -> {"", 0} end do
