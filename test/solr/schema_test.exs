@@ -45,7 +45,6 @@ defmodule DgTest.Solr.SchemaTest do
   end
 
   describe "add_field" do
-    @tag :skip
     test "add_field/3 add nonexisting field" do
       assert Schema.add_field("test", "test_field", "string") == :ok
     end
