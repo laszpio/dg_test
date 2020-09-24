@@ -45,14 +45,12 @@ defmodule DgTest.Solr.CoresTest do
   end
 
   describe "exists?" do
-    @tag :skip
     test "exists?/1 returns true when core exists" do
       assert Cores.exists?("core_1")
       assert Cores.exists?("core_2")
       assert Cores.exists?("core_3")
     end
 
-    @tag :skip
     test "exists?/1 returns false when core doesn't exist" do
       refute Cores.exists?("no_core")
     end
