@@ -67,8 +67,8 @@ defmodule DgTest.Solr.SchemaTest do
   end
 
   describe "remove_field" do
-    @tag :skip
     test "remove_field/2 remove existing field" do
+      assert Schema.add_field("test", "test_field", "string") == :ok
       assert Schema.remove_field("test", "test_field") == :ok
     end
 
