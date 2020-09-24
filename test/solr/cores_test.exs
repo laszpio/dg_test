@@ -23,9 +23,10 @@ defmodule DgTest.Solr.CoresTest do
       assert status["core_2"]
     end
 
-    @tag :skip
     test "status/1 returns core status" do
-      assert Cores.status("core_1") == {:ok, %{"name" => "core_1"}}
+      assert {:ok, %{"core_1" => status}} = Cores.status("core_1")
+      assert status["name"] == "core_1"
+      assert Map.keys(status) == ["config", "dataDir", "index", "instanceDir", "name", "schema", "startTime", "uptime"]
     end
 
     @tag :skip
