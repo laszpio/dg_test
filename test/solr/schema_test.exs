@@ -4,6 +4,7 @@ defmodule DgTest.Solr.SchemaTest do
   import Tesla.Mock
 
   alias DgTest.Solr.Schema
+  alias DgTest.Solr.Cores
 
   doctest DgTest.Solr.Schema
 
@@ -61,26 +62,21 @@ defmodule DgTest.Solr.SchemaTest do
     }
   }
 
-  def fake_solr_api do
-    mock(fn
-      %{method: :get, url: @schema_api} ->
-        %Tesla.Env{status: 200, body: @schema_info}
+  def prepare_solr do
+    case Cores.exists?("test") do
+      false ->
+        Cores.create("test")
+      true ->
+        Cores.delete("test")
+        Cores.create("test")
+    end
+  end
 
-      %{method: :get, url: @nocore_api} ->
-        %Tesla.Env{status: 404, body: ""}
-
-      %{method: :post, url: @schema_api} ->
-        %Tesla.Env{status: 200, body: @schema_ok_response}
-    end)
-
-    :ok
+  setup_all do
+    prepare_solr()
   end
 
   describe "info" do
-    setup do
-      fake_solr_api
-    end
-
     test "info/1" do
       assert Schema.info("test") == @schema_info
     end
@@ -90,11 +86,8 @@ defmodule DgTest.Solr.SchemaTest do
     end
   end
 
+  @tag :skip
   describe "add_field" do
-    setup do
-      fake_solr_api
-    end
-
     test "add_field/3 add nonexisting field" do
       assert Schema.add_field("test", "test_field", "string") == :ok
     end
@@ -121,11 +114,8 @@ defmodule DgTest.Solr.SchemaTest do
     end
   end
 
+  @tag :skip
   describe "remove_field" do
-    setup do
-      fake_solr_api
-    end
-
     test "remove_field/2 remove existing field" do
       assert Schema.remove_field("test", "test_field") == :ok
     end
@@ -150,11 +140,8 @@ defmodule DgTest.Solr.SchemaTest do
     end
   end
 
+  @tag :skip
   describe "add_copy_field" do
-    setup do
-      fake_solr_api
-    end
-
     test "add_copy_field/3" do
       assert Schema.add_copy_field("test", "test_field", "test_other") == :ok
     end
