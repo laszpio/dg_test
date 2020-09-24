@@ -35,9 +35,12 @@ defmodule DgTest.Solr.CoresTest do
   end
 
   describe "cores" do
-    @tag :skip
     test "cores/0 returns list of cores" do
-      assert Cores.cores() == ["core_1", "core_2", "core_3"]
+      cores = Cores.cores()
+
+      assert "core_1" in cores
+      assert "core_2" in cores
+      assert "core_3" in cores
     end
   end
 
