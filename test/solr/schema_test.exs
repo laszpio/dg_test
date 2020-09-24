@@ -4,20 +4,22 @@ defmodule DgTest.Solr.SchemaTest do
   alias DgTest.Solr.Schema
   alias DgTest.Solr.Cores
 
+  @core "test_schema_test"
+
   def prepare_solr do
-    case Cores.exists?("test") do
+    case Cores.exists?(@core) do
       false ->
-        Cores.create("test")
+        Cores.create(@core)
 
       true ->
-        Cores.delete("test")
-        Cores.create("test")
+        Cores.delete(@core)
+        Cores.create(@core)
     end
     :ok
   end
 
   def cleanup_solr do
-    Cores.delete("test")
+    Cores.delete(@core)
     :ok
   end
 
@@ -29,7 +31,7 @@ defmodule DgTest.Solr.SchemaTest do
 
   describe "info" do
     test "info/1" do
-      assert {:ok, info} = Schema.info("test")
+      assert {:ok, info} = Schema.info(@core)
 
       assert Map.keys(info) == [
                "copyFields",
@@ -49,13 +51,13 @@ defmodule DgTest.Solr.SchemaTest do
 
   describe "add_field" do
     test "add_field/3 add nonexisting field" do
-      assert Schema.add_field("test", "test_field_a", "string") == :ok
+      assert Schema.add_field(@core, "test_field_a", "string") == :ok
     end
 
     test "add_field/3 when field already exist" do
-      assert Schema.add_field("test", "test_field_b", "string") == :ok
+      assert Schema.add_field(@core, "test_field_b", "string") == :ok
 
-      assert Schema.add_field("test", "test_field_b", "string") ==
+      assert Schema.add_field(@core, "test_field_b", "string") ==
                {:error,
                 [
                   %{
@@ -72,12 +74,12 @@ defmodule DgTest.Solr.SchemaTest do
 
   describe "remove_field" do
     test "remove_field/2 remove existing field" do
-      assert Schema.add_field("test", "test_field_c", "string") == :ok
-      assert Schema.remove_field("test", "test_field_c") == :ok
+      assert Schema.add_field(@core, "test_field_c", "string") == :ok
+      assert Schema.remove_field(@core, "test_field_c") == :ok
     end
 
     test "remove_field/2 field doesn't exist" do
-      assert Schema.remove_field("test", "test_field_c") ==
+      assert Schema.remove_field(@core, "test_field_c") ==
                {:error,
                 [
                   %{
@@ -92,14 +94,14 @@ defmodule DgTest.Solr.SchemaTest do
 
   describe "add_copy_field" do
     test "add_copy_field/3" do
-      assert Schema.add_field("test", "test_field", "string") == :ok
-      assert Schema.add_field("test", "test_other", "string") == :ok
+      assert Schema.add_field(@core, "test_field", "string") == :ok
+      assert Schema.add_field(@core, "test_other", "string") == :ok
 
-      assert Schema.add_copy_field("test", "test_field", "test_other") == :ok
+      assert Schema.add_copy_field(@core, "test_field", "test_other") == :ok
     end
 
     test "add_copy_field/3 fails when source field doesn't exist" do
-      assert Schema.add_copy_field("test", "no_test_field", "test_other") ==
+      assert Schema.add_copy_field(@core, "no_test_field", "test_other") ==
                {:error,
                 [
                   %{
