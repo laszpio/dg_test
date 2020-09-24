@@ -1,5 +1,5 @@
 defmodule DgTest.Solr.SchemaTest do
-  use ExUnit.Case
+  use ExUnit.Case, async: true
 
   alias DgTest.Solr.Schema
   alias DgTest.Solr.Cores
@@ -13,12 +13,18 @@ defmodule DgTest.Solr.SchemaTest do
         Cores.delete("test")
         Cores.create("test")
     end
-
     :ok
   end
 
-  setup do
+  def cleanup_solr do
+    Cores.delete("test")
+    :ok
+  end
+
+  setup_all do
     prepare_solr()
+    on_exit(fn -> cleanup_solr() end)
+    :ok
   end
 
   describe "info" do
@@ -43,22 +49,22 @@ defmodule DgTest.Solr.SchemaTest do
 
   describe "add_field" do
     test "add_field/3 add nonexisting field" do
-      assert Schema.add_field("test", "test_field", "string") == :ok
+      assert Schema.add_field("test", "test_field_a", "string") == :ok
     end
 
     test "add_field/3 when field already exist" do
-      assert Schema.add_field("test", "test_field", "string") == :ok
+      assert Schema.add_field("test", "test_field_b", "string") == :ok
 
-      assert Schema.add_field("test", "test_field", "string") ==
+      assert Schema.add_field("test", "test_field_b", "string") ==
                {:error,
                 [
                   %{
                     "add-field" => %{
-                      "name" => "test_field",
+                      "name" => "test_field_b",
                       "stored" => true,
                       "type" => "string"
                     },
-                    "errorMessages" => ["Field 'test_field' already exists.\n"]
+                    "errorMessages" => ["Field 'test_field_b' already exists.\n"]
                   }
                 ]}
     end
@@ -66,18 +72,18 @@ defmodule DgTest.Solr.SchemaTest do
 
   describe "remove_field" do
     test "remove_field/2 remove existing field" do
-      assert Schema.add_field("test", "test_field", "string") == :ok
-      assert Schema.remove_field("test", "test_field") == :ok
+      assert Schema.add_field("test", "test_field_c", "string") == :ok
+      assert Schema.remove_field("test", "test_field_c") == :ok
     end
 
     test "remove_field/2 field doesn't exist" do
-      assert Schema.remove_field("test", "test_field") ==
+      assert Schema.remove_field("test", "test_field_c") ==
                {:error,
                 [
                   %{
-                    "delete-field" => %{"name" => "test_field"},
+                    "delete-field" => %{"name" => "test_field_c"},
                     "errorMessages" => [
-                      "The field 'test_field' is not present in this schema, and so cannot be deleted.\n"
+                      "The field 'test_field_c' is not present in this schema, and so cannot be deleted.\n"
                     ]
                   }
                 ]}
@@ -93,16 +99,16 @@ defmodule DgTest.Solr.SchemaTest do
     end
 
     test "add_copy_field/3 fails when source field doesn't exist" do
-      assert Schema.add_copy_field("test", "test_field", "test_other") ==
+      assert Schema.add_copy_field("test", "no_test_field", "test_other") ==
                {:error,
                 [
                   %{
                     "add-copy-field" => %{
-                      "source" => "test_field",
+                      "source" => "no_test_field",
                       "dest" => "test_other"
                     },
                     "errorMessages" => [
-                      "copyField source :'test_field' is not a glob and doesn't match any explicit field or dynamicField.\n"
+                      "copyField source :'no_test_field' is not a glob and doesn't match any explicit field or dynamicField.\n"
                     ]
                   }
                 ]}
