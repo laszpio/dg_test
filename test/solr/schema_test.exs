@@ -72,10 +72,7 @@ defmodule DgTest.Solr.SchemaTest do
       assert Schema.remove_field("test", "test_field") == :ok
     end
 
-    @tag :skip
     test "remove_field/2 field doesn't exist" do
-      assert Schema.remove_field("test", "test_field") == :ok
-
       assert Schema.remove_field("test", "test_field") ==
                {:error,
                 [
@@ -90,8 +87,10 @@ defmodule DgTest.Solr.SchemaTest do
   end
 
   describe "add_copy_field" do
-    @tag :skip
     test "add_copy_field/3" do
+      assert Schema.add_field("test", "test_field", "string") == :ok
+      assert Schema.add_field("test", "test_other", "string") == :ok
+
       assert Schema.add_copy_field("test", "test_field", "test_other") == :ok
     end
   end
