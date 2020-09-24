@@ -3,9 +3,13 @@ defmodule DgTest.Solr.Schema do
 
   def info(core) do
     case get!(client(), "/#{core}/schema") do
-      %Tesla.Env{status: 200, body: body} -> body
+      %Tesla.Env{status: 200, body: body} -> {:ok, parse_info(body)}
       %Tesla.Env{status: 404} -> {:error, "Core '#{core}' doesn't exist."}
     end
+  end
+
+  def parse_info(%{"schema" => schema}) do
+    schema
   end
 
   def add_field(core, name, type) do

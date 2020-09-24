@@ -23,7 +23,8 @@ defmodule DgTest.Solr.SchemaTest do
 
   describe "info" do
     test "info/1" do
-      assert %{} = Schema.info("test")
+      assert {:ok, info} = Schema.info("test")
+      assert Map.keys(info) == ["copyFields", "dynamicFields", "fieldTypes", "fields", "name", "uniqueKey", "version"]
     end
 
     test "info/1 when core doesn't exist" do
