@@ -42,11 +42,21 @@ defmodule DgTest.Solr.Cores do
     end
   end
 
+  def create!(core) do
+    create(core)
+    :ok
+  end
+
   def delete(core) do
     case System.cmd("solr", ["delete", "-c", core], stderr_to_stdout: true) do
       {_, 0} -> {:ok, "Deleted core '#{core}'"}
       {_, 1} -> {:error, "Failed to delete core '#{core}'"}
     end
+  end
+
+  def delete!(core) do
+    delete(core)
+    :ok
   end
 
   def rename(core, other) do

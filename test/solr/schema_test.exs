@@ -7,19 +7,13 @@ defmodule DgTest.Solr.SchemaTest do
   @core "test_schema_test"
 
   def prepare_solr do
-    case Cores.exists?(@core) do
-      false ->
-        Cores.create(@core)
-
-      true ->
-        Cores.delete(@core)
-        Cores.create(@core)
-    end
+    Cores.delete!(@core)
+    Cores.create!(@core)
     :ok
   end
 
   def cleanup_solr do
-    Cores.delete(@core)
+    Cores.delete!(@core)
     :ok
   end
 
