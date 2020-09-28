@@ -1,14 +1,20 @@
 defmodule DgTest.Solr.Schema do
   use Tesla, only: [:get, :post]
 
+  @typedoc """
+  Struct for the common and SolrCloud schema.
+  """
+  @type t :: %__MODULE__{
+  }
+
   defstruct [
+    :name,
+    :unique_key,
+    :version,
     copy_fields: [],
     dynamic_fields: [],
     field_types: [],
-    fields: [],
-    :name,
-    :unique_key,
-    :version
+    fields: []
   ]
 
   def info(core) do
