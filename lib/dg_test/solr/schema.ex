@@ -7,14 +7,14 @@ defmodule DgTest.Solr.Schema do
   Struct for the common and SolrCloud schema.
   """
   @type t :: %__MODULE__{
-    name: binary,
-    unique_key: binary,
-    version: float,
-    copy_fields: list,
-    dynamic_fields: list,
-    field_types: list,
-    fields: list
-  }
+          name: binary,
+          unique_key: binary,
+          version: float,
+          copy_fields: list,
+          dynamic_fields: list,
+          # field_types: list,
+          fields: list
+        }
 
   defstruct [
     :name,
@@ -22,7 +22,7 @@ defmodule DgTest.Solr.Schema do
     :version,
     copy_fields: [],
     dynamic_fields: [],
-    field_types: [],
+    # field_types: [],
     fields: []
   ]
 
@@ -39,9 +39,9 @@ defmodule DgTest.Solr.Schema do
     schema =
       %__MODULE__{}
       |> Map.put(:copy_fields, Map.get(schema, "copyFields"))
-      |> Map.put(:dynamic_fields, Map.get(schema, "dynamicFields"))
-      |> Map.put(:field_types, Map.get(schema, "fieldTypes"))
-      |> Map.put(:fields, Map.get(schema, "fields") |> Enum.map(fn s -> Field.new(s) end))
+      |> Map.put(:dynamic_fields, Map.get(schema, "dynamicFields") |> Enum.map(&Field.new/1))
+      # |> Map.put(:field_types, Map.get(schema, "fieldTypes"))
+      |> Map.put(:fields, Map.get(schema, "fields") |> Enum.map(&Field.new/1))
       |> Map.put(:name, Map.get(schema, "name"))
       |> Map.put(:unique_key, Map.get(schema, "uniqueKey"))
       |> Map.put(:version, Map.get(schema, "version"))
