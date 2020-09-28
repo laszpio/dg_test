@@ -1,15 +1,18 @@
 defmodule DgTest.Solr.Schema do
   use Tesla, only: [:get, :post]
 
+  defstruct [:copy_fields, :dynamic_fields, :fields]
+
   def info(core) do
     case get!(client(), "/#{core}/schema") do
-      %Tesla.Env{status: 200, body: body} -> {:ok, parse_info(body)}
+      %Tesla.Env{status: 200, body: body} -> parse_info(body)
       %Tesla.Env{status: 404} -> {:error, "Core '#{core}' doesn't exist."}
     end
   end
 
   def parse_info(%{"schema" => schema}) do
-    schema
+    %__MODULE__{}
+    |> Map.put(:copy_fields, schema["copyFields"])
   end
 
   def add_field(core, name, type) do
