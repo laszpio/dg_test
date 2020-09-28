@@ -60,7 +60,7 @@ defmodule DgTest.Solr.Schema do
     apply_change(core, change)
   end
 
-  @spec remove_field(binary, binary, binary) :: :ok | {:error, binary}
+  @spec remove_field(binary, binary) :: :ok | {:error, binary}
   def remove_field(core, name) do
     change = %{"delete-field" => %{"name" => name}}
 
