@@ -40,7 +40,7 @@ defmodule DgTest.Solr.Schema do
       %__MODULE__{}
       |> Map.put(:copy_fields, Map.get(schema, "copyFields"))
       |> Map.put(:dynamic_fields, Map.get(schema, "dynamicFields") |> Enum.map(&Field.new/1))
-      # |> Map.put(:field_types, Map.get(schema, "fieldTypes"))
+      |> Map.put(:field_types, Map.get(schema, "fieldTypes"))
       |> Map.put(:fields, Map.get(schema, "fields") |> Enum.map(&Field.new/1))
       |> Map.put(:name, Map.get(schema, "name"))
       |> Map.put(:unique_key, Map.get(schema, "uniqueKey"))
@@ -49,13 +49,14 @@ defmodule DgTest.Solr.Schema do
     {:ok, schema}
   end
 
-  @spec add_field(binary, binary, binary) :: :ok | {:error, binary}
-  def add_field(core, name, type) do
+  @spec add_field(binary, binary, binary, keyword) :: :ok | {:error, binary}
+  def add_field(core, name, type, opts \\ []) do
     change = %{
       "add-field" => %{
         name: name,
         type: type,
-        stored: true
+        stored: true,
+        multiValued: Keyword.get(opts, :multivalued, false)
       }
     }
 

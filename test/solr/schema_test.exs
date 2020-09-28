@@ -21,7 +21,7 @@ defmodule DgTest.Solr.SchemaTest do
   end
 
   describe "info" do
-    test "info/1" do
+    test "info/1 returns structure" do
       assert {:ok, %Schema{} = schema} = Schema.info(@core)
 
       required_fields = [
@@ -57,7 +57,8 @@ defmodule DgTest.Solr.SchemaTest do
                     "add-field" => %{
                       "name" => "test_field_b",
                       "stored" => true,
-                      "type" => "string"
+                      "type" => "string",
+                      "multiValued" => false
                     },
                     "errorMessages" => ["Field 'test_field_b' already exists.\n"]
                   }
