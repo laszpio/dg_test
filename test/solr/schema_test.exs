@@ -66,7 +66,13 @@ defmodule DgTest.Solr.SchemaTest do
     end
 
     test "add_field/4 add multivale field" do
+      {:ok, schema_before} = Schema.info(@core)
+      refute Enum.find(schema_before.fields, fn f -> f.name == "test_list_a" end)
+
       assert Schema.add_field(@core, "test_list_a", "string", multivalue: true) == :ok
+
+      {:ok, schema_after} = Schema.info(@core)
+      assert Enum.find(schema_after.fields, fn f -> f.name == "test_list_a" end)
     end
   end
 
