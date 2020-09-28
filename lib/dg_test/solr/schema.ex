@@ -7,7 +7,7 @@ defmodule DgTest.Solr.Schema do
   @type t :: %__MODULE__{
     name: binary,
     unique_key: binary,
-    version: binary,
+    version: float,
     copy_fields: list,
     dynamic_fields: list,
     field_types: list,
@@ -32,6 +32,7 @@ defmodule DgTest.Solr.Schema do
     end
   end
 
+  @spec parse_info(map) :: {:ok, t}
   def parse_info(%{"schema" => schema}) do
     schema =
       %__MODULE__{}
