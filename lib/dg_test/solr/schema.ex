@@ -5,6 +5,13 @@ defmodule DgTest.Solr.Schema do
   Struct for the common and SolrCloud schema.
   """
   @type t :: %__MODULE__{
+    name: binary,
+    unique_key: binary,
+    version: binary,
+    copy_fields: list,
+    dynamic_fields: list,
+    field_types: list,
+    fields: list
   }
 
   defstruct [
@@ -17,6 +24,7 @@ defmodule DgTest.Solr.Schema do
     fields: []
   ]
 
+  @spec info(binary) :: {:ok, t} | {:error, binary}
   def info(core) do
     case get!(client(), "/#{core}/schema") do
       %Tesla.Env{status: 200, body: body} -> parse_info(body)
