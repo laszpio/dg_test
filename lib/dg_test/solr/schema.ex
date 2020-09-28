@@ -47,7 +47,7 @@ defmodule DgTest.Solr.Schema do
     {:ok, schema}
   end
 
-  @spec add_field(binary, binary, binary) :: :ok
+  @spec add_field(binary, binary, binary) :: :ok | {:error, binary}
   def add_field(core, name, type) do
     change = %{
       "add-field" => %{
@@ -60,13 +60,14 @@ defmodule DgTest.Solr.Schema do
     apply_change(core, change)
   end
 
-  @spec remove_field(binary, binary, binary) :: :ok
+  @spec remove_field(binary, binary, binary) :: :ok | {:error, binary}
   def remove_field(core, name) do
     change = %{"delete-field" => %{"name" => name}}
 
     apply_change(core, change)
   end
 
+  @spec add_copy_field(binary, binary, binary) :: :ok | {:error, binary}
   def add_copy_field(core, source, dest) do
     change = %{
       "add-copy-field" => %{
@@ -78,6 +79,7 @@ defmodule DgTest.Solr.Schema do
     apply_change(core, change)
   end
 
+  @spec remove_copy_field(binary, binary, binary) :: :ok | {:error, binary}
   def remove_copy_field(core, source, dest) do
     change = %{
       "add-copy-field" => %{
