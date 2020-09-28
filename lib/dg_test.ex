@@ -107,4 +107,11 @@ defmodule DgTest do
   def page_max(page) do
     page |> get_in(["meta", "pagination", "pages"])
   end
+
+  def create_index do
+    DgTest.Solr.Cores.create("items")
+    DgTest.Solr.Schema.add_field("items", "domain", "string")
+    DgTest.Solr.Schema.add_field("items", "title", "text_en")
+    DgTest.Solr.Schema.add_field("items", "content", "text_en")
+  end
 end

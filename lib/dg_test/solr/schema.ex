@@ -12,7 +12,7 @@ defmodule DgTest.Solr.Schema do
           version: float,
           copy_fields: list,
           dynamic_fields: list,
-          # field_types: list,
+          field_types: list,
           fields: list
         }
 
@@ -22,7 +22,7 @@ defmodule DgTest.Solr.Schema do
     :version,
     copy_fields: [],
     dynamic_fields: [],
-    # field_types: [],
+    field_types: [],
     fields: []
   ]
 

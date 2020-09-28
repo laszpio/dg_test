@@ -6,6 +6,6 @@ config :dg_test,
   solr_url: System.get_env("SOLR_URL"),
   solr_core: System.get_env("SOLR_CORE")
 
-config :logger, level: :info
+config :logger, level: :warn
 
 # config :tesla, adapter: Tesla.Mock
