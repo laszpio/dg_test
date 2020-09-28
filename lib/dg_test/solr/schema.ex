@@ -1,6 +1,8 @@
 defmodule DgTest.Solr.Schema do
   use Tesla, only: [:get, :post]
 
+  alias DgTest.Solr.Field
+
   @typedoc """
   Struct for the common and SolrCloud schema.
   """
@@ -39,7 +41,7 @@ defmodule DgTest.Solr.Schema do
       |> Map.put(:copy_fields, Map.get(schema, "copyFields"))
       |> Map.put(:dynamic_fields, Map.get(schema, "dynamicFields"))
       |> Map.put(:field_types, Map.get(schema, "fieldTypes"))
-      |> Map.put(:fields, Map.get(schema, "fields"))
+      |> Map.put(:fields, Map.get(schema, "fields") |> Enum.map(fn s -> Field.new(s) end))
       |> Map.put(:name, Map.get(schema, "name"))
       |> Map.put(:unique_key, Map.get(schema, "uniqueKey"))
       |> Map.put(:version, Map.get(schema, "version"))
