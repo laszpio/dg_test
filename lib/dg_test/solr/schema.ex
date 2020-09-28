@@ -112,6 +112,7 @@ defmodule DgTest.Solr.Schema do
     Tesla.client(middleware())
   end
 
+  @spec middleware() :: list(tuple)
   def middleware() do
     [
       {Tesla.Middleware.BaseUrl, DgTest.solr_url()},
