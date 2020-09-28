@@ -3,6 +3,7 @@ defmodule DgTest.Solr.SchemaTest do
 
   alias DgTest.Solr.Schema
   alias DgTest.Solr.Cores
+  alias DgTest.Solr.Field
 
   @core "test_schema_test"
 
@@ -47,8 +48,14 @@ defmodule DgTest.Solr.SchemaTest do
       assert Schema.add_field(@core, "test_field_a", "string") == :ok
     end
 
-    test "add_field/3 when field already exist" do
+    test "add_field/3 returns error when field already exist" do
+      {:ok, schema_before} = Schema.info(@core)
+      refute Enum.any?(schema_before.fields, fn f -> f.name == "test_field_b" end)
+
       assert Schema.add_field(@core, "test_field_b", "string") == :ok
+
+      {:ok, schema_after} = Schema.info(@core)
+      assert Enum.any?(schema_after.fields, fn f -> f.name == "test_field_b" end)
 
       assert Schema.add_field(@core, "test_field_b", "string") ==
                {:error,
@@ -67,29 +74,30 @@ defmodule DgTest.Solr.SchemaTest do
 
     test "add_field/4 add multivale field" do
       {:ok, schema_before} = Schema.info(@core)
-      refute Enum.find(schema_before.fields, fn f -> f.name == "test_list_a" end)
+      refute Enum.find(schema_before.fields, fn f -> f.name == "test_field_c" end)
 
-      assert Schema.add_field(@core, "test_list_a", "string", multivalue: true) == :ok
+      assert Schema.add_field(@core, "test_list_c", "string", multivalued: true) == :ok
 
       {:ok, schema_after} = Schema.info(@core)
-      assert Enum.find(schema_after.fields, fn f -> f.name == "test_list_a" end)
+      field = Enum.find(schema_after.fields, fn f -> f.name == "test_list_c" end)
+      assert %Field{name: "test_list_c", type: "string", multivalued: true} = field
     end
   end
 
   describe "remove_field" do
     test "remove_field/2 remove existing field" do
-      assert Schema.add_field(@core, "test_field_c", "string") == :ok
-      assert Schema.remove_field(@core, "test_field_c") == :ok
+      assert Schema.add_field(@core, "test_field_d", "string") == :ok
+      assert Schema.remove_field(@core, "test_field_d") == :ok
     end
 
     test "remove_field/2 field doesn't exist" do
-      assert Schema.remove_field(@core, "test_field_c") ==
+      assert Schema.remove_field(@core, "test_no_field") ==
                {:error,
                 [
                   %{
-                    "delete-field" => %{"name" => "test_field_c"},
+                    "delete-field" => %{"name" => "test_no_field"},
                     "errorMessages" => [
-                      "The field 'test_field_c' is not present in this schema, and so cannot be deleted.\n"
+                      "The field 'test_no_field' is not present in this schema, and so cannot be deleted.\n"
                     ]
                   }
                 ]}
