@@ -21,8 +21,14 @@ defmodule DgTest.Solr.Field do
     :multivalued
   ]
 
+  @spec new(map) :: t
   def new(field) do
     Utils.to_struct(%__MODULE__{}, field)
     |> Map.put(:multivalued, field["multiValued"])
+  end
+
+  @spec to_param(t) :: map
+  def to_param(field) do
+    field
   end
 end
