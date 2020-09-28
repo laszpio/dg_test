@@ -107,6 +107,7 @@ defmodule DgTest.Solr.Schema do
     {:error, details}
   end
 
+  @spec client() :: %Tesla.Client{}
   def client() do
     Tesla.client(middleware())
   end
