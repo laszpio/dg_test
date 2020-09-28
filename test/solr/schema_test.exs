@@ -9,18 +9,15 @@ defmodule DgTest.Solr.SchemaTest do
   def prepare_solr do
     Cores.delete!(@core)
     Cores.create!(@core)
-    :ok
   end
 
   def cleanup_solr do
     Cores.delete!(@core)
-    :ok
   end
 
   setup_all do
     prepare_solr()
     on_exit(fn -> cleanup_solr() end)
-    :ok
   end
 
   describe "info" do
