@@ -1,7 +1,15 @@
 defmodule DgTest.Solr.Schema do
   use Tesla, only: [:get, :post]
 
-  defstruct [:copy_fields, :dynamic_fields, :fields]
+  defstruct [
+    copy_fields: [],
+    dynamic_fields: [],
+    field_types: [],
+    fields: [],
+    :name,
+    :unique_key,
+    :version
+  ]
 
   def info(core) do
     case get!(client(), "/#{core}/schema") do
