@@ -22,17 +22,19 @@ defmodule DgTest.Solr.SchemaTest do
 
   describe "info" do
     test "info/1" do
-      assert {:ok, info} = Schema.info(@core)
+      assert {:ok, %Schema{} = schema} = Schema.info(@core)
 
-      assert Map.keys(info) == [
-               "copyFields",
-               "dynamicFields",
-               "fieldTypes",
-               "fields",
-               "name",
-               "uniqueKey",
-               "version"
-             ]
+      required_fields = [
+        :copy_fields,
+        :dynamic_fields,
+        :field_types,
+        :fields,
+        :name,
+        :unique_key,
+        :version
+      ]
+
+      assert required_fields |> Enum.all?(&Map.has_key?(schema, &1))
     end
 
     test "info/1 when core doesn't exist" do

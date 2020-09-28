@@ -11,8 +11,17 @@ defmodule DgTest.Solr.Schema do
   end
 
   def parse_info(%{"schema" => schema}) do
-    %__MODULE__{}
-    |> Map.put(:copy_fields, schema["copyFields"])
+    schema =
+      %__MODULE__{}
+      |> Map.put(:copy_fields, schema["copyFields"])
+      |> Map.put(:dynamic_fields, schema["dynamicFields"])
+      |> Map.put(:field_types, schema["fieldTypes"])
+      |> Map.put(:fields, schema["fields"])
+      |> Map.put(:name, schema["name"])
+      |> Map.put(:unique_key, schema["uniqueKey"])
+      |> Map.put(:version, schema["version"])
+
+    {:ok, schema}
   end
 
   def add_field(core, name, type) do
