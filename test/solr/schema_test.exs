@@ -64,6 +64,10 @@ defmodule DgTest.Solr.SchemaTest do
                   }
                 ]}
     end
+
+    test "add_field/4 add multivale field" do
+      assert Schema.add_field(@core, "test_list_a", "string", multivalue: true) == :ok
+    end
   end
 
   describe "remove_field" do
