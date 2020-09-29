@@ -3,6 +3,7 @@ defmodule DgTest.Solr.Cores do
 
   alias DgTest.Solr.AdminApi
 
+  @spec status() :: {:ok, map} | {:error, binary}
   def status do
     case get(AdminApi.client(), "/cores", query: [action: "STATUS"]) do
       {:ok, %Tesla.Env{status: 200, body: body}} -> parse_status(body)
