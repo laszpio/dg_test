@@ -18,6 +18,7 @@ defmodule DgTest.Solr.Cores do
       {:error, msg} -> {:error, msg}
     end
   end
+
   def parse_status(%{"status" => status}) do
     {:ok, status}
   end
@@ -29,11 +30,13 @@ defmodule DgTest.Solr.Cores do
     end
   end
 
+  @spec cores() :: list(binary)
   def cores do
     {:ok, status} = status()
     Map.keys(status)
   end
 
+  @spec exists?(binary) :: boolean
   def exists?(core), do: core in cores()
 
   def create(core) do
