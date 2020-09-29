@@ -53,6 +53,7 @@ defmodule DgTest.Solr.Cores do
     :ok
   end
 
+  @spec delete(binary) :: {:ok, binary} | {:ok, binary}
   def delete(core) do
     case System.cmd("solr", ["delete", "-c", core], stderr_to_stdout: true) do
       {_, 0} -> {:ok, "Deleted core '#{core}'"}
@@ -60,6 +61,7 @@ defmodule DgTest.Solr.Cores do
     end
   end
 
+  @spec delete!(binary) :: :ok
   def delete!(core) do
     delete(core)
     :ok
