@@ -67,6 +67,7 @@ defmodule DgTest.Solr.Cores do
     :ok
   end
 
+  @spec rename(binary, binary) :: :ok | {:error, binary}
   def rename(core, other) do
     query = [action: "RENAME", core: core, other: other]
 
