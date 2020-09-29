@@ -26,7 +26,7 @@ defmodule DgTest.Solr.Schema do
     fields: []
   ]
 
-  @spec info(binary) :: {:ok, t} | {:error, binary}
+  @spec info(binary | atom) :: {:ok, t} | {:error, binary}
   def info(core) do
     case get!(client(), "/#{core}/schema") do
       %Tesla.Env{status: 200, body: body} -> parse_info(body)

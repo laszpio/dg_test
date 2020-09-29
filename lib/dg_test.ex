@@ -1,6 +1,9 @@
 defmodule DgTest do
   import HtmlSanitizeEx
 
+  alias DgTest.Solr.Cores
+  alias DgTest.Solr.Schema
+
   use Tesla
 
   plug(Tesla.Middleware.BaseUrl, ghost_url())
@@ -109,14 +112,14 @@ defmodule DgTest do
   end
 
   def recreate_index do
-    DgTest.Solr.Cores.delete("items")
-    DgTest.Solr.Cores.create("items")
-    DgTest.Solr.Schema.add_field("items", "domain", "string")
-    DgTest.Solr.Schema.add_field("items", "slug", "string")
-    DgTest.Solr.Schema.add_field("items", "title", "text_en")
-    DgTest.Solr.Schema.add_field("items", "tags", "text_en", multivalue: true)
-    DgTest.Solr.Schema.add_field("items", "authors", "text_en", multivalue: true)
-    DgTest.Solr.Schema.add_field("items", "content", "text_en")
-    DgTest.Solr.Schema.add_copy_field("items", "*", "_text_")
+    Cores.delete("items")
+    Cores.create("items")
+    Schema.add_field(:items, "domain", "string")
+    Schema.add_field(:items, "slug", "string")
+    Schema.add_field(:items, "title", "text_en")
+    Schema.add_field(:items, "tags", "text_en", multi_valued: true)
+    Schema.add_field(:items, "authors", "text_en", multi_valued: true)
+    Schema.add_field(:items, "content", "text_en")
+    Schema.add_copy_field(:items, "*", "_text_")
   end
 end
