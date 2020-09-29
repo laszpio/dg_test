@@ -39,6 +39,7 @@ defmodule DgTest.Solr.Cores do
   @spec exists?(binary) :: boolean
   def exists?(core), do: core in cores()
 
+  @spec create(binary) :: {:ok, binary} | {:error, binary}
   def create(core) do
     case System.cmd("solr", ["create", "-c", core], stderr_to_stdout: true) do
       {_, 0} -> {:ok, "Created new core '#{core}'"}
@@ -46,6 +47,7 @@ defmodule DgTest.Solr.Cores do
     end
   end
 
+  @spec create!(binary) :: :ok
   def create!(core) do
     create(core)
     :ok
