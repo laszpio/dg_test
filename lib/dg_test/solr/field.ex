@@ -8,7 +8,7 @@ defmodule DgTest.Solr.Field do
           required: boolean,
           stored: boolean,
           uninvertible: boolean,
-          multivalued: boolean
+          multi_valued: boolean
         }
 
   defstruct [
@@ -18,13 +18,12 @@ defmodule DgTest.Solr.Field do
     :stored,
     :type,
     :uninvertible,
-    :multivalued
+    :multi_valued
   ]
 
   @spec new(map) :: t
   def new(field) do
     Utils.to_struct(%__MODULE__{}, field)
-    |> Map.put(:multivalued, field["multiValued"])
   end
 
   @spec to_param(t) :: map

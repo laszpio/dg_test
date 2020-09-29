@@ -56,7 +56,7 @@ defmodule DgTest.Solr.Schema do
         name: name,
         type: type,
         stored: true,
-        multiValued: Keyword.get(opts, :multivalued, false)
+        multiValued: Keyword.get(opts, :multi_valued, false)
       }
     }
 
