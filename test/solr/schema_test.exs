@@ -65,14 +65,15 @@ defmodule DgTest.Solr.SchemaTest do
                       "name" => "test_field_b",
                       "stored" => true,
                       "type" => "string",
-                      "multiValued" => false
+                      "multiValued" => false,
+                      "uninvertible" => false
                     },
                     "errorMessages" => ["Field 'test_field_b' already exists.\n"]
                   }
                 ]}
     end
 
-    test "add_field/4 add multivale field" do
+    test "add_field/4 adds multivalued field" do
       {:ok, schema_before} = Schema.info(@core)
       refute Enum.find(schema_before.fields, fn f -> f.name == "test_field_c" end)
 
@@ -82,12 +83,23 @@ defmodule DgTest.Solr.SchemaTest do
       field = Enum.find(schema_after.fields, fn f -> f.name == "test_list_c" end)
       assert %Field{name: "test_list_c", type: "string", multi_valued: true} = field
     end
+
+    test "add_field/4 adds uninvertible field" do
+      {:ok, schema_before} = Schema.info(@core)
+      refute Enum.find(schema_before.fields, fn f -> f.name == "test_field_d" end)
+
+      assert Schema.add_field(@core, "test_list_d", "string", uninvertible: true) == :ok
+
+      {:ok, schema_after} = Schema.info(@core)
+      field = Enum.find(schema_after.fields, fn f -> f.name == "test_list_d" end)
+      assert %Field{name: "test_list_d", type: "string", uninvertible: true} = field
+    end
   end
 
   describe "remove_field" do
     test "remove_field/2 remove existing field" do
-      assert Schema.add_field(@core, "test_field_d", "string") == :ok
-      assert Schema.remove_field(@core, "test_field_d") == :ok
+      assert Schema.add_field(@core, "test_field_e", "string") == :ok
+      assert Schema.remove_field(@core, "test_field_e") == :ok
     end
 
     test "remove_field/2 field doesn't exist" do
