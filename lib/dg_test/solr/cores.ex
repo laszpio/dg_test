@@ -11,13 +11,13 @@ defmodule DgTest.Solr.Cores do
     end
   end
 
+  @spec status(binary | atom) :: {:ok, map} | {:error, binary}
   def status(core) do
     case get(AdminApi.client(), "/cores", query: [action: "STATUS", core: core]) do
       {:ok, %Tesla.Env{status: 200, body: body}} -> parse_status(body, core)
       {:error, msg} -> {:error, msg}
     end
   end
-
   def parse_status(%{"status" => status}) do
     {:ok, status}
   end
