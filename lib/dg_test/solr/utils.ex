@@ -1,4 +1,5 @@
 defmodule DgTest.Solr.Utils do
+  @spec to_struct(struct, map) :: struct
   def to_struct(kind, attrs) do
     struct = struct(kind)
 
