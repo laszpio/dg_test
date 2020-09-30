@@ -25,5 +25,13 @@ defmodule DgTest.Solr.UtilsTest do
         "snakeCase" => false
       }
     end
+
+    test "solarize/1" do
+      assert Utils.solarize("") == ""
+      assert Utils.solarize(:"") == ""
+
+      assert Utils.solarize("a") == "a"
+      assert Utils.solarize("A") == "a"
+    end
   end
 end

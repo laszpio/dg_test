@@ -26,7 +26,7 @@ defmodule DgTest.Solr.Utils do
     Map.new(map, fn {k, v} -> {solarize(k), v} end)
   end
 
-  defp lower_first(""), do: ""
+  defp lower_first(<<>>), do: ""
 
   defp lower_first(<<first::binary-size(1)>> <> rest) do
     String.downcase(first) <> rest
