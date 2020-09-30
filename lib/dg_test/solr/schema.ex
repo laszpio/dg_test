@@ -95,7 +95,7 @@ defmodule DgTest.Solr.Schema do
     apply_change(core, change)
   end
 
-  @spec apply_change(binary, binary) :: :ok | {:error, binary}
+  @spec apply_change(binary, map) :: :ok | {:error, binary}
   def apply_change(core, change) do
     case post!(client(), "/#{core}/schema", change) do
       %Tesla.Env{status: 200, body: body} -> parse_response(body)
