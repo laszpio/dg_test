@@ -111,6 +111,7 @@ defmodule DgTest do
     page |> get_in(["meta", "pagination", "pages"])
   end
 
+  @spec recreate_index() :: no_return() 
   def recreate_index do
     Cores.delete("items")
     Cores.create("items")
