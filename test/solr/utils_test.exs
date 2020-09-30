@@ -26,12 +26,28 @@ defmodule DgTest.Solr.UtilsTest do
       }
     end
 
-    test "solarize/1" do
+    test "solarize/1 strings" do
       assert Utils.solarize("") == ""
-      assert Utils.solarize(:"") == ""
 
       assert Utils.solarize("a") == "a"
       assert Utils.solarize("A") == "a"
+
+      assert Utils.solarize("AaBb") == "aaBb"
+      assert Utils.solarize("aaBb") == "aaBb"
+
+      assert Utils.solarize("a_b") == "aB"
+    end
+
+    test "solarize/1 atoms" do
+      assert Utils.solarize(:"") == ""
+
+      assert Utils.solarize(:a) == "a"
+      assert Utils.solarize(:A) == "a"
+
+      assert Utils.solarize(:AaBb) == "aaBb"
+      assert Utils.solarize(:aaBb) == "aaBb"
+
+      assert Utils.solarize(:a_b) == "aB"
     end
   end
 end
