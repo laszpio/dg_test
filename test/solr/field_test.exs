@@ -8,13 +8,20 @@ defmodule DgTest.Solr.FieldTest do
       assert %Field{} = Field.new(%{})
     end
 
-    test "new/1 maps basic field attributes" do
+    test "new/1 maps solr format to field" do
       solr = %{
         "name" => "name",
         "type" => "string",
         "indexed" => true,
         "multiValued" => true
       }
+
+      assert Field.new(solr) == %Field{
+               name: "name",
+               type: "string",
+               indexed: true,
+               multi_valued: true
+             }
     end
   end
 end
