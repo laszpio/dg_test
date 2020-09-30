@@ -49,7 +49,7 @@ defmodule DgTest.Solr.Schema do
     {:ok, schema}
   end
 
-  @spec add_field(binary, binary, binary, keyword) :: :ok | {:error, binary}
+  @spec add_field(atom | binary, binary, binary, keyword) :: :ok | {:error, binary}
   def add_field(core, name, type, opts \\ []) do
     change = %{
       "add-field" => %{
@@ -71,7 +71,7 @@ defmodule DgTest.Solr.Schema do
     apply_change(core, change)
   end
 
-  @spec add_copy_field(binary, binary, binary) :: :ok | {:error, binary}
+  @spec add_copy_field(atom | binary, binary, binary) :: :ok | {:error, binary}
   def add_copy_field(core, source, dest) do
     change = %{
       "add-copy-field" => %{
@@ -95,7 +95,7 @@ defmodule DgTest.Solr.Schema do
     apply_change(core, change)
   end
 
-  @spec apply_change(binary, map) :: :ok | {:error, binary}
+  @spec apply_change(binary | atom, map) :: :ok | {:error, binary}
   def apply_change(core, change) do
     case post!(client(), "/#{core}/schema", change) do
       %Tesla.Env{status: 200, body: body} -> parse_response(body)
