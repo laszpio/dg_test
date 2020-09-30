@@ -3,15 +3,23 @@ defmodule DgTest.Solr.Utils do
     struct = struct(kind)
 
     Enum.reduce(Map.to_list(struct), struct, fn {k, _}, acc ->
-      case Map.fetch(attrs, to_solr(k)) do
+      case Map.fetch(attrs, solarize(k)) do
         {:ok, v} -> %{acc | k => v}
         :error -> acc
       end
     end)
   end
 
-  def to_solr(attr) when is_atom(attr) do
-    attr |> Atom.to_string() |> Macro.camelize() |> lower_first()
+  def solarize(attr) when is_atom(attr) do
+    attr |> Atom.to_string() |> solarize()
+  end
+
+  def solarize(attr) when is_binary(attr) do
+    attr |> Macro.camelize() |> lower_first()
+  end
+
+  def solarize(map) do
+    Map.new(map, fn {k, v} -> {solarize(k), v} end)
   end
 
   defp lower_first(""), do: ""
