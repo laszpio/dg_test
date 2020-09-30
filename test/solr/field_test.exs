@@ -4,16 +4,22 @@ defmodule DgTest.Solr.FieldTest do
   alias DgTest.Solr.Field
 
   @example_solr %{
-    name: "name",
-    type: "string",
-    indexed: true,
-    multiValued: true
+    "name" => "name",
+    "type" => "string",
+    "stored" => false,
+    "required" => false,
+    "indexed" => true,
+    "uninvertible" => false,
+    "multiValued" => true
   }
 
   @example_field %Field{
     name: "name",
     type: "string",
+    stored: false,
     indexed: true,
+    required: false,
+    uninvertible: false,
     multi_valued: true
   }
 
@@ -29,7 +35,7 @@ defmodule DgTest.Solr.FieldTest do
 
   describe "to_solr" do
     test "to_solr/1 return a Field map in Solr format" do
-      # assert Field.to_solr(@example_field) == @example_solr
+      assert Field.to_solr(@example_field) == @example_solr
     end
   end
 end

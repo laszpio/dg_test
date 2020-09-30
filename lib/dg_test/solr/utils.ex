@@ -11,11 +11,7 @@ defmodule DgTest.Solr.Utils do
   end
 
   def to_solr(attr) when is_atom(attr) do
-    attr
-    |> Atom.to_string()
-    |> Macro.camelize()
-    |> lower_first()
-    |> String.to_atom()
+    attr |> Atom.to_string() |> Macro.camelize() |> lower_first()
   end
 
   defp lower_first(""), do: ""

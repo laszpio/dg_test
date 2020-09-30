@@ -28,6 +28,6 @@ defmodule DgTest.Solr.Field do
 
   @spec to_solr(t) :: map
   def to_solr(field) do
-    Map.from_struct(field)
+    field |> Map.from_struct() |> Map.new(fn {k, v} -> {Utils.to_solr(k), v} end)
   end
 end
