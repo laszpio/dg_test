@@ -13,5 +13,17 @@ defmodule DgTest.Solr.UtilsTest do
       assert Utils.solarize("attribute") == "attribute"
       assert Utils.solarize("snake_case") == "snakeCase"
     end
+
+    test "solarize/1 converts map to Solr convention" do
+      test_map = %{
+        :attribute => false,
+        :snake_case => false
+      }
+
+      assert Utils.solarize(test_map) == %{
+        "attribute" => false,
+        "snakeCase" => false
+      }
+    end
   end
 end
