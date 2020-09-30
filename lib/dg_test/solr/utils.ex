@@ -10,14 +10,17 @@ defmodule DgTest.Solr.Utils do
     end)
   end
 
+  @spec solarize(atom) :: binary
   def solarize(attr) when is_atom(attr) do
     attr |> Atom.to_string() |> solarize()
   end
 
+  @spec solarize(binary) :: binary
   def solarize(attr) when is_binary(attr) do
     attr |> Macro.camelize() |> lower_first()
   end
 
+  @spec solarize(map) :: map
   def solarize(map) do
     Map.new(map, fn {k, v} -> {solarize(k), v} end)
   end
