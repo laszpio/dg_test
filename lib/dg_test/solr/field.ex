@@ -26,8 +26,8 @@ defmodule DgTest.Solr.Field do
     Utils.to_struct(%__MODULE__{}, field)
   end
 
-  @spec to_param(t) :: map
-  def to_param(field) do
-    field
+  @spec to_solr(t) :: map
+  def to_solr(field) do
+    Map.from_struct(field)
   end
 end
