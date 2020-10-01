@@ -3,6 +3,16 @@ defmodule DgTest.Solr.UtilsTest do
 
   alias DgTest.Solr.Utils
 
+  describe "to_struct" do
+    defmodule TestStruct do
+      defstruct [:attr]
+    end
+
+    test "to_struct/2 maps to structure" do
+      Utils.to_struct(%TestStruct{}, %{attr: "A"}) == %TestStruct{attr: "A"}
+    end
+  end
+
   describe "solarize" do
     test "solarize/1 converts attribute to Solar convention" do
       assert Utils.solarize(:attribute) == "attribute"
@@ -21,9 +31,9 @@ defmodule DgTest.Solr.UtilsTest do
       }
 
       assert Utils.solarize(test_map) == %{
-        "attribute" => false,
-        "snakeCase" => false
-      }
+               "attribute" => false,
+               "snakeCase" => false
+             }
     end
 
     test "solarize/1 strings" do
