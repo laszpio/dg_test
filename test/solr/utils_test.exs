@@ -5,11 +5,16 @@ defmodule DgTest.Solr.UtilsTest do
 
   describe "to_struct" do
     defmodule TestStruct do
-      defstruct [:attr]
+      defstruct [:attr_a, :attr_b]
     end
 
-    test "to_struct/2 maps to structure" do
-      Utils.to_struct(%TestStruct{}, %{attr: "A"}) == %TestStruct{attr: "A"}
+    test "to_struct/2 maps string attriutes to the structure" do
+      input_map = %{"attrA" => "A", "attrB" => "B"}
+
+      assert Utils.to_struct(%TestStruct{}, input_map) == %TestStruct{
+               attr_a: "A",
+               attr_b: "B"
+             }
     end
   end
 
