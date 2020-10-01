@@ -8,7 +8,6 @@ defmodule DgTest.Solr.UtilsTest do
       defstruct [:attr_a, :attr_b, :attr_c]
     end
 
-
     test "to_struct/2 maps string attriutes to the structure" do
       input_map = %{"attrA" => "A", "attrB" => "B", "attrC" => "C"}
 

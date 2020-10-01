@@ -30,9 +30,8 @@ defmodule DgTest.Solr.Schema do
   def new(schema) do
     %__MODULE__{}
     |> Utils.to_struct(schema)
-    |> Map.put(:copy_fields, Map.get(schema, "copyFields"))
-    |> Map.put(:dynamic_fields, Map.get(schema, "dynamicFields") |> Enum.map(&Field.new/1))
-    |> Map.put(:fields, Map.get(schema, "fields") |> Enum.map(&Field.new/1))
+    |> Map.update!(:fields, &Enum.map(&1, fn f -> Field.new(f) end))
+    |> Map.update!(:dynamic_fields, &Enum.map(&1, fn f -> Field.new(f) end))
   end
 
   @spec info(binary | atom) :: {:ok, t} | {:error, binary}
