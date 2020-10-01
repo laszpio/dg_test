@@ -121,6 +121,7 @@ defmodule DgTest do
     Schema.add_field(:items, "tags", "text_en", multi_valued: true)
     Schema.add_field(:items, "authors", "text_en", multi_valued: true)
     Schema.add_field(:items, "content", "text_en")
+    Schema.add_field(:items, "created_at", "pdate")
     Schema.add_copy_field(:items, "*", "_text_")
   end
 end
