@@ -78,9 +78,9 @@ defmodule DgTest.Solr.CoresTest do
   describe "create" do
     test "create/1 creates new core using command interface" do
       with_mock System,
-        cmd: fn "solr", ["create", "-c", "test"], stderr_to_stdout: true -> {"", 0} end do
+        cmd: fn "docker", ["exec", "dg_test_solr_1", "solr", "create", "-c", "test"], stderr_to_stdout: true -> {"", 0} end do
         assert Cores.create("test") == {:ok, "Created new core 'test'"}
-        assert called(System.cmd("solr", ["create", "-c", "test"], stderr_to_stdout: true))
+        assert called(System.cmd("docker", ["exec", "dg_test_solr_1", "solr", "create", "-c", "test"], stderr_to_stdout: true))
       end
     end
   end
@@ -88,9 +88,9 @@ defmodule DgTest.Solr.CoresTest do
   describe "delete" do
     test "delete/1 removes a core using command interface" do
       with_mock System,
-        cmd: fn "solr", ["delete", "-c", "test"], stderr_to_stdout: true -> {"", 0} end do
+        cmd: fn "docker", ["exec", "dg_test_solr_1", "solr", "delete", "-c", "test"], stderr_to_stdout: true -> {"", 0} end do
         assert Cores.delete("test") == {:ok, "Deleted core 'test'"}
-        assert called(System.cmd("solr", ["delete", "-c", "test"], stderr_to_stdout: true))
+        assert called(System.cmd("docker", ["exec", "dg_test_solr_1", "solr", "delete", "-c", "test"], stderr_to_stdout: true))
       end
     end
   end
