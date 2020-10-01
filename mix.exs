@@ -27,7 +27,8 @@ defmodule DgTest.MixProject do
       {:html_sanitize_ex, "~> 1.3.0-rc3"},
       {:hui, "~> 0.1"},
       {:mock, "~> 0.3.5", only: :test},
-      {:dialyxir, "~> 1.0", only: [:dev], runtime: false}
+      {:dialyxir, "~> 1.0", only: [:dev], runtime: false},
+      {:credo, "~> 1.5.0-rc.2", only: [:dev, :test], runtime: false}
     ]
   end
 end

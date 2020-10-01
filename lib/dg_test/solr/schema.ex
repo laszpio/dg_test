@@ -30,7 +30,7 @@ defmodule DgTest.Solr.Schema do
   def new(schema) do
     %__MODULE__{}
     |> Utils.to_struct(schema)
-    |> Map.update!(:fields, &Enum.map(&1, fn f -> Field.new(f) end))
+    |> Map.update!(:fields, &Enum.map(&1, Field.new/1))
     |> Map.update!(:dynamic_fields, &Enum.map(&1, fn f -> Field.new(f) end))
   end
 
