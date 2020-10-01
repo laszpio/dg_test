@@ -33,6 +33,12 @@ defmodule DgTest.Solr.FieldTest do
     end
   end
 
+  describe "from_list" do
+    test "from_list/1 returns a list of Fields" do
+      assert Field.from_list([@example_solr]) == [@example_field]
+    end
+  end
+
   describe "to_solr" do
     test "to_solr/1 return a Field map in Solr format" do
       assert Field.to_solr(@example_field) == @example_solr
