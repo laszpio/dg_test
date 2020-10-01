@@ -32,8 +32,8 @@ defmodule DgTest.Solr.Schema do
   def new(schema) do
     %__MODULE__{}
     |> Utils.to_struct(schema)
-    |> Map.update!(:fields, &Enum.map(&1, fn f -> Field.new(f) end))
-    |> Map.update!(:dynamic_fields, &Enum.map(&1, fn f -> Field.new(f) end))
+    |> Map.update!(:fields, &Field.from_list(&1))
+    |> Map.update!(:dynamic_fields, &Field.from_list(&1))
   end
 
   @spec info(binary | atom) :: {:ok, t} | {:error, binary}
