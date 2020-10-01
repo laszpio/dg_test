@@ -1,6 +1,7 @@
 defmodule DgTest.Solr.Schema do
   use Tesla, only: [:get, :post]
 
+  alias DgTest.Solr.Utils
   alias DgTest.Solr.Field
 
   @typedoc """
@@ -26,6 +27,14 @@ defmodule DgTest.Solr.Schema do
     fields: []
   ]
 
+  def new(schema) do
+    %__MODULE__{}
+    |> Utils.to_struct(schema)
+    |> Map.put(:copy_fields, Map.get(schema, "copyFields"))
+    |> Map.put(:dynamic_fields, Map.get(schema, "dynamicFields") |> Enum.map(&Field.new/1))
+    |> Map.put(:fields, Map.get(schema, "fields") |> Enum.map(&Field.new/1))
+  end
+
   @spec info(binary | atom) :: {:ok, t} | {:error, binary}
   def info(core) do
     case get!(client(), "/#{core}/schema") do
@@ -36,17 +45,7 @@ defmodule DgTest.Solr.Schema do
 
   @spec parse_info(map) :: {:ok, t}
   def parse_info(%{"schema" => schema}) do
-    schema =
-      %__MODULE__{}
-      |> Map.put(:copy_fields, Map.get(schema, "copyFields"))
-      |> Map.put(:dynamic_fields, Map.get(schema, "dynamicFields") |> Enum.map(&Field.new/1))
-      |> Map.put(:field_types, Map.get(schema, "fieldTypes"))
-      |> Map.put(:fields, Map.get(schema, "fields") |> Enum.map(&Field.new/1))
-      |> Map.put(:name, Map.get(schema, "name"))
-      |> Map.put(:unique_key, Map.get(schema, "uniqueKey"))
-      |> Map.put(:version, Map.get(schema, "version"))
-
-    {:ok, schema}
+    {:ok, new(schema)}
   end
 
   @spec add_field(atom | binary, binary, binary, keyword) :: :ok | {:error, binary}
