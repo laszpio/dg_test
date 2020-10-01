@@ -1,4 +1,6 @@
 defmodule DgTest.Solr.Core do
+  @moduledoc false
+
   defstruct [
     :name,
     :schema,

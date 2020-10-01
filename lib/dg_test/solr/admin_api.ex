@@ -1,4 +1,6 @@
 defmodule DgTest.Solr.AdminApi do
+  @moduledoc false
+
   def client do
     Tesla.client(middleware())
   end

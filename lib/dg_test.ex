@@ -1,4 +1,6 @@
 defmodule DgTest do
+  @moduledoc false
+
   import HtmlSanitizeEx
 
   alias DgTest.Solr.Cores

@@ -1,4 +1,6 @@
 defmodule DgTest.Solr.Field do
+  @moduledoc false
+
   alias DgTest.Solr.Utils
 
   @type t :: %__MODULE__{

@@ -1,4 +1,6 @@
 defmodule DgTest.Solr.Cores do
+  @moduledoc false
+
   use Tesla, only: [:get]
 
   alias DgTest.Solr.AdminApi

@@ -1,4 +1,6 @@
 defmodule DgTest.Solr.Schema do
+  @moduledoc false
+
   use Tesla, only: [:get, :post]
 
   alias DgTest.Solr.Utils
