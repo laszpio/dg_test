@@ -4,6 +4,6 @@ defmodule DgTest.Solr.AdminCmd do
   def solr_cmd(cmd) do
     [base | opts] = System.get_env("SOLR_CMD") |> String.split()
 
-    {base, opts}
+    {base, opts ++ String.split(cmd)}
   end
 end
