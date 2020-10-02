@@ -4,6 +4,7 @@ defmodule DgTest.Solr.CoresTest do
   import Mock
 
   alias DgTest.Solr.Cores
+  alias DgTest.Solr.AdminCmd
 
   def prepare_solr do
     Cores.create("core_1")
@@ -77,20 +78,20 @@ defmodule DgTest.Solr.CoresTest do
 
   describe "create" do
     test "create/1 creates new core using command interface" do
-      with_mock System,
-        cmd: fn "docker", ["exec", "dg_test_solr_1", "solr", "create", "-c", "test"], stderr_to_stdout: true -> {"", 0} end do
+      with_mock AdminCmd,
+        run: fn "create -c test" -> {:ok, ""} end do
         assert Cores.create("test") == {:ok, "Created new core 'test'"}
-        assert called(System.cmd("docker", ["exec", "dg_test_solr_1", "solr", "create", "-c", "test"], stderr_to_stdout: true))
+        assert called(AdminCmd.run("create -c test"))
       end
     end
   end
 
   describe "delete" do
     test "delete/1 removes a core using command interface" do
-      with_mock System,
-        cmd: fn "docker", ["exec", "dg_test_solr_1", "solr", "delete", "-c", "test"], stderr_to_stdout: true -> {"", 0} end do
+      with_mock AdminCmd,
+        run: fn "delete -c test" -> {:ok, ""} end do
         assert Cores.delete("test") == {:ok, "Deleted core 'test'"}
-        assert called(System.cmd("docker", ["exec", "dg_test_solr_1", "solr", "delete", "-c", "test"], stderr_to_stdout: true))
+        assert called(AdminCmd.run("delete -c test"))
       end
     end
   end
