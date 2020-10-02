@@ -58,9 +58,9 @@ defmodule DgTest.Solr.Cores do
 
   @spec delete(binary) :: {:ok, binary} | {:ok, binary}
   def delete(core) do
-    case System.cmd("docker", ["exec", "dg_test_solr_1", "solr", "delete", "-c", core], stderr_to_stdout: true) do
-      {_, 0} -> {:ok, "Deleted core '#{core}'"}
-      {_, 1} -> {:error, "Failed to delete core '#{core}'"}
+    case AdminCmd.run("delete -c #{core}") do
+      {:ok, _} -> {:ok, "Deleted core '#{core}'"}
+      {:error, _} -> {:error, "Failed to delete core '#{core}'"}
     end
   end
 
