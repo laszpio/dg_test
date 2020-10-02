@@ -1,5 +1,5 @@
 defmodule DgTest.Solr.AdminCmdTest do
-  use ExUnit.Case, async: true
+  use ExUnit.Case, async: false
 
   import Mock
   import DgTest.Solr.AdminCmd
@@ -24,7 +24,14 @@ defmodule DgTest.Solr.AdminCmdTest do
           {"output", 0}
         end do
         assert run("create -c test") == {:ok, "output"}
-        # assert called(System.cmd("runner", ["args", "solr", "create", "-c", "test"]))
+
+        assert called(
+                 System.cmd(
+                   "runner",
+                   ["args", "solr", "create", "-c", "test"],
+                   stderr_to_stdout: true
+                 )
+               )
       end
     end
 
@@ -34,7 +41,14 @@ defmodule DgTest.Solr.AdminCmdTest do
           {"output", 0}
         end do
         assert run("delete -c test") == {:ok, "output"}
-        # assert called(System.cmd("runner", ["args", "solr", "delete", "-c", "test"]))
+
+        assert called(
+                 System.cmd(
+                   "runner",
+                   ["args", "solr", "delete", "-c", "test"],
+                   stderr_to_stdout: true
+                 )
+               )
       end
     end
   end
