@@ -1,9 +1,14 @@
 defmodule DgTest.Solr.AdminCmd do
   @moduledoc false
 
-  def solr_cmd(cmd) do
+  @cmd_opts [stderr_to_stdout: true]
+
+  def run(cmd) do
     [base | opts] = System.get_env("SOLR_CMD") |> String.split()
 
-    {base, opts ++ String.split(cmd)}
+    case Kernel.apply(System, :cmd, [base, opts ++ String.split(cmd), @cmd_opts]) do
+      {output, 0} -> {:ok, output}
+      {output, 1} -> {:error, output}
+    end
   end
 end
