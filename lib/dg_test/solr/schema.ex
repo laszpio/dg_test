@@ -3,6 +3,7 @@ defmodule DgTest.Solr.Schema do
 
   use Tesla, only: [:get, :post]
 
+  alias DgTest.Solr
   alias DgTest.Solr.Utils
   alias DgTest.Solr.Field
 
@@ -119,7 +120,7 @@ defmodule DgTest.Solr.Schema do
   @spec middleware() :: list(tuple)
   def middleware() do
     [
-      {Tesla.Middleware.BaseUrl, DgTest.solr_url()},
+      {Tesla.Middleware.BaseUrl, Solr.solr_url()},
       {Tesla.Middleware.JSON, decode_content_types: ["text/plain"]},
       {Tesla.Middleware.Logger, log_level: :info}
     ]

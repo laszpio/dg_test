@@ -3,6 +3,7 @@ defmodule DgTest do
 
   import HtmlSanitizeEx
 
+  alias DgTest.Solr
   alias DgTest.Solr.Cores
   alias DgTest.Solr.Schema
 
@@ -22,15 +23,7 @@ defmodule DgTest do
   end
 
   def target_url() do
-    Enum.join([solr_url(), solr_core()], "/")
-  end
-
-  def solr_url() do
-    Application.fetch_env!(:dg_test, :solr_url)
-  end
-
-  def solr_core() do
-    Application.fetch_env!(:dg_test, :solr_core)
+    Enum.join([Solr.solr_url(), Solr.solr_core()], "/")
   end
 
   def posts() do
