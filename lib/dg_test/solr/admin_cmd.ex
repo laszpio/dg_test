@@ -3,6 +3,7 @@ defmodule DgTest.Solr.AdminCmd do
 
   @cmd_opts [stderr_to_stdout: true]
 
+  @spec run(binary) :: {:ok, binary} | {:error, binary}
   def run(cmd) do
     [base | opts] = solr_cmd() |> String.split()
 
