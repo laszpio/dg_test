@@ -7,6 +7,8 @@ defmodule DgTest do
   alias DgTest.Solr.Cores
   alias DgTest.Solr.Schema
 
+  import DgTest.Ghost
+
   use Tesla
 
   plug(Tesla.Middleware.BaseUrl, ghost_url())
@@ -88,14 +90,6 @@ defmodule DgTest do
 
   def parse_created_at(post) do
     post |> Map.get("created_at") |> strip_tags()
-  end
-
-  def ghost_url do
-    Application.fetch_env!(:dg_test, :ghost_url)
-  end
-
-  def ghost_key do
-    Application.fetch_env!(:dg_test, :ghost_key)
   end
 
   def page_max(page) do
