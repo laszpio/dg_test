@@ -4,6 +4,7 @@ defmodule DgTest.Solr.Cores do
   use Tesla, only: [:get]
 
   alias DgTest.Solr.AdminApi
+  alias DgTest.Solr.AdminCmd
 
   @spec status() :: {:ok, map} | {:error, binary}
   def status do
@@ -43,9 +44,9 @@ defmodule DgTest.Solr.Cores do
 
   @spec create(binary) :: {:ok, binary} | {:error, binary}
   def create(core) do
-    case System.cmd("docker", ["exec", "dg_test_solr_1", "solr", "create", "-c", core], stderr_to_stdout: true) do
-      {_, 0} -> {:ok, "Created new core '#{core}'"}
-      {_, 1} -> {:error, "Core '#{core}' already exists"}
+    case AdminCmd.run("create -c #{core}") do
+      {:ok, _} -> {:ok, "Created new core '#{core}'"}
+      {:error, _} -> {:error, "Core '#{core}' already exists"}
     end
   end
 
