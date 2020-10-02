@@ -3,7 +3,7 @@ defmodule DgTest do
 
   import HtmlSanitizeEx
 
-  alias DgTest.Solr
+  import DgTest.Solr
   alias DgTest.Solr.Cores
   alias DgTest.Solr.Schema
 
@@ -20,10 +20,6 @@ defmodule DgTest do
   def posts_target() do
     headers = [{"Content-type", "application/json"}]
     %Hui.URL{url: target_url(), handler: "update", headers: headers}
-  end
-
-  def target_url() do
-    Enum.join([Solr.solr_url(), Solr.solr_core()], "/")
   end
 
   def posts() do
