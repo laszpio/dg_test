@@ -7,12 +7,20 @@ defmodule DgTest do
   alias DgTest.Ghost
 
   def reindex_posts() do
-    Hui.update(posts_target(), %Ghost.Resource{name: "posts"} |> Ghost.Resource.all |> Enum.map(&Map.from_struct/1))
+    Hui.update(
+      posts_target(),
+      %Ghost.Resource{name: "posts"}
+      |> Ghost.Resource.all()
+      |> Enum.map(&Map.from_struct/1)
+    )
   end
 
   def posts_target() do
-    headers = [{"Content-type", "application/json"}]
-    %Hui.URL{url: target_url(), handler: "update", headers: headers}
+    %Hui.URL{
+      url: target_url(),
+      handler: "update",
+      headers: [{"Content-type", "application/json"}]
+    }
   end
 
   @spec recreate_index() :: no_return()

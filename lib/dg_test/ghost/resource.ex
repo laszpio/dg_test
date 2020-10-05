@@ -27,7 +27,9 @@ defmodule DgTest.Ghost.Resource do
   end
 
   def fetch(%Resource{name: name}, page) do
-    case get("/#{name}/", query: [key: ghost_key(), page: page, per_page: 10, include: "authors,tags"]) do
+    case get("/#{name}/",
+           query: [key: ghost_key(), page: page, per_page: 10, include: "authors,tags"]
+         ) do
       {:ok, resp} -> resp.body
     end
   end
