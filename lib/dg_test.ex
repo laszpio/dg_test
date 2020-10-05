@@ -4,9 +4,10 @@ defmodule DgTest do
   import DgTest.Solr
   alias DgTest.Solr.Cores
   alias DgTest.Solr.Schema
+  alias DgTest.Ghost
 
   def reindex_posts() do
-    Hui.update(posts_target(), DgTest.Ghost.Crawl.posts())
+    Hui.update(posts_target(), %Ghost.Resource{name: "posts"} |> Ghost.Resource.all |> Enum.map(&Map.from_struct/1))
   end
 
   def posts_target() do
