@@ -1,9 +1,12 @@
 defmodule DgTest.Ghost.Post do
   @moduledoc false
 
+  alias __MODULE__
+
   import HtmlSanitizeEx
 
   @mapping [content: :html]
+  @collect [authors: :name, tags: :name]
 
   defstruct [
     :id,
@@ -17,19 +20,21 @@ defmodule DgTest.Ghost.Post do
   ]
 
   def new(post) do
-    Enum.reduce(Map.to_list(%__MODULE__{}), %__MODULE__{}, fn {k, default}, acc ->
+    Enum.reduce(Map.to_list(%Post{}), %Post{}, fn {k, default}, acc ->
       case Map.fetch(post, (Keyword.get(@mapping, k) || k) |> Atom.to_string) do
-        {:ok, v} -> %{acc | k => parse_attr(v, default)}
+        {:ok, v} -> %{acc | k => parse_attr(k, v, default)}
         :error -> acc
       end
     end)
   end
 
-  def parse_attr(value, []) do
-    value |> Enum.map(&Map.get(&1, "name")) |> Enum.map(&strip_tags/1)
+  def parse_attr(key, value, []) do
+    value
+    |> Enum.map(&Map.get(&1, Keyword.get(@collect, key) |> Atom.to_string))
+    |> Enum.map(&strip_tags/1)
   end
 
-  def parse_attr(value, _default) do
+  def parse_attr(_key, value, _default) do
     value |> strip_tags()
   end
 end
