@@ -36,12 +36,12 @@ defmodule DgTest do
   end
 
   def posts(page) do
-    {:ok, resp} = get("/posts/", query: [key: ghost_key(), page: page, include: "authors,tags"])
+    {:ok, resp} = get("/posts/", query: [key: ghost_key(), page: page, include: "authors,tags", per_page: 2])
     resp.body
   end
 
   def parse_posts(page) do
-    Map.get(page, "posts") |> Enum.map(&DgTest.Ghost.Post.parse_post/1)
+    Map.get(page, "posts") |> Enum.map(&DgTest.Ghost.Post.new/1)
   end
 
   def page_max(page) do

@@ -14,7 +14,7 @@ defmodule DgTest.Ghost.Post do
     authors: [],
   ]
 
-  def parse_post(post) do
+  def new(post) do
     %__MODULE__{
       id: parse_id(post),
       domain: "https://productmarketingalliance.com",
