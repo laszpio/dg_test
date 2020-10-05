@@ -20,7 +20,7 @@ defmodule DgTest.Solr.AdminCmdTest do
   describe "run/1" do
     test "create" do
       with_mock System,
-        cmd: fn "runner", ["args", "solr", "create", "-c", "test"], stderr_to_stdout: true ->
+        cmd: fn "runner", ~w(args solr create -c test), stderr_to_stdout: true ->
           {"output", 0}
         end do
         assert run("create -c test") == {:ok, "output"}
@@ -28,7 +28,7 @@ defmodule DgTest.Solr.AdminCmdTest do
         assert called(
                  System.cmd(
                    "runner",
-                   ["args", "solr", "create", "-c", "test"],
+                   ~w(args solr create -c test),
                    stderr_to_stdout: true
                  )
                )
@@ -37,7 +37,7 @@ defmodule DgTest.Solr.AdminCmdTest do
 
     test "delete" do
       with_mock System,
-        cmd: fn "runner", ["args", "solr", "delete", "-c", "test"], stderr_to_stdout: true ->
+        cmd: fn "runner", ~w(args solr delete -c test), stderr_to_stdout: true ->
           {"output", 0}
         end do
         assert run("delete -c test") == {:ok, "output"}
@@ -45,7 +45,7 @@ defmodule DgTest.Solr.AdminCmdTest do
         assert called(
                  System.cmd(
                    "runner",
-                   ["args", "solr", "delete", "-c", "test"],
+                   ~w(args solr delete -c test),
                    stderr_to_stdout: true
                  )
                )

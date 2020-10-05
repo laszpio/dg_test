@@ -1,8 +1,6 @@
 defmodule DgTest do
   @moduledoc false
 
-  import HtmlSanitizeEx
-
   import DgTest.Solr
   alias DgTest.Solr.Cores
   alias DgTest.Solr.Schema
