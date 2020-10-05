@@ -40,12 +40,14 @@ defmodule DgTest.Ghost.Post do
     end)
   end
 
+  @spec extract(atom, list, list) :: list(binary)
   def extract(key, value, default) when is_list(default) do
     value
     |> Enum.map(&Map.get(&1, Keyword.get(@collect, key) |> Atom.to_string))
     |> Enum.map(&strip_tags/1)
   end
 
+  @spec extract(atom, binary, nil | binary) :: nil | binary
   def extract(_key, value, _default) do
     value |> strip_tags()
   end
