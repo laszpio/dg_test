@@ -48,7 +48,10 @@ defmodule DgTest.Ghost.Post do
   end
 
   @spec extract(atom, binary, nil | binary) :: nil | binary
-  def extract(_key, value, _default) do
-    value |> strip_tags()
+  def extract(_key, value, default) do
+    case value |> strip_tags() do
+      <<>> -> default
+      v -> v
+    end
   end
 end
