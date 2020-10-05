@@ -22,19 +22,19 @@ defmodule DgTest.Ghost.Post do
   def new(post) do
     Enum.reduce(Map.to_list(%Post{}), %Post{}, fn {k, default}, acc ->
       case Map.fetch(post, (Keyword.get(@mapping, k) || k) |> Atom.to_string) do
-        {:ok, v} -> %{acc | k => parse_attr(k, v, default)}
+        {:ok, v} -> %{acc | k => extract(k, v, default)}
         :error -> acc
       end
     end)
   end
 
-  def parse_attr(key, value, []) do
+  def extract(key, value, []) do
     value
     |> Enum.map(&Map.get(&1, Keyword.get(@collect, key) |> Atom.to_string))
     |> Enum.map(&strip_tags/1)
   end
 
-  def parse_attr(_key, value, _default) do
+  def extract(_key, value, _default) do
     value |> strip_tags()
   end
 end
