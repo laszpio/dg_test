@@ -15,16 +15,15 @@ defmodule DgTest.Ghost.Post do
   ]
 
   def new(post) do
-    %__MODULE__{
-      id: parse_id(post),
-      domain: "https://productmarketingalliance.com",
-      slug: Map.get(post, "slug"),
-      title: Map.get(post, "title"),
-      tags: parse_tags(post),
-      authors: parse_authors(post),
-      content: parse_content(post),
-      created_at: parse_created_at(post)
-    }
+    %__MODULE__{}
+    |> Map.put(:id, parse_id(post))
+    |> Map.put(:domain, "https://productmarketingalliance.com")
+    |> Map.put(:slug, parse_slug(post))
+    |> Map.put(:title, parse_title(post))
+    |> Map.put(:content, parse_content(post))
+    |> Map.put(:created_at, parse_created_at(post))
+    |> Map.put(:tags, parse_tags(post))
+    |> Map.put(:authors, parse_authors(post))
   end
 
   def parse_id(post) do

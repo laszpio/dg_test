@@ -36,7 +36,7 @@ defmodule DgTest do
   end
 
   def posts(page) do
-    {:ok, resp} = get("/posts/", query: [key: ghost_key(), page: page, include: "authors,tags", per_page: 2])
+    {:ok, resp} = get("/posts/", query: [key: ghost_key(), page: page, include: "authors,tags"])
     resp.body
   end
 
