@@ -27,13 +27,13 @@ defmodule DgTest.Ghost.Post do
     :published_at,
     domain: "https://productmarketingalliance.com",
     tags: [],
-    authors: [],
+    authors: []
   ]
 
   @spec new(map) :: t
   def new(post) do
     Enum.reduce(Map.to_list(%Post{}), %Post{}, fn {k, default}, acc ->
-      case Map.fetch(post, (Keyword.get(@mapping, k) || k) |> Atom.to_string) do
+      case Map.fetch(post, (Keyword.get(@mapping, k) || k) |> Atom.to_string()) do
         {:ok, v} -> %{acc | k => extract(k, v, default)}
         :error -> acc
       end
@@ -43,7 +43,7 @@ defmodule DgTest.Ghost.Post do
   @spec extract(atom, list, list) :: list(binary)
   def extract(key, value, default) when is_list(default) do
     value
-    |> Enum.map(&Map.get(&1, Keyword.get(@collect, key) |> Atom.to_string))
+    |> Enum.map(&Map.get(&1, Keyword.get(@collect, key) |> Atom.to_string()))
     |> Enum.map(&strip_tags/1)
   end
 

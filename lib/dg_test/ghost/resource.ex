@@ -1,6 +1,8 @@
 defmodule DgTest.Ghost.Resource do
   @moduledoc false
-  
+
+  alias __MODULE__
+
   use Tesla
 
   import DgTest.Ghost
@@ -8,29 +10,25 @@ defmodule DgTest.Ghost.Resource do
   plug(Tesla.Middleware.BaseUrl, ghost_url())
   plug(Tesla.Middleware.JSON)
   plug(Tesla.Middleware.Logger, log_level: :info)
-  
+
   defstruct [:name]
-  
-  def all(name) do
-    page = fetch(name, 1)
+
+  def all(%Resource{name: name} = resource) do
+    page = fetch(resource, 1)
 
     case page_max(page) do
       1 -> [page]
-      n -> [page | 2..n |> Enum.map(&fetch(name, &1))]
+      n -> [page | 2..n |> Enum.map(&fetch(resource, &1))]
     end
     |> Enum.map(&parse(name, &1))
     |> Enum.to_list()
     |> List.flatten()
   end
-  
-  def fetch(resource, page) do
-    case get("/#{resource}/", query: query(page)) do
+
+  def fetch(%Resource{name: name}, page) do
+    case get("/#{name}/", query: [key: ghost_key(), page: page, include: "authors,tags"]) do
       {:ok, resp} -> resp.body
     end
-  end
-  
-  def query(page) do
-    [key: ghost_key(), page: page, include: "authors,tags"]
   end
 
   def parse(resource, page) do
