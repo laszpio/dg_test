@@ -11,8 +11,12 @@ defmodule DgTest.Ghost.PostTest do
 
   describe "extract/3" do
     test "returns string" do
-      assert Post.extract(:title, "Title 1", nil) == "Title 1"
+      assert Post.extract(:title, "Title", nil) == "Title"
       assert Post.extract(:title, nil, "Default") == "Default"
+    end
+
+    test "strips html" do
+      assert Post.extract(:title, "<h1>Title</h1>", nil) == "Title"
     end
   end
 end
