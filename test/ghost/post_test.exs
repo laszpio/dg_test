@@ -1,7 +1,7 @@
 defmodule DgTest.Ghost.PostTest do
   use ExUnit.Case, async: true
 
-  import DgTest.Solr.Post
+  import DgTest.Ghost.Post
 
   describe "new/1" do
   end

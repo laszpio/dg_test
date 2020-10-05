@@ -8,6 +8,17 @@ defmodule DgTest.Ghost.Post do
   @mapping [content: :html]
   @collect [authors: :name, tags: :name]
 
+  @type t :: %__MODULE__{
+          id: binary,
+          slug: binary,
+          title: binary,
+          content: binary,
+          created_at: binary,
+          domain: binary,
+          tags: list,
+          authors: list
+        }
+
   defstruct [
     :id,
     :slug,
@@ -19,6 +30,7 @@ defmodule DgTest.Ghost.Post do
     authors: [],
   ]
 
+  @spec new(map) :: t
   def new(post) do
     Enum.reduce(Map.to_list(%Post{}), %Post{}, fn {k, default}, acc ->
       case Map.fetch(post, (Keyword.get(@mapping, k) || k) |> Atom.to_string) do
@@ -28,7 +40,7 @@ defmodule DgTest.Ghost.Post do
     end)
   end
 
-  def extract(key, value, []) do
+  def extract(key, value, default) when is_list(default) do
     value
     |> Enum.map(&Map.get(&1, Keyword.get(@collect, key) |> Atom.to_string))
     |> Enum.map(&strip_tags/1)
