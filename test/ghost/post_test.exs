@@ -9,7 +9,7 @@ defmodule DgTest.Ghost.PostTest do
 		"slug" => "title-1234-5678-90AB",
 		"title" => "Title",
 		"html" => "<p>Sample post <b>content</b></p>.",
-		"created_at" => "2020-10-02T16:52:52.000+00:00",
+		"published_at" => "2020-10-02T16:52:52.000+00:00",
 		"tags" => [
 			%{"name" => "Tag1"},
 			%{"name" => "Tag2"}
@@ -41,7 +41,7 @@ defmodule DgTest.Ghost.PostTest do
 				slug: "title-1234-5678-90AB",
 				title: "Title",
 				content: "Sample post content.",
-				created_at: "2020-10-02T16:52:52.000+00:00",
+				published_at: "2020-10-02T16:52:52.000+00:00",
 				tags: ["Tag1", "Tag2"],
 				authors: ["Author A", "Author B"]
 			}

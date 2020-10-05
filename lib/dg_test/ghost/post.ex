@@ -13,7 +13,7 @@ defmodule DgTest.Ghost.Post do
           slug: binary,
           title: binary,
           content: binary,
-          created_at: binary,
+          published_at: binary,
           domain: binary,
           tags: list,
           authors: list
@@ -24,7 +24,7 @@ defmodule DgTest.Ghost.Post do
     :slug,
     :title,
     :content,
-    :created_at,
+    :published_at,
     domain: "https://productmarketingalliance.com",
     tags: [],
     authors: [],
