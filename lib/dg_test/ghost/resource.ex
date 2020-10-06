@@ -3,7 +3,6 @@ defmodule DgTest.Ghost.Resource do
 
   alias __MODULE__
   
-
   import DgTest.Ghost
   alias DgTest.Ghost.Post
 
@@ -17,7 +16,9 @@ defmodule DgTest.Ghost.Resource do
   @type post :: Post.t()
 
   @enforce_keys [:name]
-  defstruct [:name]
+  defstruct ~w(name page)a
+  
+  @per_page 10
 
   @spec all(resource) :: list(post)
   def all(%Resource{name: name} = resource) do
@@ -37,7 +38,7 @@ defmodule DgTest.Ghost.Resource do
     query = [
       key: ghost_key(),
       page: page,
-      per_page: 10,
+      per_page: @per_page,
       include: "authors,tags"
     ]
 
