@@ -16,14 +16,12 @@ defmodule DgTest.Ghost.Resource do
   @type post :: Post.t()
 
   @enforce_keys [:name]
-  defstruct ~w(name page)a
-  
-  @per_page 10
+  defstruct [:name, :pages, :pages_count]
 
   @spec all(resource) :: list(post)
   def all(%Resource{name: name} = resource) do
     page = fetch(resource, 1)
-
+    
     case max_page(page) do
       1 -> [page]
       n -> [page | 2..n |> Enum.map(&fetch(resource, &1))]
@@ -38,7 +36,7 @@ defmodule DgTest.Ghost.Resource do
     query = [
       key: ghost_key(),
       page: page,
-      per_page: @per_page,
+      limit: 10,
       include: "authors,tags"
     ]
 
@@ -51,7 +49,7 @@ defmodule DgTest.Ghost.Resource do
     page = resource |> fetch(1)
     
     resource 
-    |> Map.put(:page_count, max_page(page))
+    |> Map.put(:pages_count, max_page(page))
     |> Map.put(:pages, [page])
   end
 
