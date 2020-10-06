@@ -17,6 +17,8 @@ defmodule DgTest.Ghost.Resource do
 
   @enforce_keys [:name]
   defstruct [:name, :pages, :pages_count]
+  
+  @per_page 10
 
   @spec all(resource) :: list(post)
   def all(%Resource{name: name} = resource) do
@@ -36,7 +38,7 @@ defmodule DgTest.Ghost.Resource do
     query = [
       key: ghost_key(),
       page: page,
-      limit: 10,
+      limit: @per_page,
       include: "authors,tags"
     ]
 
