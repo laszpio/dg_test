@@ -4,48 +4,23 @@ defmodule DgTest do
   import DgTest.Solr
   alias DgTest.Solr.Cores
   alias DgTest.Solr.Schema
-
-  import DgTest.Ghost
-
-  use Tesla
-
-  plug(Tesla.Middleware.BaseUrl, ghost_url())
-  plug(Tesla.Middleware.JSON)
-  plug(Tesla.Middleware.Logger, log_level: :info)
+  alias DgTest.Ghost
 
   def reindex_posts() do
-    Hui.update(posts_target(), posts())
+    Hui.update(
+      posts_target(),
+      %Ghost.Resource{name: "posts"}
+      |> Ghost.Resource.all()
+      |> Enum.map(&Map.from_struct/1)
+    )
   end
 
   def posts_target() do
-    headers = [{"Content-type", "application/json"}]
-    %Hui.URL{url: target_url(), handler: "update", headers: headers}
-  end
-
-  def posts() do
-    page = posts(1)
-
-    case page_max(page) do
-      1 -> [page]
-      n -> [page | 2..n |> Enum.map(&posts/1)]
-    end
-    |> Enum.map(&parse_posts/1)
-    |> Enum.to_list()
-    |> List.flatten()
-    |> Enum.map(&Map.from_struct/1)
-  end
-
-  def posts(page) do
-    {:ok, resp} = get("/posts/", query: [key: ghost_key(), page: page, include: "authors,tags"])
-    resp.body
-  end
-
-  def parse_posts(page) do
-    Map.get(page, "posts") |> Enum.map(&DgTest.Ghost.Post.new/1)
-  end
-
-  def page_max(page) do
-    page |> get_in(["meta", "pagination", "pages"])
+    %Hui.URL{
+      url: target_url(),
+      handler: "update",
+      headers: [{"Content-type", "application/json"}]
+    }
   end
 
   @spec recreate_index() :: no_return()
