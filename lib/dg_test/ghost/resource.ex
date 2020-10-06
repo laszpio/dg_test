@@ -24,7 +24,7 @@ defmodule DgTest.Ghost.Resource do
   def all(%Resource{name: name} = resource) do
     page = fetch(resource, 1)
 
-    case page_max(page) do
+    case max_page(page) do
       1 -> [page]
       n -> [page | 2..n |> Enum.map(&fetch(resource, &1))]
     end
@@ -46,12 +46,20 @@ defmodule DgTest.Ghost.Resource do
       %Tesla.Env{status: 200, body: body} -> body
     end
   end
+  
+  def pages_count(%Resource{} = resource) do
+    page = resource |> fetch(1)
+    
+    resource 
+    |> Map.put(:page_count, max_page(page))
+    |> Map.put(:pages, [page])
+  end
 
   def parse(resource, page) do
     Map.get(page, resource) |> Enum.map(&Post.new/1)
   end
 
-  def page_max(page) do
+  def max_page(page) do
     page |> get_in(["meta", "pagination", "pages"])
   end
 end
