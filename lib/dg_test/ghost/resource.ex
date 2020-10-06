@@ -13,12 +13,12 @@ defmodule DgTest.Ghost.Resource do
   plug(Tesla.Middleware.JSON)
   plug(Tesla.Middleware.Logger, log_level: :info)
   
-  @type t :: %__MODULE__{name: binary}
+  @type resource :: %__MODULE__{name: binary}
 
   @enforce_keys [:name]
   defstruct [:name]
 
-  @spec all(t) :: list(%Post{})
+  @spec all(resource) :: list(%Post{})
   def all(%Resource{name: name} = resource) do
     page = fetch(resource, 1)
 
@@ -31,7 +31,7 @@ defmodule DgTest.Ghost.Resource do
     |> List.flatten()
   end
 
-  @spec fetch(t, pos_integer) :: map
+  @spec fetch(resource, pos_integer) :: map
   def fetch(%Resource{name: name}, page) do
     query = [
       key: ghost_key(),
