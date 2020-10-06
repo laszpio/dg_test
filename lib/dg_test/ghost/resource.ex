@@ -14,11 +14,12 @@ defmodule DgTest.Ghost.Resource do
   plug(Tesla.Middleware.Logger, log_level: :info)
   
   @type resource :: %__MODULE__{name: binary}
+  @type post :: Post.t()
 
   @enforce_keys [:name]
   defstruct [:name]
 
-  @spec all(resource) :: list(%Post{})
+  @spec all(resource) :: list(post)
   def all(%Resource{name: name} = resource) do
     page = fetch(resource, 1)
 
