@@ -15,20 +15,20 @@ defmodule DgTest.Ghost.Resource do
   @type t :: %__MODULE__{name: binary}
   @type post :: Post.t()
 
-  @enforce_keys [:name]
-  defstruct [:name, :pages, :pages_count]
+  @enforce_keys [:name, :domain]
+  defstruct [:name, :domain, :pages, :pages_count]
   
   @per_page 10
 
   @spec all(t) :: list(post)
-  def all(%Resource{name: name} = resource) do
+  def all(%Resource{domain: domain, name: name} = resource) do
     page = fetch(resource, 1)
     
     case max_page(page) do
       1 -> [page]
       n -> [page | 2..n |> Enum.map(&fetch(resource, &1))]
     end
-    |> Enum.map(&parse(name, &1))
+    |> Enum.map(&parse(domain, name, &1))
     |> Enum.to_list()
     |> List.flatten()
   end
@@ -56,9 +56,9 @@ defmodule DgTest.Ghost.Resource do
     |> Map.put(:pages, [page])
   end
 
-  @spec parse(binary, map) :: list(post)
-  def parse(resource, page) do
-    Map.get(page, resource) |> Enum.map(&Post.new/1)
+  @spec parse(binary, binary, map) :: list(post)
+  def parse(domain, resource, page) do
+    Map.get(page, resource) |> Enum.map(&Post.new(Map.put(&1, "domain", domain)))
   end
 
   @spec max_page(map) :: pos_integer

@@ -21,11 +21,11 @@ defmodule DgTest.Ghost.Post do
 
   defstruct [
     :id,
+    :domain,
     :slug,
     :title,
     :content,
     :published_at,
-    domain: "https://productmarketingalliance.com",
     tags: [],
     authors: []
   ]
