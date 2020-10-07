@@ -8,7 +8,7 @@ defmodule DgTest.Ghost.Post do
   @mapping [content: :html]
   @collect [authors: :name, tags: :name]
 
-  @type post :: %__MODULE__{
+  @type t :: %__MODULE__{
           id: binary,
           slug: binary,
           title: binary,
@@ -30,7 +30,7 @@ defmodule DgTest.Ghost.Post do
     authors: []
   ]
 
-  @spec new(map) :: post
+  @spec new(map) :: t
   def new(post) do
     Enum.reduce(Map.to_list(%Post{}), %Post{}, fn {k, default}, acc ->
       case Map.fetch(post, (Keyword.get(@mapping, k) || k) |> Atom.to_string()) do
