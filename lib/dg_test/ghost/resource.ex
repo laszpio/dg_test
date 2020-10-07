@@ -30,9 +30,7 @@ defmodule DgTest.Ghost.Resource do
     resource
     |> pages_count()
     |> pages_fetch()
-
-    # |> pages_fetch()
-    # |> pages_parse()
+    |> pages_parse()
   end
 
   @spec fetch(t, pos_integer) :: map
@@ -63,6 +61,10 @@ defmodule DgTest.Ghost.Resource do
 
   def pages_fetch(%Resource{name: name, pages: [p | pages]} = resource, acc) do
     pages_fetch(%{resource | pages: pages}, [fetch(resource, p) | acc])
+  end
+
+  def pages_parse(%Resource{domain: domain, name: name, pages: pages} = resource) do
+    Enum.reduce(pages, fn page, acc -> parse(domain, name, page) end)
   end
 
   @spec pages_count(t) :: t
