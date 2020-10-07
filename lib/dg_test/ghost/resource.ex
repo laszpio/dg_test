@@ -56,6 +56,7 @@ defmodule DgTest.Ghost.Resource do
     |> Map.put(:pages, [page])
   end
 
+  @spec parse(binary, map) :: list(post)
   def parse(resource, page) do
     Map.get(page, resource) |> Enum.map(&Post.new/1)
   end
