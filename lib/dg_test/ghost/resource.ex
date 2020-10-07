@@ -16,7 +16,12 @@ defmodule DgTest.Ghost.Resource do
   @type post :: Post.t()
 
   @enforce_keys [:name, :domain]
-  defstruct [:name, :domain, :pages, :pages_count]
+  defstruct [
+    :name,
+    :domain,
+    pages: [],
+    items: []
+  ]
 
   @per_page 10
 
@@ -25,7 +30,9 @@ defmodule DgTest.Ghost.Resource do
     resource
     |> pages_count()
     |> pages_fetch()
-    |> pages_parse()
+
+    # |> pages_fetch()
+    # |> pages_parse()
   end
 
   @spec fetch(t, pos_integer) :: map
@@ -42,25 +49,46 @@ defmodule DgTest.Ghost.Resource do
     end
   end
 
-  def pages_fetch(%Resource{pages_count: 1, pages: pages} = resource) do
-    %{resource | pages: pages}
+  def pages_fetch(%Resource{} = resource) do
+    pages_fetch(resource, [])
   end
 
-  def pages_fetch(%Resource{pages_count: n, pages: [page]} = resource) do
-    %{resource | pages: [page | 2..n |> Enum.map(&fetch(resource, &1))]}
+  def pages_fetch(%Resource{pages: []} = resource, acc) do
+    %{resource | pages: Enum.reverse(acc)}
   end
 
-  def pages_parse(%Resource{domain: domain, name: name, pages: pages} = resource) do
-    %{resource | pages: Enum.map(pages, &parse(domain, name, &1)) |> Enum.to_list |> List.flatten}
+  def pages_fetch(%Resource{name: name, pages: [p | pages]} = resource, acc) when is_map(p) do
+    pages_fetch(%{resource | pages: pages}, [p | acc])
   end
+
+  def pages_fetch(%Resource{name: name, pages: [p | pages]} = resource, acc) do
+    pages_fetch(%{resource | pages: pages}, [fetch(resource, p) | acc])
+  end
+
+  # def pages_fetch(%Resource{pages_count: 1, pages: pages} = resource) do
+  #   %{resource | pages: pages}
+  # end
+  #
+  # def pages_fetch(%Resource{pages_count: n, pages: [page]} = resource) do
+  #   %{resource | pages: [page | 2..n |> Enum.map(&fetch(resource, &1))]}
+  # end
+  #
+  # def pages_parse(%Resource{domain: domain, name: name, pages: pages} = resource) do
+  #   %{resource | pages: Enum.map(pages, &parse(domain, name, &1)) |> Enum.to_list |> List.flatten}
+  # end
 
   @spec pages_count(t) :: t
   def pages_count(%Resource{} = resource) do
     page = resource |> fetch(1)
 
-    resource
-    |> Map.put(:pages_count, max_page(page))
-    |> Map.put(:pages, [page])
+    %{
+      resource
+      | pages:
+          case max_page(page) do
+            1 -> [page]
+            n -> [page | 2..n |> Enum.to_list]
+          end
+    }
   end
 
   @spec parse(binary, binary, map) :: list(post)
