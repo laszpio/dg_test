@@ -33,7 +33,7 @@ defmodule DgTest.Ghost.Resource do
     |> pages_parse()
   end
 
-  @spec fetch(t, pos_integer) :: map
+  @spec fetch(t, pos_integer) :: list(post)
   def fetch(%Resource{name: name}, page) do
     query = [
       key: ghost_key(),
