@@ -50,11 +50,15 @@ defmodule DgTest.Ghost.Resource do
   end
 
   def pages_fetch(%Resource{domain: domain, name: name, pages_count: n} = resource) do
-    1..n
-    |> Enum.map(&fetch(resource, &1))
-    |> Enum.map(&parse(domain, name, &1))
-    |> Enum.to_list()
-    |> List.flatten()
+    %{
+      resource
+      | pages:
+          1..n
+          |> Enum.map(&fetch(resource, &1))
+          |> Enum.map(&parse(domain, name, &1))
+          |> Enum.to_list()
+          |> List.flatten()
+    }
   end
 
   @spec pages_count(t) :: t
