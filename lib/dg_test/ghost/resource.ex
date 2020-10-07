@@ -20,19 +20,11 @@ defmodule DgTest.Ghost.Resource do
 
   @per_page 10
 
-  @spec all(t) :: list(post)
+  @spec all(t) :: t
   def all(%Resource{domain: domain, name: name} = resource) do
     resource
     |> pages_count()
-    |> pages_fetch()
-
-    # case count do
-    #   1 -> [page]
-    #   n -> [page | 2..n |> Enum.map(&fetch(resource, &1))]
-    # end
-    # |> Enum.map(&parse(domain, name, &1))
-    # |> Enum.to_list()
-    # |> List.flatten()
+    # |> pages_fetch()
   end
 
   @spec fetch(t, pos_integer) :: map
@@ -49,16 +41,12 @@ defmodule DgTest.Ghost.Resource do
     end
   end
 
-  def pages_fetch(%Resource{domain: domain, name: name, pages_count: n} = resource) do
-    %{
-      resource
-      | pages:
-          1..n
-          |> Enum.map(&fetch(resource, &1))
-          |> Enum.map(&parse(domain, name, &1))
-          |> Enum.to_list()
-          |> List.flatten()
-    }
+  def pages_fetch(%Resource{pages_count: 1, pages: pages} = resource) do
+    %{resource | pages: pages}
+  end
+
+  def pages_fetch(%Resource{pages_count: n, pages: [page]} = resource) do
+    %{resource | pages: [page | 2..n |> Enum.map(&fetch(resource, &1))]}
   end
 
   @spec pages_count(t) :: t
@@ -67,6 +55,7 @@ defmodule DgTest.Ghost.Resource do
 
     resource
     |> Map.put(:pages_count, max_page(page))
+    |> Map.put(:pages, [page])
   end
 
   @spec parse(binary, binary, map) :: list(post)
