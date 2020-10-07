@@ -22,9 +22,9 @@ defmodule DgTest.Ghost.Resource do
 
   @spec all(t) :: list(post)
   def all(%Resource{domain: domain, name: name} = resource) do
-    page = fetch(resource, 1)
+    %Resource{pages: [page], pages_count: count} = resource |> pages_count()
 
-    case max_page(page) do
+    case count do
       1 -> [page]
       n -> [page | 2..n |> Enum.map(&fetch(resource, &1))]
     end
