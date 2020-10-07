@@ -13,14 +13,14 @@ defmodule DgTest.Ghost.Resource do
   plug(Tesla.Middleware.Logger, log_level: :info)
   
   @type t :: %__MODULE__{name: binary}
-  # @type post :: Post.t()
+  @type post :: Post.t()
 
   @enforce_keys [:name]
   defstruct [:name, :pages, :pages_count]
   
   @per_page 10
 
-  @spec all(t) :: list
+  @spec all(t) :: list(post)
   def all(%Resource{name: name} = resource) do
     page = fetch(resource, 1)
     
@@ -60,7 +60,8 @@ defmodule DgTest.Ghost.Resource do
     Map.get(page, resource) |> Enum.map(&Post.new/1)
   end
 
+  @spec max_page(map) :: pos_integer
   def max_page(page) do
-    page |> get_in(["meta", "pagination", "pages"])
+    get_in(page, ["meta", "pagination", "pages"])
   end
 end
