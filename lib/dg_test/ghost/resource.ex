@@ -2,7 +2,7 @@ defmodule DgTest.Ghost.Resource do
   @moduledoc false
 
   alias __MODULE__
-  
+
   import DgTest.Ghost
   alias DgTest.Ghost.Post
 
@@ -11,19 +11,19 @@ defmodule DgTest.Ghost.Resource do
   plug(Tesla.Middleware.BaseUrl, ghost_url())
   plug(Tesla.Middleware.JSON)
   plug(Tesla.Middleware.Logger, log_level: :info)
-  
+
   @type t :: %__MODULE__{name: binary}
   @type post :: Post.t()
 
   @enforce_keys [:name, :domain]
   defstruct [:name, :domain, :pages, :pages_count]
-  
+
   @per_page 10
 
   @spec all(t) :: list(post)
   def all(%Resource{domain: domain, name: name} = resource) do
     page = fetch(resource, 1)
-    
+
     case max_page(page) do
       1 -> [page]
       n -> [page | 2..n |> Enum.map(&fetch(resource, &1))]
@@ -46,12 +46,12 @@ defmodule DgTest.Ghost.Resource do
       %Tesla.Env{status: 200, body: body} -> body
     end
   end
-  
+
   @spec pages_count(t) :: t
   def pages_count(%Resource{} = resource) do
     page = resource |> fetch(1)
-    
-    resource 
+
+    resource
     |> Map.put(:pages_count, max_page(page))
     |> Map.put(:pages, [page])
   end
