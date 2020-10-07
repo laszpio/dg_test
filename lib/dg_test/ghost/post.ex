@@ -33,7 +33,9 @@ defmodule DgTest.Ghost.Post do
   @spec new(map) :: t
   def new(post) do
     Enum.reduce(Map.to_list(%Post{}), %Post{}, fn {k, default}, acc ->
-      case Map.fetch(post, (Keyword.get(@mapping, k) || k) |> Atom.to_string()) do
+      attr = (Keyword.get(@mapping, k) || k) |> Atom.to_string()
+
+      case Map.fetch(post, attr) do
         {:ok, v} -> %{acc | k => extract(k, v, default)}
         :error -> acc
       end
