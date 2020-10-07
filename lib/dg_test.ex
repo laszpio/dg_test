@@ -11,6 +11,7 @@ defmodule DgTest do
       posts_target(),
       %Ghost.Resource{name: "posts", domain: "https://productmarketingalliance.com"}
       |> Ghost.Resource.all()
+      |> Map.get(:pages)
       |> Enum.map(&Map.from_struct/1)
     )
   end
