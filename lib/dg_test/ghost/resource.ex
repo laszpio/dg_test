@@ -76,7 +76,7 @@ defmodule DgTest.Ghost.Resource do
 
     case max_page(page) do
       1 -> %{resource | pages: [page]}
-      n -> %{resource | pages: [page | 2..n |> Enum.to_list]}
+      n -> %{resource | pages: [page | 2..n |> Enum.to_list()]}
     end
   end
 
