@@ -63,7 +63,7 @@ defmodule DgTest.Ghost.Resource do
 
   @spec pages_parse(t) :: list(post)
   def pages_parse(%Resource{domain: domain, name: name, pages: pages}) do
-    Enum.reduce(pages, fn page, _acc -> parse(domain, name, page) end)
+    Enum.flat_map(pages, &parse(domain, name, &1))
   end
 
   @spec pages_count(t) :: t
