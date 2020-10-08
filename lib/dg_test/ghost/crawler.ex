@@ -11,7 +11,9 @@ defmodule DgTest.Ghost.Crawler do
 
   defstruct [:domain, :url, :key]
 
+  @resources ~w(posts pages)
+
   def resources(%Crawler{domain: domain} = crawler) do
-    [%Resource{domain: domain, name: "posts"}]
+    Enum.map(@resources, &%Resource{domain: domain, name: &1})
   end
 end
