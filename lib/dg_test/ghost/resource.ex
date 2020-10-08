@@ -14,7 +14,7 @@ defmodule DgTest.Ghost.Resource do
 
   @type t :: %__MODULE__{name: binary}
   @type post :: Post.t()
-
+  @type page :: keyword
   @enforce_keys [:name, :domain]
   defstruct [
     :name,
@@ -25,7 +25,7 @@ defmodule DgTest.Ghost.Resource do
 
   @per_page 10
 
-  @spec all(t) :: t
+  @spec all(t) :: list(post)
   def all(%Resource{} = resource) do
     resource
     |> pages_count()
@@ -64,8 +64,8 @@ defmodule DgTest.Ghost.Resource do
     pages_fetch(%{resource | pages: pages}, [fetch(resource, p) | acc])
   end
 
-  @spec pages_parse(resource) :: t
-  defp pages_parse(%Resource{domain: domain, name: name, pages: pages}) do
+  @spec pages_parse(t) :: list(post)
+  def pages_parse(%Resource{domain: domain, name: name, pages: pages}) do
     Enum.reduce(pages, fn page, _acc -> parse(domain, name, page) end)
   end
 
@@ -84,7 +84,7 @@ defmodule DgTest.Ghost.Resource do
     Map.get(page, name) |> Enum.map(&Post.new(Map.put(&1, "domain", domain)))
   end
 
-  @spec max_page(map) :: pos_integer
+  @spec max_page(page) :: pos_integer
   def max_page(page) do
     get_in(page, ["meta", "pagination", "pages"])
   end
