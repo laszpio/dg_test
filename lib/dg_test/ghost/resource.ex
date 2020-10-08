@@ -8,10 +8,6 @@ defmodule DgTest.Ghost.Resource do
 
   use Tesla
 
-  plug(Tesla.Middleware.BaseUrl, ghost_url())
-  plug(Tesla.Middleware.JSON)
-  plug(Tesla.Middleware.Logger, log_level: :info)
-
   @type t :: %__MODULE__{name: binary}
   @type post :: Post.t()
   @type page :: keyword
@@ -35,7 +31,7 @@ defmodule DgTest.Ghost.Resource do
   end
 
   @spec fetch(t, pos_integer) :: list(post)
-  def fetch(%Resource{name: name}, page) do
+  def fetch(%Resource{name: name, client: client}, page) do
     query = [
       key: ghost_key(),
       page: page,
@@ -43,7 +39,7 @@ defmodule DgTest.Ghost.Resource do
       include: "authors,tags"
     ]
 
-    case get!("/#{name}/", query: query) do
+    case get!(client, "/#{name}/", query: query) do
       %Tesla.Env{status: 200, body: body} -> body
     end
   end

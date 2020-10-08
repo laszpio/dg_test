@@ -7,9 +7,7 @@ defmodule DgTest.Ghost.Crawler do
   alias DgTest.Ghost.Resource
 
   @type t :: %__MODULE__{
-          domain: binary,
-          url: binary,
-          key: binary
+          domain: binary
         }
 
   defstruct [:domain, :url, :key]
