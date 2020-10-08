@@ -8,7 +8,7 @@ defmodule DgTest.Ghost.Crawler do
 
   @type t :: %__MODULE__{domain: binary}
 
-  defstruct [:domain, :url, :key]
+  defstruct [:domain, :resources, :items]
 
   @resources ~w(posts)
 
@@ -16,8 +16,12 @@ defmodule DgTest.Ghost.Crawler do
     %Crawler{domain: domain}
   end
 
-  def resources(%Crawler{domain: domain} = _crawler) do
-    Enum.map(@resources, &%Resource{domain: domain, name: &1, client: client()})
+  def resources(%Crawler{domain: domain} = crawler) do
+    %{crawler | resources: Enum.map(@resources, &%Resource{domain: domain, name: &1, client: client()})}
+  end
+
+  def fetch(%Crawler{resources: resources} = crawler) do
+    %{crawler | items: Enum.flat_map(resources, &Resource.all/1)}
   end
 
   def client do
