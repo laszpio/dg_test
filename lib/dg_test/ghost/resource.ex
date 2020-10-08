@@ -51,19 +51,19 @@ defmodule DgTest.Ghost.Resource do
     pages_fetch(resource, [])
   end
 
-  def pages_fetch(%Resource{pages: []} = resource, acc) do
+  defp pages_fetch(%Resource{pages: []} = resource, acc) do
     %{resource | pages: Enum.reverse(acc)}
   end
 
-  def pages_fetch(%Resource{name: name, pages: [p | pages]} = resource, acc) when is_map(p) do
+  defp pages_fetch(%Resource{pages: [p | pages]} = resource, acc) when is_map(p) do
     pages_fetch(%{resource | pages: pages}, [p | acc])
   end
 
-  def pages_fetch(%Resource{name: name, pages: [p | pages]} = resource, acc) do
+  defp pages_fetch(%Resource{pages: [p | pages]} = resource, acc) do
     pages_fetch(%{resource | pages: pages}, [fetch(resource, p) | acc])
   end
 
-  def pages_parse(%Resource{domain: domain, name: name, pages: pages} = resource) do
+  defp pages_parse(%Resource{domain: domain, name: name, pages: pages} = resource) do
     Enum.reduce(pages, fn page, acc -> parse(domain, name, page) end)
   end
 
