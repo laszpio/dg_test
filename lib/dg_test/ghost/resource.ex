@@ -64,6 +64,7 @@ defmodule DgTest.Ghost.Resource do
     pages_fetch(%{resource | pages: pages}, [fetch(resource, p) | acc])
   end
 
+  @spec pages_parse(resource) :: t
   defp pages_parse(%Resource{domain: domain, name: name, pages: pages}) do
     Enum.reduce(pages, fn page, _acc -> parse(domain, name, page) end)
   end
