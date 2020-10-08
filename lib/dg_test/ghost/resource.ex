@@ -19,6 +19,7 @@ defmodule DgTest.Ghost.Resource do
   defstruct [
     :name,
     :domain,
+    :client,
     pages: [],
     items: []
   ]
