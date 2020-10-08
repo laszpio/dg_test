@@ -9,7 +9,7 @@ defmodule DgTest do
   def reindex_posts() do
     Hui.update(
       posts_target(),
-      %Ghost.Resource{name: "posts"}
+      %Ghost.Resource{name: "posts", domain: "https://productmarketingalliance.com"}
       |> Ghost.Resource.all()
       |> Enum.map(&Map.from_struct/1)
     )

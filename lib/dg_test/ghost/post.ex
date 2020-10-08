@@ -8,7 +8,7 @@ defmodule DgTest.Ghost.Post do
   @mapping [content: :html]
   @collect [authors: :name, tags: :name]
 
-  @type post :: %__MODULE__{
+  @type t :: %__MODULE__{
           id: binary,
           slug: binary,
           title: binary,
@@ -21,19 +21,21 @@ defmodule DgTest.Ghost.Post do
 
   defstruct [
     :id,
+    :domain,
     :slug,
     :title,
     :content,
     :published_at,
-    domain: "https://productmarketingalliance.com",
     tags: [],
     authors: []
   ]
 
-  @spec new(map) :: post
+  @spec new(map) :: t
   def new(post) do
     Enum.reduce(Map.to_list(%Post{}), %Post{}, fn {k, default}, acc ->
-      case Map.fetch(post, (Keyword.get(@mapping, k) || k) |> Atom.to_string()) do
+      attr = (Keyword.get(@mapping, k) || k) |> Atom.to_string()
+
+      case Map.fetch(post, attr) do
         {:ok, v} -> %{acc | k => extract(k, v, default)}
         :error -> acc
       end
