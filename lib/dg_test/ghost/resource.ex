@@ -4,12 +4,12 @@ defmodule DgTest.Ghost.Resource do
   alias __MODULE__
 
   import DgTest.Ghost
-  alias DgTest.Ghost.Post
+  alias DgTest.Ghost.Item
 
   use Tesla, only: [:get]
 
   @type t :: %__MODULE__{name: binary}
-  @type post :: Post.t()
+  @type post :: Item.t()
   @type page :: keyword
   @enforce_keys [:name, :domain]
   defstruct [
@@ -78,7 +78,7 @@ defmodule DgTest.Ghost.Resource do
 
   @spec parse(binary, binary, map) :: list(post)
   def parse(domain, name, page) do
-    Map.get(page, name) |> Enum.map(&Post.new(Map.put(&1, "domain", domain)))
+    Map.get(page, name) |> Enum.map(&Item.new(Map.put(&1, "domain", domain)))
   end
 
   @spec max_page(page) :: pos_integer

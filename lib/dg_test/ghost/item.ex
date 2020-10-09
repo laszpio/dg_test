@@ -1,4 +1,4 @@
-defmodule DgTest.Ghost.Post do
+defmodule DgTest.Ghost.Item do
   @moduledoc false
 
   alias __MODULE__
@@ -31,11 +31,11 @@ defmodule DgTest.Ghost.Post do
   ]
 
   @spec new(map) :: t
-  def new(post) do
-    Enum.reduce(Map.to_list(%Post{}), %Post{}, fn {k, default}, acc ->
+  def new(source) do
+    Enum.reduce(Map.to_list(%Item{}), %Item{}, fn {k, default}, acc ->
       attr = (Keyword.get(@mapping, k) || k) |> Atom.to_string()
 
-      case Map.fetch(post, attr) do
+      case Map.fetch(source, attr) do
         {:ok, v} -> %{acc | k => extract(k, v, default)}
         :error -> acc
       end
