@@ -6,7 +6,7 @@ defmodule DgTest.Ghost.Resource do
   import DgTest.Ghost
   alias DgTest.Ghost.Post
 
-  use Tesla
+  use Tesla, only: [:get]
 
   @type t :: %__MODULE__{name: binary}
   @type post :: Post.t()

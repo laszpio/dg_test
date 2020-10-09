@@ -1,7 +1,7 @@
 defmodule DgTest.Ghost.Crawler do
   alias __MODULE__
 
-  use Tesla
+  use Tesla, only: [:get]
 
   import DgTest.Ghost
   alias DgTest.Ghost.Resource
@@ -22,6 +22,10 @@ defmodule DgTest.Ghost.Crawler do
 
   def fetch(%Crawler{resources: resources} = crawler) do
     %{crawler | items: Enum.flat_map(resources, &Resource.all/1)}
+  end
+
+  def items(%Crawler{items: items} = crawler) do
+    items
   end
 
   def client do
