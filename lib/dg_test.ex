@@ -5,11 +5,11 @@ defmodule DgTest do
   alias DgTest.Solr.{Cores, Schema}
   alias DgTest.Ghost.Crawler
 
-  def reindex() do
+  def reindex do
     Hui.update(target(), items())
   end
 
-  def items() do
+  def items do
     %Crawler{domain: "https://productmarketingalliance.com"}
     |> Crawler.resources()
     |> Crawler.fetch()
@@ -17,7 +17,7 @@ defmodule DgTest do
     |> Enum.map(&Map.from_struct/1)
   end
 
-  def target() do
+  def target do
     %Hui.URL{
       url: target_url(),
       handler: "update",

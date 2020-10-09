@@ -9,6 +9,7 @@ defmodule DgTest.Ghost.Resource do
   @type t :: %__MODULE__{name: binary}
   @type post :: Item.t()
   @type page :: keyword
+
   @enforce_keys [:name, :domain]
   defstruct [
     :name,
