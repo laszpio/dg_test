@@ -4,21 +4,18 @@ defmodule DgTest.Ghost.Resource do
   alias __MODULE__
 
   import DgTest.Ghost
-  alias DgTest.Ghost.Post
-
-  use Tesla
-
-  plug(Tesla.Middleware.BaseUrl, ghost_url())
-  plug(Tesla.Middleware.JSON)
-  plug(Tesla.Middleware.Logger, log_level: :info)
+  alias DgTest.Ghost.Client
+  alias DgTest.Ghost.Item
 
   @type t :: %__MODULE__{name: binary}
-  @type post :: Post.t()
+  @type post :: Item.t()
   @type page :: keyword
+
   @enforce_keys [:name, :domain]
   defstruct [
     :name,
     :domain,
+    :client,
     pages: [],
     items: []
   ]
@@ -34,17 +31,8 @@ defmodule DgTest.Ghost.Resource do
   end
 
   @spec fetch(t, pos_integer) :: list(post)
-  def fetch(%Resource{name: name}, page) do
-    query = [
-      key: ghost_key(),
-      page: page,
-      limit: @per_page,
-      include: "authors,tags"
-    ]
-
-    case get!("/#{name}/", query: query) do
-      %Tesla.Env{status: 200, body: body} -> body
-    end
+  def fetch(%Resource{name: name, client: client}, page) do
+    Client.get!(client, "/#{name}/", query: [page: page, limit: @per_page])
   end
 
   @spec pages_fetch(t) :: t
@@ -66,7 +54,7 @@ defmodule DgTest.Ghost.Resource do
 
   @spec pages_parse(t) :: list(post)
   def pages_parse(%Resource{domain: domain, name: name, pages: pages}) do
-    Enum.reduce(pages, fn page, _acc -> parse(domain, name, page) end)
+    Enum.flat_map(pages, &parse(domain, name, &1))
   end
 
   @spec pages_count(t) :: t
@@ -75,13 +63,13 @@ defmodule DgTest.Ghost.Resource do
 
     case max_page(page) do
       1 -> %{resource | pages: [page]}
-      n -> %{resource | pages: [page | 2..n |> Enum.to_list]}
+      n -> %{resource | pages: [page | 2..n |> Enum.to_list()]}
     end
   end
 
   @spec parse(binary, binary, map) :: list(post)
   def parse(domain, name, page) do
-    Map.get(page, name) |> Enum.map(&Post.new(Map.put(&1, "domain", domain)))
+    Map.get(page, name) |> Enum.map(&Item.new(Map.put(&1, "domain", domain)))
   end
 
   @spec max_page(page) :: pos_integer

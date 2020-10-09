@@ -1,9 +1,9 @@
-defmodule DgTest.Ghost.PostTest do
+defmodule DgTest.Ghost.ItemTest do
   use ExUnit.Case, async: true
 
-  alias DgTest.Ghost.Post
+  alias DgTest.Ghost.Item
 
-  @sample_post %{
+  @sample_source %{
     "id" => "1234-5678-90AB",
     "domain" => "http://test.local",
     "slug" => "title-1234-5678-90AB",
@@ -22,20 +22,20 @@ defmodule DgTest.Ghost.PostTest do
 
   describe "new/1" do
     test "return empty" do
-      assert %Post{} = Post.new(%{})
+      assert %Item{} = Item.new(%{})
     end
 
     test "maps keys when defined" do
-      assert %Post{content: "Content here"} = Post.new(%{"html" => "Content here"})
+      assert %Item{content: "Content here"} = Item.new(%{"html" => "Content here"})
     end
 
     test "maps collections when defined" do
-      assert %Post{authors: [%{"name" => "Author A"}, %{"name" => "Author B"}]}
-      assert %Post{tags: [%{"name" => "Tag A"}, %{"name" => "Tag B"}]}
+      assert %Item{authors: [%{"name" => "Author A"}, %{"name" => "Author B"}]}
+      assert %Item{tags: [%{"name" => "Tag A"}, %{"name" => "Tag B"}]}
     end
 
     test "returns Post" do
-      assert Post.new(@sample_post) == %Post{
+      assert Item.new(@sample_source) == %Item{
                id: "1234-5678-90AB",
                domain: "http://test.local",
                slug: "title-1234-5678-90AB",
@@ -50,12 +50,12 @@ defmodule DgTest.Ghost.PostTest do
 
   describe "extract/3" do
     test "returns string" do
-      assert Post.extract(:title, "Title", nil) == "Title"
-      assert Post.extract(:title, nil, "Default") == "Default"
+      assert Item.extract(:title, "Title", nil) == "Title"
+      assert Item.extract(:title, nil, "Default") == "Default"
     end
 
     test "strips html" do
-      assert Post.extract(:title, "<h1>Title</h1>", nil) == "Title"
+      assert Item.extract(:title, "<h1>Title</h1>", nil) == "Title"
     end
   end
 end

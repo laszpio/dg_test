@@ -2,20 +2,22 @@ defmodule DgTest do
   @moduledoc false
 
   import DgTest.Solr
-  alias DgTest.Solr.Cores
-  alias DgTest.Solr.Schema
-  alias DgTest.Ghost
+  alias DgTest.Solr.{Cores, Schema}
+  alias DgTest.Ghost.Crawler
 
-  def reindex_posts() do
-    Hui.update(
-      posts_target(),
-      %Ghost.Resource{name: "posts", domain: "https://productmarketingalliance.com"}
-      |> Ghost.Resource.all()
-      |> Enum.map(&Map.from_struct/1)
-    )
+  def reindex do
+    Hui.update(target(), items())
   end
 
-  def posts_target() do
+  def items do
+    %Crawler{domain: "https://productmarketingalliance.com"}
+    |> Crawler.resources()
+    |> Crawler.fetch()
+    |> Map.get(:items)
+    |> Enum.map(&Map.from_struct/1)
+  end
+
+  def target do
     %Hui.URL{
       url: target_url(),
       handler: "update",
