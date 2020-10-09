@@ -6,8 +6,6 @@ defmodule DgTest.Ghost.Resource do
   import DgTest.Ghost
   alias DgTest.Ghost.Item
 
-  use Tesla, only: [:get]
-
   @type t :: %__MODULE__{name: binary}
   @type post :: Item.t()
   @type page :: keyword
@@ -34,7 +32,7 @@ defmodule DgTest.Ghost.Resource do
   def fetch(%Resource{name: name, client: client}, page) do
     query = [page: page, limit: @per_page]
 
-    case get!(client, "/#{name}/", query: query) do
+    case Tesla.get!(client, "/#{name}/", query: query) do
       %Tesla.Env{status: 200, body: body} -> body
     end
   end
