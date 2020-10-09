@@ -27,7 +27,7 @@ defmodule DgTest.Ghost.Crawler do
     %{crawler | items: Enum.flat_map(resources, &Resource.all/1)}
   end
 
-  def items(%Crawler{items: items} = crawler) do
+  def items(%Crawler{items: items} = _crawler) do
     items
   end
 

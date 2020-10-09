@@ -1,5 +1,7 @@
 defmodule DgTest.Ghost.Client do
-  alias __MODULE__
-
-  use Tesla, only: [:get]
+  def get!(client, path, query: query) do
+    case Tesla.get!(client, path, query: query) do
+      %Tesla.Env{status: 200, body: body} -> body
+    end
+  end
 end

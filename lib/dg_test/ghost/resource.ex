@@ -4,6 +4,7 @@ defmodule DgTest.Ghost.Resource do
   alias __MODULE__
 
   import DgTest.Ghost
+  alias DgTest.Ghost.Client
   alias DgTest.Ghost.Item
 
   @type t :: %__MODULE__{name: binary}
@@ -19,7 +20,7 @@ defmodule DgTest.Ghost.Resource do
     items: []
   ]
 
-  @per_page 100
+  @per_page 10
 
   @spec all(t) :: list(post)
   def all(%Resource{} = resource) do
@@ -31,11 +32,7 @@ defmodule DgTest.Ghost.Resource do
 
   @spec fetch(t, pos_integer) :: list(post)
   def fetch(%Resource{name: name, client: client}, page) do
-    query = [page: page, limit: @per_page]
-
-    case Tesla.get!(client, "/#{name}/", query: query) do
-      %Tesla.Env{status: 200, body: body} -> body
-    end
+    Client.get!(client, "/#{name}/", query: [page: page, limit: @per_page])
   end
 
   @spec pages_fetch(t) :: t
