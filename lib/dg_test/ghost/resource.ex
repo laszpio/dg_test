@@ -20,7 +20,7 @@ defmodule DgTest.Ghost.Resource do
     items: []
   ]
 
-  @per_page 10
+  @per_page 100
 
   @spec all(t) :: list(post)
   def all(%Resource{} = resource) do
@@ -32,12 +32,7 @@ defmodule DgTest.Ghost.Resource do
 
   @spec fetch(t, pos_integer) :: list(post)
   def fetch(%Resource{name: name, client: client}, page) do
-    query = [
-      key: ghost_key(),
-      page: page,
-      limit: @per_page,
-      include: "authors,tags"
-    ]
+    query = [page: page, limit: @per_page]
 
     case get!(client, "/#{name}/", query: query) do
       %Tesla.Env{status: 200, body: body} -> body
