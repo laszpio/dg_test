@@ -5,8 +5,8 @@ defmodule DgTest do
   alias DgTest.Solr.{Cores, Schema}
   alias DgTest.Ghost.Crawler
 
-  def reindex_posts() do
-    Hui.update(posts_target(), items())
+  def reindex() do
+    Hui.update(target(), items())
   end
 
   def items() do
@@ -17,7 +17,7 @@ defmodule DgTest do
     |> Enum.map(&Map.from_struct/1)
   end
 
-  def posts_target() do
+  def target() do
     %Hui.URL{
       url: target_url(),
       handler: "update",
