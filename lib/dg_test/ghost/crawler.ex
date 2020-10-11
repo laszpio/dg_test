@@ -2,6 +2,7 @@ defmodule DgTest.Ghost.Crawler do
   alias __MODULE__
 
   import DgTest.Ghost
+  alias DgTest.Ghost.Client
   alias DgTest.Ghost.Resource
 
   @type t :: %__MODULE__{domain: binary}
@@ -10,8 +11,9 @@ defmodule DgTest.Ghost.Crawler do
 
   @resources ~w(posts)
 
-  def new(domain) do
-    %Crawler{domain: domain}
+  def start(%Crawler{} = crawler) do
+    Client.start_link()
+    crawler
   end
 
   def resources(%Crawler{domain: domain} = crawler) do

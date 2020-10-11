@@ -3,16 +3,15 @@ defmodule DgTest do
 
   import DgTest.Solr
   alias DgTest.Solr.{Cores, Schema}
-  alias DgTest.Ghost.{Client, Crawler}
+  alias DgTest.Ghost.Crawler
 
   def reindex do
     Hui.update(target(), items())
   end
 
   def items do
-    Client.start_link()
-
     %Crawler{domain: "https://productmarketingalliance.com"}
+    |> Crawler.start()
     |> Crawler.resources()
     |> Crawler.fetch()
     |> Map.get(:items)
