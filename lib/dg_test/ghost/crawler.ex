@@ -1,28 +1,13 @@
 defmodule DgTest.Ghost.Crawler do
   alias __MODULE__
 
-  alias DgTest.Ghost.Client
   alias DgTest.Ghost.Resource
 
   @type t :: %__MODULE__{domain: binary}
 
-  defstruct [:domain, :pid, :resources, :items]
+  defstruct [:domain, :resources, :items]
 
   @resources ~w(posts)
-
-  @spec start(t) :: t
-  def start(%Crawler{} = crawler) do
-    case Client.start_link() do
-      {:ok, pid} -> %{crawler | pid: pid}
-    end
-  end
-
-  @spec stop(t) :: t
-  def stop(%Crawler{pid: pid} = crawler) do
-    case Client.stop(pid) do
-      :ok -> %{crawler | pid: nil}
-    end
-  end
 
   @spec resources(t) :: t
   def resources(%Crawler{domain: domain} = crawler) do

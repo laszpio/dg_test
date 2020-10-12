@@ -3,7 +3,6 @@ defmodule DgTest.Ghost.Resource do
 
   alias __MODULE__
 
-  import DgTest.Ghost
   alias DgTest.Ghost.Client
   alias DgTest.Ghost.Item
 

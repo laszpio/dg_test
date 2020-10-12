@@ -11,10 +11,8 @@ defmodule DgTest do
 
   def items do
     %Crawler{domain: "https://productmarketingalliance.com"}
-    # |> Crawler.start()
     |> Crawler.resources()
     |> Crawler.fetch()
-    # |> Crawler.stop()
   end
 
   def target do
