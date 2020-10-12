@@ -25,13 +25,13 @@ defmodule DgTest.Solr.SchemaApi do
 
   def handle_call({:info, core}, _from, state) do
     case Tesla.get!(client(), "/#{core}/schema") do
-      response -> {:reply, response, state}
+      %Tesla.Env{} = response -> {:reply, response, state}
     end
   end
 
   def handle_call({:change, core, change}, _from, state) do
     case Tesla.post!(client(), "/#{core}/schema", change) do
-      response -> {:reply, response, state}
+      %Tesla.Env{} = response -> {:reply, response, state}
     end
   end
 
