@@ -1,12 +1,12 @@
 defmodule DgTest.Ghost.Client do
   use GenServer
 
-  def init(init_args) do
-    {:ok, init_args}
+  def init(state) do
+    {:ok, state}
   end
 
-  def start_link(inital \\ nil) do
-    GenServer.start_link(__MODULE__, inital, name: __MODULE__)
+  def start_link(state \\ nil) do
+    GenServer.start_link(__MODULE__, state, name: __MODULE__)
   end
 
   def get!(path, query: query) do
