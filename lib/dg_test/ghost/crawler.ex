@@ -18,9 +18,9 @@ defmodule DgTest.Ghost.Crawler do
   end
 
   def stop(%Crawler{pid: pid} = crawler) do
-    Client.stop(pid)
-
-    crawler
+    case Client.stop(pid) do
+      :ok -> %{crawler | pid: nil}
+    end
   end
 
   def resources(%Crawler{domain: domain} = crawler) do
