@@ -18,9 +18,7 @@ defmodule DgTest.Ghost.Crawler do
   end
 
   def stop(%Crawler{pid: pid} = crawler) do
-    case Process.alive?(pid) do
-      true -> Process.exit(pid, :exit)
-    end
+    Client.stop(pid)
 
     crawler
   end
