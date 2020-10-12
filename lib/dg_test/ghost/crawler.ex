@@ -1,8 +1,6 @@
 defmodule DgTest.Ghost.Crawler do
   alias __MODULE__
 
-  use Tesla, only: [:get]
-
   import DgTest.Ghost
   alias DgTest.Ghost.Resource
 
