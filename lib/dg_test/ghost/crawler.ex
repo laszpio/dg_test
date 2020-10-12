@@ -25,15 +25,4 @@ defmodule DgTest.Ghost.Crawler do
   def items(%Crawler{items: items} = _crawler) do
     items
   end
-
-  def client do
-    middleware = [
-      {Tesla.Middleware.BaseUrl, ghost_url()},
-      {Tesla.Middleware.Query, [key: ghost_key(), include: "authors,tags"]},
-      Tesla.Middleware.JSON,
-      {Tesla.Middleware.Logger, log_level: :info}
-    ]
-
-    Tesla.client(middleware)
-  end
 end
