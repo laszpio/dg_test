@@ -37,7 +37,7 @@ defmodule DgTest.Solr.Schema do
 
   @spec info(binary | atom) :: {:ok, t} | {:error, binary}
   def info(core) do
-    case SchemaApi.get!(core) do
+    case SchemaApi.info(core) do
       %Tesla.Env{status: 200, body: body} -> parse_info(body)
       %Tesla.Env{status: 404} -> {:error, "Core '#{core}' doesn't exist."}
     end
@@ -96,7 +96,7 @@ defmodule DgTest.Solr.Schema do
 
   @spec apply_change(binary | atom, map) :: :ok | {:error, binary}
   def apply_change(core, change) do
-    case SchemaApi.post!(core, change) do
+    case SchemaApi.change(core, change) do
       %Tesla.Env{status: 200, body: body} -> parse_response(body)
       %Tesla.Env{status: 400, body: body} -> parse_response(body)
     end
