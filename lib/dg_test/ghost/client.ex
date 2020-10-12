@@ -9,6 +9,10 @@ defmodule DgTest.Ghost.Client do
     GenServer.start_link(__MODULE__, state, name: __MODULE__)
   end
 
+  def stop(pid) do
+    GenServer.stop(pid, :normal)
+  end
+
   def get!(path, query: query) do
     GenServer.call(__MODULE__, {:get!, path, query: query})
   end
@@ -17,6 +21,10 @@ defmodule DgTest.Ghost.Client do
     case Tesla.get!(client(), path, query: query) do
       %Tesla.Env{status: 200, body: body} -> {:reply, body, inital}
     end
+  end
+
+  def terminate(:normal, state) do
+    state
   end
 
   def client do
