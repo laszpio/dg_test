@@ -7,8 +7,8 @@ defmodule DgTest.Application do
 
   def start(_type, _args) do
     children = [
-      # Starts a worker by calling: DgTest.Worker.start_link(arg)
-      # {DgTest.Worker, arg}
+      {DgTest.Ghost.Client, []},
+      {DgTest.Solr.SchemaApi, []}
     ]
 
     # See https://hexdocs.pm/elixir/Supervisor.html

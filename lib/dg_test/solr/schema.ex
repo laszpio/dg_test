@@ -1,7 +1,6 @@
 defmodule DgTest.Solr.Schema do
   @moduledoc false
 
-  alias DgTest.Solr
   alias DgTest.Solr.Utils
   alias DgTest.Solr.Field
   alias DgTest.Solr.SchemaApi
