@@ -18,9 +18,8 @@ defmodule DgTest do
   end
 
   def test do
-    {:ok, pid} = Client.start_link(Crawler.client())
+    Client.start_link(Crawler.client())
     items()
-    Process.exit(pid, :kill)
   end
 
   def target do
