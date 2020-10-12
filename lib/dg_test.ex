@@ -13,6 +13,7 @@ defmodule DgTest do
     %Crawler{domain: "https://productmarketingalliance.com"}
     |> Crawler.resources()
     |> Crawler.fetch()
+    |> Crawler.items()
   end
 
   def target do

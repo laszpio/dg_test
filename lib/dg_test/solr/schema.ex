@@ -1,11 +1,9 @@
 defmodule DgTest.Solr.Schema do
   @moduledoc false
 
-  use Tesla, only: [:get, :post]
-
-  alias DgTest.Solr
   alias DgTest.Solr.Utils
   alias DgTest.Solr.Field
+  alias DgTest.Solr.SchemaApi
 
   @typedoc """
   Struct for the common and SolrCloud schema.
@@ -39,7 +37,7 @@ defmodule DgTest.Solr.Schema do
 
   @spec info(binary | atom) :: {:ok, t} | {:error, binary}
   def info(core) do
-    case get!(client(), "/#{core}/schema") do
+    case SchemaApi.info(core) do
       %Tesla.Env{status: 200, body: body} -> parse_info(body)
       %Tesla.Env{status: 404} -> {:error, "Core '#{core}' doesn't exist."}
     end
@@ -98,7 +96,7 @@ defmodule DgTest.Solr.Schema do
 
   @spec apply_change(binary | atom, map) :: :ok | {:error, binary}
   def apply_change(core, change) do
-    case post!(client(), "/#{core}/schema", change) do
+    case SchemaApi.change(core, change) do
       %Tesla.Env{status: 200, body: body} -> parse_response(body)
       %Tesla.Env{status: 400, body: body} -> parse_response(body)
     end
@@ -110,19 +108,5 @@ defmodule DgTest.Solr.Schema do
 
   def parse_response(%{"error" => %{"details" => details}}) do
     {:error, details}
-  end
-
-  @spec client() :: %Tesla.Client{}
-  def client() do
-    Tesla.client(middleware())
-  end
-
-  @spec middleware() :: list(tuple)
-  def middleware() do
-    [
-      {Tesla.Middleware.BaseUrl, Solr.solr_url()},
-      {Tesla.Middleware.JSON, decode_content_types: ["text/plain"]},
-      {Tesla.Middleware.Logger, log_level: :info}
-    ]
   end
 end
