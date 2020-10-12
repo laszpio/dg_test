@@ -19,9 +19,19 @@ defmodule DgTest.Solr.SchemaApi do
     GenServer.call(__MODULE__, {:get!, core})
   end
 
-  def handle_call({:get!, core}, _from, inital) do
+  def post!(core, change) do
+    GenServer.call(__MODULE__, {:post!, core, change})
+  end
+
+  def handle_call({:get!, core}, _from, state) do
     case Tesla.get!(client(), "/#{core}/schema") do
-      response -> {:reply, response, inital}
+      response -> {:reply, response, state}
+    end
+  end
+
+  def handle_call({:post!, core, change}, _from, state) do
+    case Tesla.post!(client(), "/#{core}/schema", change) do
+      response -> {:reply, response, state}
     end
   end
 
