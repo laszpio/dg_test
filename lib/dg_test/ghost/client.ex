@@ -5,7 +5,7 @@ defmodule DgTest.Ghost.Client do
     {:ok, init_args}
   end
 
-  def start_link(inital \\ 0) do
+  def start_link(inital \\ nil) do
     GenServer.start_link(__MODULE__, inital, name: __MODULE__)
   end
 

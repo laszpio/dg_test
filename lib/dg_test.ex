@@ -10,16 +10,13 @@ defmodule DgTest do
   end
 
   def items do
+    Client.start_link()
+
     %Crawler{domain: "https://productmarketingalliance.com"}
     |> Crawler.resources()
     |> Crawler.fetch()
     |> Map.get(:items)
     |> Enum.map(&Map.from_struct/1)
-  end
-
-  def test do
-    Client.start_link(Crawler.client())
-    items()
   end
 
   def target do
