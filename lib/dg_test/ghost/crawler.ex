@@ -1,7 +1,6 @@
 defmodule DgTest.Ghost.Crawler do
   alias __MODULE__
 
-  import DgTest.Ghost
   alias DgTest.Ghost.Client
   alias DgTest.Ghost.Resource
 
