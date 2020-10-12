@@ -1,5 +1,19 @@
 defmodule DgTest.Solr.SchemaApi do
+  use GenServer
+
   alias DgTest.Solr
+
+  def init(state) do
+    {:ok, state}
+  end
+
+  def start_link(state \\ nil) do
+    GenServer.start_link(__MODULE__, state, name: __MODULE__)
+  end
+
+  def stop(pid) do
+    GenServer.stop(pid, :normal)
+  end
 
   @spec client() :: %Tesla.Client{}
   def client() do
