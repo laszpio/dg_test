@@ -7,12 +7,21 @@ defmodule DgTest.Ghost.Crawler do
 
   @type t :: %__MODULE__{domain: binary}
 
-  defstruct [:domain, :resources, :items]
+  defstruct [:domain, :pid, :resources, :items]
 
   @resources ~w(posts)
 
   def start(%Crawler{} = crawler) do
-    Client.start_link()
+    case Client.start_link() do
+      {:ok, pid} -> %{crawler | pid: pid}
+    end
+  end
+
+  def stop(%Crawler{pid: pid} = crawler) do
+    case Process.alive?(pid) do
+      true -> Process.exit(pid, :exit)
+    end
+
     crawler
   end
 

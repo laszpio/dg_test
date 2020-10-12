@@ -14,6 +14,7 @@ defmodule DgTest do
     |> Crawler.start()
     |> Crawler.resources()
     |> Crawler.fetch()
+    |> Crawler.stop()
     |> Map.get(:items)
     |> Enum.map(&Map.from_struct/1)
   end
