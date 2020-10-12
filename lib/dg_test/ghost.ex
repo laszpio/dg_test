@@ -1,13 +1,11 @@
 defmodule DgTest.Ghost do
-  @moduledoc false
+  use Application
 
-  @spec ghost_url :: binary
-  def ghost_url do
-    Application.fetch_env!(:dg_test, :ghost_url)
-  end
+  def start(_type, _args) do
+    children = [
+      {DgTest.Ghost.Client, []}
+    ]
 
-  @spec ghost_key :: binary
-  def ghost_key do
-    Application.fetch_env!(:dg_test, :ghost_key)
+    Supervisor.start_link(children, strategy: :one_for_one)
   end
 end

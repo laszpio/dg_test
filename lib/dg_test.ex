@@ -13,8 +13,6 @@ defmodule DgTest do
     %Crawler{domain: "https://productmarketingalliance.com"}
     |> Crawler.resources()
     |> Crawler.fetch()
-    |> Map.get(:items)
-    |> Enum.map(&Map.from_struct/1)
   end
 
   def target do
