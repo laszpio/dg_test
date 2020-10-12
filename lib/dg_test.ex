@@ -15,8 +15,6 @@ defmodule DgTest do
     |> Crawler.resources()
     |> Crawler.fetch()
     |> Crawler.stop()
-    |> Map.get(:items)
-    |> Enum.map(&Map.from_struct/1)
   end
 
   def target do

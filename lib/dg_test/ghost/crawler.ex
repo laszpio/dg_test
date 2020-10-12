@@ -32,6 +32,6 @@ defmodule DgTest.Ghost.Crawler do
   end
 
   def items(%Crawler{items: items} = _crawler) do
-    items
+    Enum.map(items, &Map.from_struct/1)
   end
 end
