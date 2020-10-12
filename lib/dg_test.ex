@@ -3,7 +3,7 @@ defmodule DgTest do
 
   import DgTest.Solr
   alias DgTest.Solr.{Cores, Schema}
-  alias DgTest.Ghost.Crawler
+  alias DgTest.Ghost.{Client, Crawler}
 
   def reindex do
     Hui.update(target(), items())
@@ -15,6 +15,12 @@ defmodule DgTest do
     |> Crawler.fetch()
     |> Map.get(:items)
     |> Enum.map(&Map.from_struct/1)
+  end
+
+  def test do
+    {:ok, pid} = Client.start_link(Crawler.client())
+    items()
+    Process.exit(pid, :kill)
   end
 
   def target do
