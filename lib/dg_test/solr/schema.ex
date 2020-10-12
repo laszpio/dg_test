@@ -4,6 +4,7 @@ defmodule DgTest.Solr.Schema do
   alias DgTest.Solr
   alias DgTest.Solr.Utils
   alias DgTest.Solr.Field
+  alias DgTest.Solr.SchemaApi
 
   @typedoc """
   Struct for the common and SolrCloud schema.
@@ -37,7 +38,7 @@ defmodule DgTest.Solr.Schema do
 
   @spec info(binary | atom) :: {:ok, t} | {:error, binary}
   def info(core) do
-    case Tesla.get!(SchemaApi.client(), "/#{core}/schema") do
+    case SchemaApi.get!(core) do
       %Tesla.Env{status: 200, body: body} -> parse_info(body)
       %Tesla.Env{status: 404} -> {:error, "Core '#{core}' doesn't exist."}
     end

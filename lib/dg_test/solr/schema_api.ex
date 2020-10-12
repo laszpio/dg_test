@@ -15,6 +15,16 @@ defmodule DgTest.Solr.SchemaApi do
     GenServer.stop(pid, :normal)
   end
 
+  def get!(core) do
+    GenServer.call(__MODULE__, {:get!, core})
+  end
+
+  def handle_call({:get!, core}, _from, inital) do
+    case Tesla.get!(client(), "/#{core}/schema") do
+      response -> {:reply, response, inital}
+    end
+  end
+
   @spec client() :: %Tesla.Client{}
   def client() do
     Tesla.client(middleware())
