@@ -3,12 +3,13 @@ defmodule DgTest.Solr.Cores do
 
   use Tesla, only: [:get]
 
+  alias DgTest.Solr.Client
   alias DgTest.Solr.AdminApi
   alias DgTest.Solr.AdminCmd
 
   @spec status() :: {:ok, map} | {:error, binary}
   def status do
-    case get(AdminApi.client(), "/cores", query: [action: "STATUS"]) do
+    case Client.get("admin/cores", query: [action: "STATUS"]) do
       {:ok, %Tesla.Env{status: 200, body: body}} -> parse_status(body)
       {:error, msg} -> {:error, msg}
     end
@@ -16,7 +17,7 @@ defmodule DgTest.Solr.Cores do
 
   @spec status(binary | atom) :: {:ok, map} | {:error, binary}
   def status(core) do
-    case get(AdminApi.client(), "/cores", query: [action: "STATUS", core: core]) do
+    case Client.get("admin/cores", query: [action: "STATUS", core: core]) do
       {:ok, %Tesla.Env{status: 200, body: body}} -> parse_status(body, core)
       {:error, msg} -> {:error, msg}
     end
