@@ -1,8 +1,7 @@
-defmodule DgTest.Solr.SchemaApi do
+defmodule DgTest.Solr.Client do
   use GenServer
 
   alias DgTest.Solr
-  alias DgTest.Solr.Client
 
   def init(state) do
     {:ok, state}
@@ -16,20 +15,20 @@ defmodule DgTest.Solr.SchemaApi do
     GenServer.stop(pid, :normal)
   end
 
-  def info(core) do
-    GenServer.call(__MODULE__, {:info, core})
+  def get(path, query \\ []) do
+    GenServer.call(__MODULE__, {:get, path, query})
   end
 
-  def change(core, change) do
-    GenServer.call(__MODULE__, {:change, core, change})
+  def get!(path, query \\ []) do
+    GenServer.call(__MODULE__, {:get!, path, query})
   end
 
-  def handle_call({:info, core}, _from, state) do
-    {:reply, Client.get!("/#{core}/schema"), state}
+  def handle_call({:get, path, query}, _from, state) do
+    {:reply, Tesla.get(client(), path, query), state}
   end
 
-  def handle_call({:change, core, change}, _from, state) do
-    case Tesla.post!(client(), "/#{core}/schema", change) do
+  def handle_call({:get!, path, query}, _from, state) do
+    case Tesla.get!(client(), path, query) do
       %Tesla.Env{} = response -> {:reply, response, state}
     end
   end
