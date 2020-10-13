@@ -1,10 +1,7 @@
 defmodule DgTest.Solr.Cores do
   @moduledoc false
 
-  use Tesla, only: [:get]
-
   alias DgTest.Solr.Client
-  alias DgTest.Solr.AdminApi
   alias DgTest.Solr.AdminCmd
 
   @spec status() :: {:ok, map} | {:error, binary}
