@@ -7,9 +7,9 @@ defmodule DgTest.Application do
 
   def start(_type, _args) do
     children = [
-      {DgTest.Ghost.Client, []},
-      {DgTest.Solr.Client, []},
-      {DgTest.Solr.SchemaApi, []}
+      DgTest.Ghost.Client,
+      DgTest.Solr.Client,
+      DgTest.Solr.SchemaApi,
     ]
 
     # See https://hexdocs.pm/elixir/Supervisor.html
