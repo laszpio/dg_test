@@ -15,8 +15,16 @@ defmodule DgTest.Solr.Client do
     GenServer.stop(pid, :normal)
   end
 
+  def get(path, query \\ []) do
+    GenServer.call(__MODULE__, {:get, path, query})
+  end
+
   def get!(path, query \\ []) do
     GenServer.call(__MODULE__, {:get!, path, query})
+  end
+
+  def handle_call({:get, path, query}, _from, state) do
+    {:reply, Tesla.get(client(), path, query), state}
   end
 
   def handle_call({:get!, path, query}, _from, state) do
