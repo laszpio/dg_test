@@ -2,6 +2,7 @@ defmodule DgTest.Solr.SchemaApi do
   use GenServer
 
   alias DgTest.Solr
+  alias DgTest.Solr.Client
 
   def init(state) do
     {:ok, state}
@@ -24,9 +25,7 @@ defmodule DgTest.Solr.SchemaApi do
   end
 
   def handle_call({:info, core}, _from, state) do
-    case Tesla.get!(client(), "/#{core}/schema") do
-      %Tesla.Env{} = response -> {:reply, response, state}
-    end
+    {:reply, Client.get!("/#{core}/schema"), state}
   end
 
   def handle_call({:change, core, change}, _from, state) do
