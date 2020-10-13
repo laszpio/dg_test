@@ -1,5 +1,13 @@
 defmodule DgTest.Solr.AdminCmd do
-  @moduledoc false
+  use GenServer
+
+  def init(state) do
+    {:ok, state}
+  end
+
+  def start_link(state \\ nil) do
+    GenServer.start_link(__MODULE__, state, name: __MODULE__)
+  end
 
   @cmd_opts [stderr_to_stdout: true]
 
