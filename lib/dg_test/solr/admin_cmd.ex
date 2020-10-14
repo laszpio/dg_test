@@ -30,4 +30,9 @@ defmodule DgTest.Solr.AdminCmd do
       {output, 1} -> {:error, output}
     end
   end
+
+  @spec solr_cmd() :: binary
+  def solr_cmd do
+    Solr.solr_cmd
+  end
 end
