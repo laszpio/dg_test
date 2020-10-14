@@ -40,6 +40,14 @@ defmodule DgTest.Solr.Cores do
   @spec exists?(binary) :: boolean
   def exists?(core), do: core in cores()
 
+  @spec ping(binary) :: :ok | :error
+  def ping(core) do
+    case Client.get!("/#{core}/admin/ping") do
+      %Tesla.Env{status: 200} -> :ok
+      %Tesla.Env{status: 404} -> :error
+    end
+  end
+
   @spec create(binary) :: {:ok, binary} | {:error, binary}
   def create(core) do
     case AdminCmd.run("create -c #{core}") do
