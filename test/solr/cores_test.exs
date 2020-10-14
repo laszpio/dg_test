@@ -76,6 +76,17 @@ defmodule DgTest.Solr.CoresTest do
     end
   end
 
+  describe "ping" do
+    test "ping/1 returns :ok when core is avalible" do
+      assert Cores.ping("core_1") == :ok
+      assert Cores.ping("core_2") == :ok
+    end
+
+    test "ping/1 returns :error when core doesn't exist" do
+      assert Cores.ping("nocore") == :error
+    end
+  end
+
   describe "create" do
     test "create/1 creates new core using command interface" do
       with_mock AdminCmd,
