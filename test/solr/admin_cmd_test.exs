@@ -2,10 +2,12 @@ defmodule DgTest.Solr.AdminCmdTest do
   use ExUnit.Case, async: false
 
   import Mock
+
+  alias DgTest.Solr
   import DgTest.Solr.AdminCmd
 
   setup_with_mocks([
-    {Application, [], [fetch_env!: fn :dg_test, :solr_cmd -> "runner args solr" end]}
+    {Solr, [], [solr_cmd: fn -> "runner args solr" end]}
   ]) do
     :ok
   end
@@ -13,7 +15,6 @@ defmodule DgTest.Solr.AdminCmdTest do
   describe "solr_cmd/0" do
     test "solr_cmd/0 returns command string" do
       assert solr_cmd() == "runner args solr"
-      assert called(Application.fetch_env!(:dg_test, :solr_cmd))
     end
   end
 
