@@ -2,18 +2,19 @@ defmodule DgTest.Solr.AdminCmdTest do
   use ExUnit.Case, async: false
 
   import Mock
-  import DgTest.Solr.AdminCmd
+  alias DgTest.Solr
+  alias DgTest.Solr.AdminCmd
 
   setup_with_mocks([
-    {Application, [], [fetch_env!: fn :dg_test, :solr_cmd -> "runner args solr" end]}
+    {Solr, [], [solr_cmd: fn -> "runner args solr" end]}
   ]) do
     :ok
   end
 
   describe "solr_cmd/0" do
     test "solr_cmd/0 returns command string" do
-      assert solr_cmd() == "runner args solr"
-      assert called(Application.fetch_env!(:dg_test, :solr_cmd))
+      assert Solr.solr_cmd() == "runner args solr"
+      assert called(Solr.solr_cmd())
     end
   end
 
@@ -23,7 +24,7 @@ defmodule DgTest.Solr.AdminCmdTest do
         cmd: fn "runner", ~w(args solr create -c test), stderr_to_stdout: true ->
           {"output", 0}
         end do
-        assert run("create -c test") == {:ok, "output"}
+        assert AdminCmd.run("create -c test") == {:ok, "output"}
 
         assert called(
                  System.cmd(
@@ -40,7 +41,7 @@ defmodule DgTest.Solr.AdminCmdTest do
         cmd: fn "runner", ~w(args solr delete -c test), stderr_to_stdout: true ->
           {"output", 0}
         end do
-        assert run("delete -c test") == {:ok, "output"}
+        assert AdminCmd.run("delete -c test") == {:ok, "output"}
 
         assert called(
                  System.cmd(

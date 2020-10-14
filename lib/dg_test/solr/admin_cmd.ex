@@ -1,6 +1,8 @@
 defmodule DgTest.Solr.AdminCmd do
   use GenServer
 
+  alias DgTest.Solr
+
   @cmd_opts [stderr_to_stdout: true]
 
   def init(state) do
@@ -21,15 +23,11 @@ defmodule DgTest.Solr.AdminCmd do
 
   @spec do_run(binary) :: {:ok, binary} | {:error, binary}
   def do_run(cmd) do
-    [base | opts] = solr_cmd() |> String.split()
+    [base | opts] = Solr.solr_cmd() |> String.split()
 
     case Kernel.apply(System, :cmd, [base, opts ++ String.split(cmd), @cmd_opts]) do
       {output, 0} -> {:ok, output}
       {output, 1} -> {:error, output}
     end
-  end
-
-  def solr_cmd do
-    Application.fetch_env!(:dg_test, :solr_cmd)
   end
 end

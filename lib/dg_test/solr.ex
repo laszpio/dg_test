@@ -24,4 +24,9 @@ defmodule DgTest.Solr do
   def target_url do
     solr_url() <> "/" <> solr_core()
   end
+
+  @spec solr_cmd() :: binary
+  def solr_cmd do
+    Application.fetch_env!(:dg_test, :solr_cmd)
+  end
 end
