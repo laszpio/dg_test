@@ -31,8 +31,5 @@ defmodule DgTest.Solr.AdminCmd do
     end
   end
 
-  @spec solr_cmd() :: binary
-  def solr_cmd do
-    Solr.solr_cmd
-  end
+  defdelegate solr_cmd, to: Solr, as: :solr_cmd
 end
