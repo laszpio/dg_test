@@ -13,6 +13,8 @@ defmodule DgTest.Solr.Field do
           multi_valued: boolean
         }
 
+  @type solr :: %{required(binary) => binary}
+
   defstruct [
     :name,
     :indexed,
@@ -28,12 +30,12 @@ defmodule DgTest.Solr.Field do
     Utils.to_struct(%__MODULE__{}, field)
   end
 
-  @spec from_list(list(map)) :: list(t)
+  @spec from_list(list(solr)) :: list(t)
   def from_list(list) do
     Enum.map(list, &new/1)
   end
 
-  @spec to_solr(t) :: map
+  @spec to_solr(t) :: solr
   def to_solr(field) do
     field |> Map.from_struct() |> Utils.solarize()
   end
