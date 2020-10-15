@@ -4,7 +4,7 @@ defmodule DgTest.Solr.CoreTest do
   import Mock
 
   alias DgTest.Solr.Core
-  alias DgTest.Solr.AdminCmd
+  alias DgTest.Solr.Cmd
 
   def prepare_solr do
     Core.create("core_1")
@@ -89,20 +89,20 @@ defmodule DgTest.Solr.CoreTest do
 
   describe "create" do
     test "create/1 creates new core using command interface" do
-      with_mock AdminCmd,
+      with_mock Cmd,
         run: fn "create -c test" -> {:ok, ""} end do
         assert Core.create("test") == {:ok, "Created new core 'test'"}
-        assert called(AdminCmd.run("create -c test"))
+        assert called(Cmd.run("create -c test"))
       end
     end
   end
 
   describe "delete" do
     test "delete/1 removes a core using command interface" do
-      with_mock AdminCmd,
+      with_mock Cmd,
         run: fn "delete -c test" -> {:ok, ""} end do
         assert Core.delete("test") == {:ok, "Deleted core 'test'"}
-        assert called(AdminCmd.run("delete -c test"))
+        assert called(Cmd.run("delete -c test"))
       end
     end
   end

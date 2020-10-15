@@ -2,7 +2,7 @@ defmodule DgTest.Solr.Core do
   @moduledoc false
 
   alias DgTest.Solr.Client
-  alias DgTest.Solr.AdminCmd
+  alias DgTest.Solr.Cmd
 
   defstruct [
     :name,
@@ -59,7 +59,7 @@ defmodule DgTest.Solr.Core do
 
   @spec create(binary) :: {:ok, binary} | {:error, binary}
   def create(core) do
-    case AdminCmd.run("create -c #{core}") do
+    case Cmd.run("create -c #{core}") do
       {:ok, _} -> {:ok, "Created new core '#{core}'"}
       {:error, _} -> {:error, "Core '#{core}' already exists"}
     end
@@ -73,7 +73,7 @@ defmodule DgTest.Solr.Core do
 
   @spec delete(binary) :: {:ok, binary} | {:ok, binary}
   def delete(core) do
-    case AdminCmd.run("delete -c #{core}") do
+    case Cmd.run("delete -c #{core}") do
       {:ok, _} -> {:ok, "Deleted core '#{core}'"}
       {:error, _} -> {:error, "Failed to delete core '#{core}'"}
     end
