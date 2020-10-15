@@ -4,6 +4,15 @@ defmodule DgTest.Solr.Cores do
   alias DgTest.Solr.Client
   alias DgTest.Solr.AdminCmd
 
+  defstruct [
+    :name,
+    :schema,
+    :start_time,
+    :uptime,
+    :index,
+    :dataDir
+  ]
+
   @spec status() :: {:ok, map} | {:error, binary}
   def status do
     case Client.get("admin/cores", query: [action: "STATUS"]) do
