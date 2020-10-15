@@ -36,11 +36,13 @@ defmodule DgTest.Solr.Client do
   @spec client() :: %Tesla.Client{}
   def client() do
     middleware = [
-      {Tesla.Middleware.BaseUrl, Solr.solr_url()},
+      {Tesla.Middleware.BaseUrl, solr_url()},
       {Tesla.Middleware.JSON, decode_content_types: ["text/plain"]},
       {Tesla.Middleware.Logger, log_level: :info}
     ]
 
     Tesla.client(middleware)
   end
+
+  defdelegate solr_url, to: Solr, as: :solr_url
 end
