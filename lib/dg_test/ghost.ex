@@ -3,7 +3,7 @@ defmodule DgTest.Ghost do
 
   def start(_type, _args) do
     children = [
-      {DgTest.Ghost.Client, []}
+      DgTest.Ghost.Client
     ]
 
     Supervisor.start_link(children, strategy: :one_for_one)
