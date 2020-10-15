@@ -4,6 +4,7 @@ defmodule DgTest.Solr do
   def start(_type, _args) do
     children = [
       {DgTest.Solr.Client, []},
+      {DfTest.Solr.Cmd, []},
       {DgTest.Solr.SchemaApi, []}
     ]
 

@@ -1,23 +1,23 @@
-defmodule DgTest.Solr.CoresTest do
+defmodule DgTest.Solr.CoreTest do
   use ExUnit.Case, async: false
 
   import Mock
 
-  alias DgTest.Solr.Cores
-  alias DgTest.Solr.AdminCmd
+  alias DgTest.Solr.Core
+  alias DgTest.Solr.Cmd
 
   def prepare_solr do
-    Cores.create("core_1")
-    Cores.create("core_2")
+    Core.create("core_1")
+    Core.create("core_2")
 
     :ok
   end
 
   def cleanup_solr do
-    Cores.delete("core_1")
-    Cores.delete("core_2")
-    Cores.delete("org_core")
-    Cores.delete("org_core_new")
+    Core.delete("core_1")
+    Core.delete("core_2")
+    Core.delete("org_core")
+    Core.delete("org_core_new")
 
     :ok
   end
@@ -30,13 +30,13 @@ defmodule DgTest.Solr.CoresTest do
 
   describe "status" do
     test "status/0 returns status for all cores" do
-      assert {:ok, status} = Cores.status()
+      assert {:ok, status} = Core.status()
       assert status["core_1"]
       assert status["core_2"]
     end
 
     test "status/1 returns core status" do
-      assert {:ok, %{"core_1" => status}} = Cores.status("core_1")
+      assert {:ok, %{"core_1" => status}} = Core.status("core_1")
       assert status["name"] == "core_1"
 
       assert Map.keys(status) == [
@@ -52,13 +52,13 @@ defmodule DgTest.Solr.CoresTest do
     end
 
     test "status/1 returns error when core doesn't exist" do
-      assert Cores.status("nocore") == {:error, "Core 'nocore' doesn't exist."}
+      assert Core.status("nocore") == {:error, "Core 'nocore' doesn't exist."}
     end
   end
 
   describe "cores" do
     test "cores/0 returns list of cores" do
-      cores = Cores.cores()
+      cores = Core.cores()
 
       assert "core_1" in cores
       assert "core_2" in cores
@@ -67,65 +67,65 @@ defmodule DgTest.Solr.CoresTest do
 
   describe "exists?" do
     test "exists?/1 returns true when core exists" do
-      assert Cores.exists?("core_1")
-      assert Cores.exists?("core_2")
+      assert Core.exists?("core_1")
+      assert Core.exists?("core_2")
     end
 
     test "exists?/1 returns false when core doesn't exist" do
-      refute Cores.exists?("no_core")
+      refute Core.exists?("no_core")
     end
   end
 
   describe "ping" do
     test "ping/1 returns :ok when core is avalible" do
-      assert Cores.ping("core_1") == :ok
-      assert Cores.ping("core_2") == :ok
+      assert Core.ping("core_1") == :ok
+      assert Core.ping("core_2") == :ok
     end
 
     test "ping/1 returns :error when core doesn't exist" do
-      assert Cores.ping("nocore") == :error
+      assert Core.ping("nocore") == :error
     end
   end
 
   describe "create" do
     test "create/1 creates new core using command interface" do
-      with_mock AdminCmd,
+      with_mock Cmd,
         run: fn "create -c test" -> {:ok, ""} end do
-        assert Cores.create("test") == {:ok, "Created new core 'test'"}
-        assert called(AdminCmd.run("create -c test"))
+        assert Core.create("test") == {:ok, "Created new core 'test'"}
+        assert called(Cmd.run("create -c test"))
       end
     end
   end
 
   describe "delete" do
     test "delete/1 removes a core using command interface" do
-      with_mock AdminCmd,
+      with_mock Cmd,
         run: fn "delete -c test" -> {:ok, ""} end do
-        assert Cores.delete("test") == {:ok, "Deleted core 'test'"}
-        assert called(AdminCmd.run("delete -c test"))
+        assert Core.delete("test") == {:ok, "Deleted core 'test'"}
+        assert called(Cmd.run("delete -c test"))
       end
     end
   end
 
   describe "rename" do
     setup do
-      Cores.create("org_core")
+      Core.create("org_core")
 
       on_exit(fn ->
-        Cores.delete("org_core")
-        Cores.delete("org_core_new")
+        Core.delete("org_core")
+        Core.delete("org_core_new")
       end)
 
       :ok
     end
 
     test "rename/2 renames a core" do
-      assert Cores.exists?("org_core")
-      refute Cores.exists?("org_core_new")
+      assert Core.exists?("org_core")
+      refute Core.exists?("org_core_new")
 
-      assert Cores.rename("org_core", "org_core_new")
-      assert Cores.exists?("org_core_new")
-      refute Cores.exists?("org_core")
+      assert Core.rename("org_core", "org_core_new")
+      assert Core.exists?("org_core_new")
+      refute Core.exists?("org_core")
     end
   end
 end

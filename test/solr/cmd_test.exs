@@ -1,10 +1,10 @@
-defmodule DgTest.Solr.AdminCmdTest do
+defmodule DgTest.Solr.CmdTest do
   use ExUnit.Case, async: false
 
   import Mock
+  import DgTest.Solr.Cmd
 
   alias DgTest.Solr
-  import DgTest.Solr.AdminCmd
 
   setup_with_mocks([
     {Solr, [], [solr_cmd: fn -> "runner args solr" end]}
