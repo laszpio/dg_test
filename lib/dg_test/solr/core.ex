@@ -1,4 +1,4 @@
-defmodule DgTest.Solr.Cores do
+defmodule DgTest.Solr.Core do
   @moduledoc false
 
   alias DgTest.Solr.Client

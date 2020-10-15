@@ -2,7 +2,7 @@ defmodule DgTest do
   @moduledoc false
 
   import DgTest.Solr
-  alias DgTest.Solr.{Cores, Schema}
+  alias DgTest.Solr.{Core, Schema}
   alias DgTest.Ghost.Crawler
 
   def reindex do
@@ -26,8 +26,8 @@ defmodule DgTest do
 
   @spec recreate_index() :: no_return()
   def recreate_index do
-    Cores.delete("items")
-    Cores.create("items")
+    Core.delete("items")
+    Core.create("items")
     Schema.add_field(:items, "domain", "string")
     Schema.add_field(:items, "slug", "string")
     Schema.add_field(:items, "title", "text_en")

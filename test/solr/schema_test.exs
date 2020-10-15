@@ -2,18 +2,18 @@ defmodule DgTest.Solr.SchemaTest do
   use ExUnit.Case, async: true
 
   alias DgTest.Solr.Schema
-  alias DgTest.Solr.Cores
+  alias DgTest.Solr.Core
   alias DgTest.Solr.Field
 
   @core "test_schema_test"
 
   def prepare_solr do
-    Cores.delete!(@core)
-    Cores.create!(@core)
+    Core.delete!(@core)
+    Core.create!(@core)
   end
 
   def cleanup_solr do
-    Cores.delete!(@core)
+    Core.delete!(@core)
   end
 
   setup_all do
