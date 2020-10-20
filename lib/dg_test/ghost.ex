@@ -9,9 +9,9 @@ defmodule DgTest.Ghost do
     Supervisor.start_link(children, strategy: :one_for_one)
   end
 
-  @spec ghost_url :: binary
-  def ghost_url do
-    Application.fetch_env!(:dg_test, :ghost_url)
+  @spec ghost_api :: binary
+  def ghost_api do
+    Application.fetch_env!(:dg_test, :ghost_api)
   end
 
   @spec ghost_key :: binary

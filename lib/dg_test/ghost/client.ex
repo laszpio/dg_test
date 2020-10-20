@@ -31,7 +31,7 @@ defmodule DgTest.Ghost.Client do
 
   def client do
     middleware = [
-      {Tesla.Middleware.BaseUrl, ghost_url()},
+      {Tesla.Middleware.BaseUrl, ghost_api()},
       {Tesla.Middleware.Query, [key: ghost_key(), include: "authors,tags"]},
       Tesla.Middleware.JSON,
       {Tesla.Middleware.Logger, log_level: :info}
@@ -40,7 +40,7 @@ defmodule DgTest.Ghost.Client do
     Tesla.client(middleware)
   end
 
-  defdelegate ghost_url, to: Ghost, as: :ghost_url
+  defdelegate ghost_api, to: Ghost, as: :ghost_api
 
   defdelegate ghost_key, to: Ghost, as: :ghost_key
 end
