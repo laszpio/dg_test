@@ -10,7 +10,12 @@ defmodule DgTest do
   end
 
   def items do
-    %Crawler{domain: "https://productmarketingalliance.com"}
+    %Crawler{
+      domain: "https://productmarketingalliance.com",
+      api: Application.fetch_env!(:dg_test, :ghost_api),
+      key: Application.fetch_env!(:dg_test, :ghost_key)
+    }
+    |> Crawler.connect()
     |> Crawler.resources()
     |> Crawler.fetch()
     |> Crawler.items()

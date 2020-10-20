@@ -7,7 +7,8 @@ defmodule DgTest.Application do
 
   def start(_type, _args) do
     children = [
-      DgTest.Ghost.Client,
+      DgTest.Ghost,
+      {Registry, keys: :unique, name: DgTest.Ghost.ClientRegistry},
       DgTest.Solr.Cmd,
       DgTest.Solr.Client,
       DgTest.Solr.SchemaApi

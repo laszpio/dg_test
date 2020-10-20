@@ -29,8 +29,8 @@ defmodule DgTest.Ghost.Resource do
   end
 
   @spec fetch(t, pos_integer) :: list(post)
-  def fetch(%Resource{name: name}, page) do
-    Client.get!("/#{name}/", query: [page: page, limit: @per_page])
+  def fetch(%Resource{domain: domain, name: name}, page) do
+    Client.get!(domain, "/#{name}/", query: [page: page, limit: @per_page])
   end
 
   @spec pages_fetch(t) :: t

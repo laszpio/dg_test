@@ -1,20 +1,30 @@
 defmodule DgTest.Ghost.Client do
   use GenServer
 
+  alias DgTest.Ghost
+
   def init(state) do
     {:ok, state}
   end
 
-  def start_link(state \\ nil) do
-    GenServer.start_link(__MODULE__, state, name: __MODULE__)
+  def start_link(domain) do
+    GenServer.start_link(__MODULE__, domain, name: process_name(domain))
+  end
+
+  def process_name(domain) do
+    {:via, Registry, {DgTest.Ghost.ClientRegistry, domain}}
   end
 
   def stop(pid) do
     GenServer.stop(pid, :normal)
   end
 
-  def get!(path, query: query) do
-    GenServer.call(__MODULE__, {:get!, path, query: query})
+  def get!(domain, path, query: query) do
+    case Registry.lookup(DgTest.Ghost.ClientRegistry, domain) do
+      [{pid, _}] -> pid
+      _ -> nil
+    end
+    |> GenServer.call({:get!, path, query: query})
   end
 
   def handle_call({:get!, path, query: query}, _from, inital) do
@@ -29,7 +39,7 @@ defmodule DgTest.Ghost.Client do
 
   def client do
     middleware = [
-      {Tesla.Middleware.BaseUrl, ghost_url()},
+      {Tesla.Middleware.BaseUrl, ghost_api()},
       {Tesla.Middleware.Query, [key: ghost_key(), include: "authors,tags"]},
       Tesla.Middleware.JSON,
       {Tesla.Middleware.Logger, log_level: :info}
@@ -38,13 +48,7 @@ defmodule DgTest.Ghost.Client do
     Tesla.client(middleware)
   end
 
-  @spec ghost_url :: binary
-  def ghost_url do
-    Application.fetch_env!(:dg_test, :ghost_url)
-  end
+  defdelegate ghost_api, to: Ghost, as: :ghost_api
 
-  @spec ghost_key :: binary
-  def ghost_key do
-    Application.fetch_env!(:dg_test, :ghost_key)
-  end
+  defdelegate ghost_key, to: Ghost, as: :ghost_key
 end

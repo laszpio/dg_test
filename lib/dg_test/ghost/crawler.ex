@@ -5,13 +5,20 @@ defmodule DgTest.Ghost.Crawler do
 
   @type t :: %__MODULE__{domain: binary}
 
-  defstruct [:domain, :resources, :items]
+  defstruct [:domain, :resources, :items, :api, :key]
 
   @resources ~w(posts)
 
   @spec resources(t) :: t
+  def connect(%Crawler{domain: domain} = crawler) do
+    DgTest.Ghost.connect(domain)
+
+    crawler
+  end
+
+  @spec resources(t) :: t
   def resources(%Crawler{domain: domain} = crawler) do
-    Map.put(crawler, :resources, Enum.map(@resources, &%Resource{domain: domain, name: &1}))
+    %{crawler | resources: Enum.map(@resources, &%Resource{domain: domain, name: &1})}
   end
 
   @spec fetch(t) :: t
