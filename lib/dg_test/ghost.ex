@@ -1,12 +1,16 @@
 defmodule DgTest.Ghost do
-  use Application
+  use DynamicSupervisor
 
-  def start(_type, _args) do
-    children = [
-      DgTest.Ghost.Client
-    ]
+  def init(_arg) do
+    DynamicSupervisor.init(strategy: :one_for_one)
+  end
 
-    Supervisor.start_link(children, strategy: :one_for_one)
+  def start_link(arg) do
+    DynamicSupervisor.start_link(__MODULE__, arg, name: __MODULE__)
+  end
+
+  def connect(domain) do
+    DynamicSupervisor.start_child(__MODULE__, {DgTest.Ghost.Client, domain})
   end
 
   @spec ghost_api :: binary
