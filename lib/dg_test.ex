@@ -16,8 +16,8 @@ defmodule DgTest do
       key: Application.fetch_env!(:dg_test, :ghost_key)
     }
     |> Crawler.resources()
-    # |> Crawler.fetch()
-    # |> Crawler.items()
+    |> Crawler.fetch()
+    |> Crawler.items()
   end
 
   def target do
