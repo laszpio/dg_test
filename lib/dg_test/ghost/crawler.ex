@@ -12,6 +12,7 @@ defmodule DgTest.Ghost.Crawler do
   @spec resources(t) :: t
   def connect(%Crawler{domain: domain} = crawler) do
     DgTest.Ghost.connect(domain)
+
     crawler
   end
 
