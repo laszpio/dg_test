@@ -21,8 +21,10 @@ defmodule DgTest.Ghost.Client do
 
   def get!(domain, path, query: query) do
     case Registry.lookup(DgTest.Ghost.ClientRegistry, domain) do
-      [{pid, _}] -> GenServer.call(pid, {:get!, path, query: query})
+      [{pid, _}] -> pid
+      _ -> nil
     end
+    |> GenServer.call({:get!, path, query: query})
   end
 
   def handle_call({:get!, path, query: query}, _from, inital) do
