@@ -10,7 +10,7 @@ defmodule DgTest.Ghost do
   end
 
   def connect(domain, api, key) do
-    DynamicSupervisor.start_child(__MODULE__, {DgTest.Ghost.Client, domain})
+    DynamicSupervisor.start_child(__MODULE__, {DgTest.Ghost.Client, {domain, api, key}})
   end
 
   @spec ghost_api :: binary
