@@ -1,5 +1,6 @@
 defmodule DgTest.Ghost.Client do
   use GenServer
+  require Logger
 
   alias DgTest.Ghost
 

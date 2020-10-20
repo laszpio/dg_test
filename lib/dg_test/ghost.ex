@@ -9,7 +9,7 @@ defmodule DgTest.Ghost do
     DynamicSupervisor.start_link(__MODULE__, arg, name: __MODULE__)
   end
 
-  def connect(domain) do
+  def connect(domain, api, key) do
     DynamicSupervisor.start_child(__MODULE__, {DgTest.Ghost.Client, domain})
   end
 
