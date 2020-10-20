@@ -30,11 +30,7 @@ defmodule DgTest.Ghost.Resource do
 
   @spec fetch(t, pos_integer) :: list(post)
   def fetch(%Resource{domain: domain, name: name}, page) do
-    # Client.get!("/#{name}/", query: [page: page, limit: @per_page])
-
-    case Registry.lookup(DgTest.Ghost.ClientRegistry, domain) do
-      [{pid, _}] -> GenServer.call(pid, {:get!, "/#{name}/", query: [page: page, limit: @per_page]})
-    end
+    Client.get!(domain, "/#{name}/", query: [page: page, limit: @per_page])
   end
 
   @spec pages_fetch(t) :: t
