@@ -12,7 +12,7 @@ defmodule DgTest.Solr.Client do
   end
 
   def process_name(domain) do
-    {:via, Registry, {Ghost.ClientRegistry, "client_for_#{domain}"}}
+    {:via, Registry, {Ghost.ClientRegistry, domain}}
   end
 
   def stop(pid) do
