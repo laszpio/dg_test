@@ -12,7 +12,7 @@ defmodule DgTest.Ghost.Client do
   end
 
   def process_name(domain) do
-    {:via, Registry, {Ghost.ClientRegistry, domain}}
+    {:via, Registry, {DgTest.Ghost.ClientRegistry, domain}}
   end
 
   def stop(pid) do
