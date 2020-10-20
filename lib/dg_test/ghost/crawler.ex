@@ -9,6 +9,15 @@ defmodule DgTest.Ghost.Crawler do
 
   @resources ~w(posts)
 
+  def connect(%Crawler{domain: domain} = crawler) do
+    case Registry.lookup(Ghost.ClientRegistry, "client") do
+      [] -> DgTest.Ghost.connect(domain)
+      _ -> nil
+    end
+
+    crawler
+  end
+
   @spec resources(t) :: t
   def resources(%Crawler{domain: domain} = crawler) do
     %{crawler | resources: Enum.map(@resources, &%Resource{domain: domain, name: &1})}
