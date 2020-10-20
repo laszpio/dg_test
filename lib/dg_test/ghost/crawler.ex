@@ -11,7 +11,7 @@ defmodule DgTest.Ghost.Crawler do
 
   @spec resources(t) :: t
   def resources(%Crawler{domain: domain} = crawler) do
-    Map.put(crawler, :resources, Enum.map(@resources, &%Resource{domain: domain, name: &1}))
+    %{crawler | resources: Enum.map(@resources, &%Resource{domain: domain, name: &1})}
   end
 
   @spec fetch(t) :: t
