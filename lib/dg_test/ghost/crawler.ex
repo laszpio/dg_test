@@ -5,7 +5,7 @@ defmodule DgTest.Ghost.Crawler do
 
   @type t :: %__MODULE__{domain: binary}
 
-  defstruct [:domain, :resources, :items]
+  defstruct [:domain, :resources, :items, :api, :key]
 
   @resources ~w(posts)
 
