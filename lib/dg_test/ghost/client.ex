@@ -1,6 +1,5 @@
 defmodule DgTest.Ghost.Client do
   use GenServer
-  require Logger
 
   alias DgTest.Ghost
 
@@ -8,8 +7,8 @@ defmodule DgTest.Ghost.Client do
     {:ok, state}
   end
 
-  def start_link(domain) do
-    GenServer.start_link(__MODULE__, domain, name: process_name(domain))
+  def start_link({domain, api, key}) do
+    GenServer.start_link(__MODULE__, client(api, key), name: process_name(domain))
   end
 
   def process_name(domain) do
@@ -28,9 +27,9 @@ defmodule DgTest.Ghost.Client do
     |> GenServer.call({:get!, path, query: query})
   end
 
-  def handle_call({:get!, path, query: query}, _from, inital) do
-    case Tesla.get!(client(), path, query: query) do
-      %Tesla.Env{status: 200, body: body} -> {:reply, body, inital}
+  def handle_call({:get!, path, query: query}, _from, client) do
+    case Tesla.get!(client, path, query: query) do
+      %Tesla.Env{status: 200, body: body} -> {:reply, body, client}
     end
   end
 
@@ -38,10 +37,10 @@ defmodule DgTest.Ghost.Client do
     state
   end
 
-  def client do
+  def client(api, key) do
     middleware = [
-      {Tesla.Middleware.BaseUrl, ghost_api()},
-      {Tesla.Middleware.Query, [key: ghost_key(), include: "authors,tags"]},
+      {Tesla.Middleware.BaseUrl, api},
+      {Tesla.Middleware.Query, [key: key, include: "authors,tags"]},
       Tesla.Middleware.JSON,
       {Tesla.Middleware.Logger, log_level: :info}
     ]
