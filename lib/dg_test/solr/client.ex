@@ -7,12 +7,8 @@ defmodule DgTest.Solr.Client do
     {:ok, state}
   end
 
-  def start_link(domain) do
-    GenServer.start_link(__MODULE__, domain, name: process_name(domain))
-  end
-
-  def process_name(domain) do
-    {:via, Registry, {Ghost.ClientRegistry, domain}}
+  def start_link(state \\ nil) do
+    GenServer.start_link(__MODULE__, state, name: __MODULE__)
   end
 
   def stop(pid) do

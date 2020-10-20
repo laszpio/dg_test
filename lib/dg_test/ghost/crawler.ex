@@ -10,10 +10,7 @@ defmodule DgTest.Ghost.Crawler do
   @resources ~w(posts)
 
   def connect(%Crawler{domain: domain} = crawler) do
-    case Registry.lookup(Ghost.ClientRegistry, "client") do
-      [] -> DgTest.Ghost.connect(domain)
-      _ -> nil
-    end
+    DgTest.Ghost.connect(domain)
 
     crawler
   end
