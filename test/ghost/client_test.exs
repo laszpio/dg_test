@@ -8,13 +8,17 @@ defmodule DgTest.Ghost.ClientTest do
   @api_url "http://localhost/ghost/api/v3/content"
   @api_key "token"
 
+  @middleware [
+    {Tesla.Middleware.BaseUrl, :call, [@api_url]},
+    {Tesla.Middleware.Query, :call, [[key: @api_key, include: "authors,tags"]]},
+    {Tesla.Middleware.JSON, :call, [[]]},
+    {Tesla.Middleware.Logger, :call, [[log_level: :info]]}
+  ]
+
   describe "start_link/1" do
     test "client process with credentials" do
       assert {:ok, pid} = Client.start_link({@domain, @api_url, @api_key})
-      assert %Tesla.Client{pre: middleware} = :sys.get_state(pid)
-
-      assert {Tesla.Middleware.BaseUrl, :call, [@api_url]} in middleware
-      assert {Tesla.Middleware.Query, :call, [[key: @api_key, include: "authors,tags"]]} in middleware
+      assert %Tesla.Client{pre: @middleware} = :sys.get_state(pid)
     end
 
     test "registers started client process" do
@@ -28,14 +32,7 @@ defmodule DgTest.Ghost.ClientTest do
     test "returns Tesla client" do
       client = Client.client(@api_url, @api_key)
 
-      assert %Tesla.Client{} = client
-
-      assert {Tesla.Middleware.BaseUrl, :call, [@api_url]} in client.pre
-
-      assert {Tesla.Middleware.Query, :call, [[key: @api_key, include: "authors,tags"]]} in client.pre
-
-      assert {Tesla.Middleware.JSON, :call, [[]]} in client.pre
-      assert {Tesla.Middleware.Logger, :call, [[log_level: :info]]} in client.pre
+      assert %Tesla.Client{pre: @middleware} = client
     end
   end
 end
