@@ -11,7 +11,10 @@ defmodule DgTest.Ghost.ClientTest do
   describe "start_link/1" do
     test "client process with credentials" do
       assert {:ok, pid} = Client.start_link({@domain, @api_url, @api_key})
-      assert %Tesla.Client{} = :sys.get_state(pid)
+      assert %Tesla.Client{pre: middleware} = :sys.get_state(pid)
+
+      assert {Tesla.Middleware.BaseUrl, :call, [@api_url]} in middleware
+      assert {Tesla.Middleware.Query, :call, [[key: @api_key, include: "authors,tags"]]} in middleware
     end
 
     test "registers started client process" do
