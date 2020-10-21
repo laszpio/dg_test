@@ -1,8 +1,6 @@
 defmodule DgTest.Ghost.Client do
   use GenServer
 
-  alias DgTest.Ghost
-
   def init(state) do
     {:ok, state}
   end
@@ -47,8 +45,4 @@ defmodule DgTest.Ghost.Client do
 
     Tesla.client(middleware)
   end
-
-  defdelegate ghost_api, to: Ghost, as: :ghost_api
-
-  defdelegate ghost_key, to: Ghost, as: :ghost_key
 end
