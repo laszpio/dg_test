@@ -6,7 +6,13 @@ defmodule DgTest.Ghost.ClientTest do
   @api_url "http://localhost/ghost/api/v3/content"
   @api_key "token"
 
-  describe "client" do
+  describe "start_link/1" do
+    test "starts authenticated client process" do
+      assert {:ok, pid} = Client.start_link({"http://localhost", @api_url, @api_key})
+    end
+  end
+
+  describe "client/2" do
     test "returns Tesla client" do
       client = Client.client(@api_url, @api_key)
 
