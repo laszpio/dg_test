@@ -9,6 +9,11 @@ defmodule DgTest.Ghost.ClientTest do
   @api_key "token"
 
   describe "start_link/1" do
+    test "client process with credentials" do
+      assert {:ok, pid} = Client.start_link({@domain, @api_url, @api_key})
+      assert %Tesla.Client{} = :sys.get_state(pid)
+    end
+
     test "registers started client process" do
       assert {:ok, pid} = Client.start_link({@domain, @api_url, @api_key})
       assert [{reg, _}] = Registry.lookup(ClientRegistry, @domain)
@@ -23,7 +28,9 @@ defmodule DgTest.Ghost.ClientTest do
       assert %Tesla.Client{} = client
 
       assert {Tesla.Middleware.BaseUrl, :call, [@api_url]} in client.pre
+
       assert {Tesla.Middleware.Query, :call, [[key: @api_key, include: "authors,tags"]]} in client.pre
+
       assert {Tesla.Middleware.JSON, :call, [[]]} in client.pre
       assert {Tesla.Middleware.Logger, :call, [[log_level: :info]]} in client.pre
     end

@@ -1,6 +1,8 @@
 defmodule DgTest.Ghost.Client do
   use GenServer
 
+  alias DgTest.Ghost.ClientRegistry
+
   def init(state) do
     {:ok, state}
   end
@@ -10,7 +12,7 @@ defmodule DgTest.Ghost.Client do
   end
 
   def process_name(domain) do
-    {:via, Registry, {DgTest.Ghost.ClientRegistry, domain}}
+    {:via, Registry, {ClientRegistry, domain}}
   end
 
   def stop(pid) do
@@ -18,7 +20,7 @@ defmodule DgTest.Ghost.Client do
   end
 
   def get!(domain, path, query: query) do
-    case Registry.lookup(DgTest.Ghost.ClientRegistry, domain) do
+    case Registry.lookup(ClientRegistry, domain) do
       [{pid, _}] -> pid
       _ -> nil
     end
