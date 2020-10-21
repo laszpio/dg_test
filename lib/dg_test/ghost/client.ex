@@ -7,8 +7,8 @@ defmodule DgTest.Ghost.Client do
     {:ok, state}
   end
 
-  def start_link({domain, api_url, key_url}) do
-    GenServer.start_link(__MODULE__, client(api_url, key_key), name: process_name(domain))
+  def start_link({domain, api_url, api_key}) do
+    GenServer.start_link(__MODULE__, client(api_url, api_key), name: process_name(domain))
   end
 
   def process_name(domain) do

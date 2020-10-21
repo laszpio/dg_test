@@ -11,7 +11,7 @@ defmodule DgTest.Ghost.Crawler do
 
   @spec resources(t) :: t
   def connect(%Crawler{domain: domain, api_url: api_url, api_key: api_key} = crawler) do
-    DgTest.Ghost.connect(domain, api_url, key_key)
+    DgTest.Ghost.connect(domain, api_url, api_key)
 
     %{crawler | api_url: nil, api_key: nil}
   end
