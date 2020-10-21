@@ -10,7 +10,12 @@ defmodule DgTest.Ghost.ClientTest do
     test "returns Tesla client" do
       client = Client.client(@api_url, @api_key)
 
-      assert %Tesla.client{} = client
+      assert %Tesla.Client{} = client
+
+      assert {Tesla.Middleware.BaseUrl, :call, [@api_url]} in client.pre
+      assert {Tesla.Middleware.Query, :call, [[key: @api_key, include: "authors,tags"]]} in client.pre
+      assert {Tesla.Middleware.JSON, :call, [[]]} in client.pre
+      assert {Tesla.Middleware.Logger, :call, [[log_level: :info]]} in client.pre
     end
   end
 end
