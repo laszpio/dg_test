@@ -2,13 +2,17 @@ defmodule DgTest.Ghost.ClientTest do
   use ExUnit.Case, async: true
 
   alias DgTest.Ghost.Client
+  alias DgTest.Ghost.ClientRegistry
 
+  @domain "http://localhost"
   @api_url "http://localhost/ghost/api/v3/content"
   @api_key "token"
 
   describe "start_link/1" do
-    test "starts authenticated client process" do
-      assert {:ok, pid} = Client.start_link({"http://localhost", @api_url, @api_key})
+    test "registers started client process" do
+      assert {:ok, pid} = Client.start_link({@domain, @api_url, @api_key})
+      assert [{reg, _}] = Registry.lookup(ClientRegistry, @domain)
+      assert pid == reg
     end
   end
 
