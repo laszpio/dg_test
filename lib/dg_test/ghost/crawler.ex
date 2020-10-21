@@ -5,15 +5,15 @@ defmodule DgTest.Ghost.Crawler do
 
   @type t :: %__MODULE__{domain: binary}
 
-  defstruct [:domain, :resources, :items, :api, :key]
+  defstruct [:domain, :resources, :items, :api_url, :api_key]
 
   @resources ~w(posts)
 
   @spec resources(t) :: t
-  def connect(%Crawler{domain: domain} = crawler) do
-    DgTest.Ghost.connect(domain)
+  def connect(%Crawler{domain: domain, api_url: api_url, api_key: api_key} = crawler) do
+    DgTest.Ghost.connect(domain, api_url, api_key)
 
-    crawler
+    %{crawler | api_url: nil, api_key: nil}
   end
 
   @spec resources(t) :: t

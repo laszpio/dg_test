@@ -1,29 +1,38 @@
 defmodule DgTest.Ghost.ClientTest do
   use ExUnit.Case, async: true
 
-  import Mock
-  import DgTest.Ghost.Client
+  alias DgTest.Ghost.Client
+  alias DgTest.Ghost.ClientRegistry
 
+  @domain "http://localhost"
   @api_url "http://localhost/ghost/api/v3/content"
   @api_key "token"
 
-  describe "ghost_api/0" do
-    test "returns API url" do
-      with_mock Application,
-        fetch_env!: fn :dg_test, :ghost_api -> @api_url end do
-        assert ghost_api() == @api_url
-        assert called(Application.fetch_env!(:dg_test, :ghost_api))
-      end
+  @middleware [
+    {Tesla.Middleware.BaseUrl, :call, [@api_url]},
+    {Tesla.Middleware.Query, :call, [[key: @api_key, include: "authors,tags"]]},
+    {Tesla.Middleware.JSON, :call, [[]]},
+    {Tesla.Middleware.Logger, :call, [[log_level: :info]]}
+  ]
+
+  describe "start_link/1" do
+    test "client process with credentials" do
+      assert {:ok, pid} = Client.start_link({@domain, @api_url, @api_key})
+      assert %Tesla.Client{pre: @middleware} = :sys.get_state(pid)
+    end
+
+    test "registers started client process" do
+      assert {:ok, pid} = Client.start_link({@domain, @api_url, @api_key})
+      assert [{reg, _}] = Registry.lookup(ClientRegistry, @domain)
+      assert pid == reg
     end
   end
 
-  describe "ghost_key/0" do
-    test "returs API key" do
-      with_mock Application,
-        fetch_env!: fn :dg_test, :ghost_key -> @api_key end do
-        assert ghost_key() == @api_key
-        assert called(Application.fetch_env!(:dg_test, :ghost_key))
-      end
+  describe "client/2" do
+    test "returns Tesla client" do
+      client = Client.client(@api_url, @api_key)
+
+      assert %Tesla.Client{pre: @middleware} = client
     end
   end
 end
