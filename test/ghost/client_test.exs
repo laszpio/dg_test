@@ -17,14 +17,25 @@ defmodule DgTest.Ghost.ClientTest do
 
   describe "start_link/1" do
     test "client process with credentials" do
-      assert {:ok, pid} = Client.start_link({@domain, @api_url, @api_key})
+      assert {:ok, pid} = start_supervised({Client, {@domain, @api_url, @api_key}})
       assert %Tesla.Client{pre: @middleware} = :sys.get_state(pid)
     end
 
     test "registers started client process" do
-      assert {:ok, pid} = Client.start_link({@domain, @api_url, @api_key})
-      assert [{reg, _}] = Registry.lookup(ClientRegistry, @domain)
-      assert pid == reg
+      assert {:ok, pid} = start_supervised({Client, {@domain, @api_url, @api_key}})
+      assert Registry.lookup(ClientRegistry, @domain) == [{pid, nil}]
+    end
+  end
+
+  describe "stop/1" do
+    test "stops and unregisters client" do
+      assert {:ok, pid} = start_supervised({Client, {@domain, @api_url, @api_key}})
+      assert Registry.lookup(ClientRegistry, @domain) == [{pid, nil}]
+
+      assert Client.stop(pid)
+
+      refute Process.alive?(pid)
+      assert Registry.lookup(ClientRegistry, @domain) == []
     end
   end
 
