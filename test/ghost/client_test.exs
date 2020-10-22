@@ -23,8 +23,7 @@ defmodule DgTest.Ghost.ClientTest do
 
     test "registers started client process" do
       assert {:ok, pid} = start_supervised({Client, {@domain, @api_url, @api_key}})
-      assert [{reg, _}] = Registry.lookup(ClientRegistry, @domain)
-      assert pid == reg
+      assert Registry.lookup(ClientRegistry, @domain) == [{pid, nil}]
     end
   end
 
