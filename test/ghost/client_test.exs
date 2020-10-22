@@ -34,6 +34,7 @@ defmodule DgTest.Ghost.ClientTest do
 
       assert Client.stop(pid)
 
+      refute Process.alive?(pid)
       assert Registry.lookup(ClientRegistry, @domain) == []
     end
   end
