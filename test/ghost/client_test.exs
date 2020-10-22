@@ -5,6 +5,7 @@ defmodule DgTest.Ghost.ClientTest do
   alias DgTest.Ghost.ClientRegistry
 
   @domain "http://localhost"
+  @other "http://other"
   @api_url "http://localhost/ghost/api/v3/content"
   @api_key "token"
 
@@ -17,12 +18,12 @@ defmodule DgTest.Ghost.ClientTest do
 
   describe "start_link/1" do
     test "client process with credentials" do
-      assert {:ok, pid} = Client.start_link({@domain, @api_url, @api_key})
+      assert {:ok, pid} = start_supervised({Client, {@domain, @api_url, @api_key}})
       assert %Tesla.Client{pre: @middleware} = :sys.get_state(pid)
     end
 
     test "registers started client process" do
-      assert {:ok, pid} = Client.start_link({@domain, @api_url, @api_key})
+      assert {:ok, pid} = start_supervised({Client, {@domain, @api_url, @api_key}})
       assert [{reg, _}] = Registry.lookup(ClientRegistry, @domain)
       assert pid == reg
     end
@@ -30,18 +31,16 @@ defmodule DgTest.Ghost.ClientTest do
 
   describe "stop/1" do
     test "stops and unregisters client" do
-      assert {:ok, pid} = Client.start_link({@domain, @api_url, @api_key})
-      assert {:ok, _} = Client.start_link({"other", @api_url, @api_key})
+      assert {:ok, pid_a} = Client.start_link({@domain, @api_url, @api_key})
+      assert {:ok, pid_b} = Client.start_link({@other, @api_url, @api_key})
 
-      assert Registry.lookup(ClientRegistry, @domain) |> Enum.count() == 1
-      assert Registry.lookup(ClientRegistry, "other") |> Enum.count() == 1
-      assert Registry.count(ClientRegistry) == 2
+      assert Registry.lookup(ClientRegistry, @domain) == [{pid_a, nil}]
+      assert Registry.lookup(ClientRegistry, @other) == [{pid_b, nil}]
 
-      Client.stop(pid)
+      assert Client.stop(pid_a) == :ok
 
-      assert Registry.count(ClientRegistry) == 1
-      assert Registry.lookup(ClientRegistry, "other") |> Enum.count() == 1
-      assert Registry.lookup(ClientRegistry, @domain) |> Enum.count() == 0
+      assert Registry.lookup(ClientRegistry, @domain) == [{pid_a, nil}]
+      assert Registry.lookup(ClientRegistry, "other") == []
     end
   end
 

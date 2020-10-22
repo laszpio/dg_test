@@ -34,7 +34,6 @@ defmodule DgTest.Ghost.Client do
   end
 
   def terminate(:normal, state) do
-    Registry.unregister(ClientRegistry, "")
     state
   end
 
