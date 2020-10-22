@@ -28,6 +28,17 @@ defmodule DgTest.Ghost.ClientTest do
     end
   end
 
+  describe "stop/1" do
+    test "stops and unregisters client" do
+      assert {:ok, pid} = Client.start_link({@domain, @api_url, @api_key})
+      assert [{_, _}] = Registry.lookup(ClientRegistry, @domain)
+
+      Client.stop(pid)
+
+      assert [] = Registry.lookup(ClientRegistry, @domain)
+    end
+  end
+
   describe "client/2" do
     test "returns Tesla client" do
       client = Client.client(@api_url, @api_key)
