@@ -5,7 +5,6 @@ defmodule DgTest.Ghost.ClientTest do
   alias DgTest.Ghost.ClientRegistry
 
   @domain "http://localhost"
-  @other "http://other"
   @api_url "http://localhost/ghost/api/v3/content"
   @api_key "token"
 
@@ -31,16 +30,12 @@ defmodule DgTest.Ghost.ClientTest do
 
   describe "stop/1" do
     test "stops and unregisters client" do
-      assert {:ok, pid_a} = Client.start_link({@domain, @api_url, @api_key})
-      assert {:ok, pid_b} = Client.start_link({@other, @api_url, @api_key})
+      assert {:ok, pid} = start_supervised({Client, {@domain, @api_url, @api_key}})
+      assert Registry.lookup(ClientRegistry, @domain) == [{pid, nil}]
 
-      assert Registry.lookup(ClientRegistry, @domain) == [{pid_a, nil}]
-      assert Registry.lookup(ClientRegistry, @other) == [{pid_b, nil}]
+      assert Client.stop(pid)
 
-      assert Client.stop(pid_a) == :ok
-
-      assert Registry.lookup(ClientRegistry, @domain) == [{pid_a, nil}]
-      assert Registry.lookup(ClientRegistry, "other") == []
+      assert Registry.lookup(ClientRegistry, @domain) == []
     end
   end
 
