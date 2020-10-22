@@ -31,11 +31,17 @@ defmodule DgTest.Ghost.ClientTest do
   describe "stop/1" do
     test "stops and unregisters client" do
       assert {:ok, pid} = Client.start_link({@domain, @api_url, @api_key})
-      assert [{_, _}] = Registry.lookup(ClientRegistry, @domain)
+      assert {:ok, _} = Client.start_link({"other", @api_url, @api_key})
+
+      assert Registry.lookup(ClientRegistry, @domain) |> Enum.count() == 1
+      assert Registry.lookup(ClientRegistry, "other") |> Enum.count() == 1
+      assert Registry.count(ClientRegistry) == 2
 
       Client.stop(pid)
 
-      assert [] = Registry.lookup(ClientRegistry, @domain)
+      assert Registry.count(ClientRegistry) == 1
+      assert Registry.lookup(ClientRegistry, "other") |> Enum.count() == 1
+      assert Registry.lookup(ClientRegistry, @domain) |> Enum.count() == 0
     end
   end
 
