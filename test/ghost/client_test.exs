@@ -1,6 +1,8 @@
 defmodule DgTest.Ghost.ClientTest do
   use ExUnit.Case, async: true
 
+  import Mock
+
   alias DgTest.Ghost.Client
   alias DgTest.Ghost.ClientRegistry
 
@@ -36,6 +38,30 @@ defmodule DgTest.Ghost.ClientTest do
 
       refute Process.alive?(pid)
       assert Registry.lookup(ClientRegistry, @domain) == []
+    end
+  end
+
+  describe "get!/2" do
+    test "performs API query" do
+      assert {:ok, _pid} = start_supervised({Client, {@domain, @api_url, @api_key}})
+
+      with_mock Tesla,
+        get!: fn(_domain, _path, query: [])-> %Tesla.Env{status: 200, body: {}} end
+      do
+        assert Client.get!(@domain, "/pages/") == {}
+      end
+    end
+  end
+
+  describe "get!/3" do
+    test "performs API query to path without params" do
+      assert {:ok, _pid} = start_supervised({Client, {@domain, @api_url, @api_key}})
+
+      with_mock Tesla,
+        get!: fn(_client, _path, query: _query)-> %Tesla.Env{status: 200, body: {}} end
+      do
+        assert Client.get!(@domain, "/pages/", query: []) == {}
+      end
     end
   end
 

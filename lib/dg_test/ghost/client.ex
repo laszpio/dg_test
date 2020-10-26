@@ -19,6 +19,8 @@ defmodule DgTest.Ghost.Client do
     GenServer.stop(pid, :normal)
   end
 
+  def get!(domain, path), do: get!(domain, path, query: [])
+
   def get!(domain, path, query: query) do
     case Registry.lookup(ClientRegistry, domain) do
       [{pid, _}] -> pid
