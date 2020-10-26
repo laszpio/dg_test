@@ -41,6 +41,18 @@ defmodule DgTest.Ghost.ClientTest do
     end
   end
 
+  describe "get!/2" do
+    test "performs API query" do
+      assert {:ok, _pid} = start_supervised({Client, {@domain, @api_url, @api_key}})
+
+      with_mock Tesla,
+        get!: fn(_domain, _path, query: [])-> %Tesla.Env{status: 200, body: {}} end
+      do
+        assert Client.get!(@domain, "/pages/") == {}
+      end
+    end
+  end
+
   describe "get!/3" do
     test "performs API query to path without params" do
       assert {:ok, _pid} = start_supervised({Client, {@domain, @api_url, @api_key}})
