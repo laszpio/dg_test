@@ -21,6 +21,7 @@ defmodule DgTest.Ghost.Item do
 
   defstruct [
     :id,
+    :resource,
     :domain,
     :slug,
     :title,
