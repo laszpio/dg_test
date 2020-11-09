@@ -58,4 +58,14 @@ defmodule DgTest.Ghost.ItemTest do
       assert Item.extract(:title, "<h1>Title</h1>", nil) == "Title"
     end
   end
+
+  describe "sanitize/1" do
+    test "removes HTML tags" do
+      assert Item.sanitize("<h1>Title</h1>") == "Title"
+    end
+
+    test "trims whitespaces" do
+      assert Item.sanitize("\n\n\nBig Title\n\r") == "Big Title"
+    end
+  end
 end
