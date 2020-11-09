@@ -60,6 +60,6 @@ defmodule DgTest.Ghost.Item do
   def sanitize(value) do
     value
     |> HtmlSanitizeEx.strip_tags()
-    |> String.trim
+    |> String.trim()
   end
 end
