@@ -25,7 +25,7 @@ defmodule DgTest do
     %Hui.URL{
       url: target_url(),
       handler: "update",
-      headers: [{"Content-type", "application/json"}]
+      headers: [{"content-type", "application/json"}]
     }
   end
 
