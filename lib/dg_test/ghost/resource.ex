@@ -67,7 +67,7 @@ defmodule DgTest.Ghost.Resource do
 
   @spec parse(binary, binary, map) :: list(post)
   def parse(domain, name, page) do
-    Map.get(page, name) |> Enum.map(&Item.new(Map.put(&1, "domain", domain)))
+    Map.get(page, name) |> Enum.map(&Item.new(Map.merge(&1, %{"domain" => domain, "resource" => name})))
   end
 
   @spec max_page(page) :: pos_integer

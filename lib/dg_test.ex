@@ -34,6 +34,7 @@ defmodule DgTest do
     Core.delete("items")
     Core.create("items")
     Schema.add_field(:items, "domain", "string")
+    Schema.add_field(:items, "resource", "string")
     Schema.add_field(:items, "slug", "string")
     Schema.add_field(:items, "title", "text_en")
     Schema.add_field(:items, "tags", "text_en", multi_valued: true)

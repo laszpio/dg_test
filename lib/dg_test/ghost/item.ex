@@ -3,8 +3,6 @@ defmodule DgTest.Ghost.Item do
 
   alias __MODULE__
 
-  import HtmlSanitizeEx
-
   @mapping [content: :html]
   @collect [authors: :name, tags: :name]
 
@@ -21,6 +19,7 @@ defmodule DgTest.Ghost.Item do
 
   defstruct [
     :id,
+    :resource,
     :domain,
     :slug,
     :title,
@@ -46,14 +45,21 @@ defmodule DgTest.Ghost.Item do
   def extract(key, value, default) when is_list(default) do
     value
     |> Enum.map(&Map.get(&1, Keyword.get(@collect, key) |> Atom.to_string()))
-    |> Enum.map(&strip_tags/1)
+    |> Enum.map(&sanitize/1)
   end
 
   @spec extract(atom, binary, nil | binary) :: nil | binary
   def extract(_key, value, default) do
-    case value |> strip_tags() do
+    case sanitize(value) do
       <<>> -> default
       v -> v
     end
+  end
+
+  @spec sanitize(binary) :: binary
+  def sanitize(value) do
+    value
+    |> HtmlSanitizeEx.strip_tags()
+    |> String.trim
   end
 end
