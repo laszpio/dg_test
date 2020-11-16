@@ -64,6 +64,10 @@ defmodule DgTest.Ghost.ItemTest do
       assert Item.sanitize("<h1>Title</h1>") == "Title"
     end
 
+    test "removes Javascript" do
+      assert Item.sanitize("<button onclick=\"alert('pwnt')\">Hi!</button>") == "Hi!"
+    end
+
     test "trims whitespaces" do
       assert Item.sanitize("\n\n\nBig Title\n\r") == "Big Title"
     end
