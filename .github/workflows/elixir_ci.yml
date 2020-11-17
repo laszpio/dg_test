@@ -1,0 +1,39 @@
+name: Elixir CI
+
+on: [push, pull_request]
+
+jobs:
+  build:
+    name: Build and test
+    runs-on: ubuntu-latest
+
+    steps:
+      - uses: actions/checkout@v2
+
+      - name: Set up Solr
+        run: docker-compose up -d
+
+      - name: Set up Elixir
+        uses: actions/setup-elixir@v1
+        with:
+          elixir-version: '1.11.0'
+          otp-version: '23.0'
+
+      - name: Restore dependencies cache
+        uses: actions/cache@v2
+        with:
+          path: deps
+          key: ${{ runner.os }}-mix-${{ hashFiles('**/mix.lock') }}
+          restore-keys: ${{ runner.os }}-mix-
+
+      - name: Install dependencies
+        run: mix deps.get
+
+      - name: Check Formatting
+        run: mix format --check-formatted
+
+      - name: Run tests
+        env:
+          SOLR_URL: "http://localhost:8983/solr"
+          SOLR_CMD: "docker exec dg_test_solr_1 solr"
+        run: mix test
