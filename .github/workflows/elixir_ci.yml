@@ -29,14 +29,17 @@ jobs:
       - name: Install dependencies
         run: mix deps.get
 
+      - name: Check Formatting
+        run: mix format --check-formatted
+
+      - name: Run Credo
+        run: mix credo
+
       - name: Run tests
         env:
           SOLR_URL: "http://localhost:8983/solr"
           SOLR_CMD: "docker exec dg_test_solr_1 solr"
         run: mix test
-
-      - name: Check Formatting
-        run: mix format --check-formatted
 
       - name: Stop Solr
         run: docker-compose down
