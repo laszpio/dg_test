@@ -4,12 +4,16 @@ on: [push, pull_request]
 
 jobs:
   build:
-
     name: Build and test
     runs-on: ubuntu-latest
 
-    steps:
+    services:
+      solr:
+        image: solr:8
+        ports:
+          - 8983:8983
 
+    steps:
       - uses: actions/checkout@v2
 
       - name: Set up Elixir
