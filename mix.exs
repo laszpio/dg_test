@@ -15,7 +15,7 @@ defmodule DgTest.MixProject do
   def application do
     [
       mod: {DgTest.Application, []},
-      extra_applications: [:logger]
+      extra_applications: [:logger, :hackney]
     ]
   end
 
