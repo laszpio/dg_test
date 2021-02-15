@@ -2,6 +2,7 @@ defmodule DgTest.Ghost.Item do
   @moduledoc false
 
   alias __MODULE__
+  import DgTest.Ghost.Timestamp
 
   @mapping [content: :html]
   @collect [authors: :name, tags: :name]
@@ -26,7 +27,7 @@ defmodule DgTest.Ghost.Item do
     :title,
     :content,
     :published_at,
-    created_at: DgTest.Ghost.Timestamp.utc_timestamp(),
+    created_at: utc_timestamp(),
     tags: [],
     authors: []
   ]
