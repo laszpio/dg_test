@@ -12,6 +12,7 @@ defmodule DgTest.Ghost.Item do
           title: binary,
           content: binary,
           published_at: binary,
+          created_at: binary,
           domain: binary,
           tags: list,
           authors: list
@@ -25,6 +26,7 @@ defmodule DgTest.Ghost.Item do
     :title,
     :content,
     :published_at,
+    :created_at,
     tags: [],
     authors: []
   ]
