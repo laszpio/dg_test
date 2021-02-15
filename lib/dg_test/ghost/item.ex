@@ -26,7 +26,7 @@ defmodule DgTest.Ghost.Item do
     :title,
     :content,
     :published_at,
-    :created_at,
+    created_at: DgTest.Ghost.Timestamp.utc_timestamp(),
     tags: [],
     authors: []
   ]
