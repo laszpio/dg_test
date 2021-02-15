@@ -2,6 +2,7 @@ defmodule DgTest.Ghost.Item do
   @moduledoc false
 
   alias __MODULE__
+  import DgTest.Ghost.Timestamp
 
   @mapping [content: :html]
   @collect [authors: :name, tags: :name]
@@ -12,6 +13,7 @@ defmodule DgTest.Ghost.Item do
           title: binary,
           content: binary,
           published_at: binary,
+          created_at: binary,
           domain: binary,
           tags: list,
           authors: list
@@ -25,6 +27,7 @@ defmodule DgTest.Ghost.Item do
     :title,
     :content,
     :published_at,
+    :created_at,
     tags: [],
     authors: []
   ]
@@ -33,6 +36,7 @@ defmodule DgTest.Ghost.Item do
   def new(source) do
     Enum.reduce(Map.to_list(%Item{}), %Item{}, fn {k, default}, acc ->
       attr = (Keyword.get(@mapping, k) || k) |> Atom.to_string()
+      source = Map.merge(source, %{created_at: utc_timestamp()})
 
       case Map.fetch(source, attr) do
         {:ok, v} -> %{acc | k => extract(k, v, default)}
