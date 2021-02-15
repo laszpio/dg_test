@@ -45,8 +45,6 @@ defmodule DgTest.Ghost.Item do
     end)
   end
 
-  def extract(:created_at, _, _), do: utc_timestamp()
-
   @spec extract(atom, list, list) :: list(binary)
   def extract(key, value, default) when is_list(default) do
     value
