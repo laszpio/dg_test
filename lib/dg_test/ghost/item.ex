@@ -27,7 +27,7 @@ defmodule DgTest.Ghost.Item do
     :title,
     :content,
     :published_at,
-    created_at: utc_timestamp(),
+    :created_at,
     tags: [],
     authors: []
   ]
@@ -36,6 +36,7 @@ defmodule DgTest.Ghost.Item do
   def new(source) do
     Enum.reduce(Map.to_list(%Item{}), %Item{}, fn {k, default}, acc ->
       attr = (Keyword.get(@mapping, k) || k) |> Atom.to_string()
+      source = Map.merge(source, %{created_at: utc_timestamp()})
 
       case Map.fetch(source, attr) do
         {:ok, v} -> %{acc | k => extract(k, v, default)}
@@ -43,6 +44,8 @@ defmodule DgTest.Ghost.Item do
       end
     end)
   end
+
+  def extract(:created_at, _, _), do: utc_timestamp()
 
   @spec extract(atom, list, list) :: list(binary)
   def extract(key, value, default) when is_list(default) do
