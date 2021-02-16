@@ -7,7 +7,7 @@ defmodule DgTest.Solr.CmdTest do
   alias DgTest.Solr
 
   setup_with_mocks([
-    {Solr, [], [solr_cmd: fn -> "runner args solr" end]}
+    {Solr, [], [solr_cmd: fn -> "runner args solr" end, solr_timeout: fn -> 5_000 end]}
   ]) do
     :ok
   end
