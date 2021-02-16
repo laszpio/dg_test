@@ -14,7 +14,7 @@ defmodule DgTest.Solr.Cmd do
   end
 
   def run(cmd) do
-    GenServer.call(__MODULE__, {:run, cmd})
+    GenServer.call(__MODULE__, {:run, cmd}, Solr.solr_timeout())
   end
 
   def handle_call({:run, cmd}, _from, state) do
@@ -32,4 +32,6 @@ defmodule DgTest.Solr.Cmd do
   end
 
   defdelegate solr_cmd, to: Solr, as: :solr_cmd
+
+  defdelegate solr_timeout, to: Solr, as: :solr_timeout
 end

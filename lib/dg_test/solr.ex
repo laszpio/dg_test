@@ -30,4 +30,14 @@ defmodule DgTest.Solr do
   def solr_cmd do
     Application.fetch_env!(:dg_test, :solr_cmd)
   end
+
+  @spec solr_timeout() :: binary
+  def solr_timeout do
+    timeout = Application.fetch_env!(:dg_test, :solr_timeout)
+
+    case Integer.parse(timeout) do
+      {t, _} -> t
+      :error -> 5000
+    end
+  end
 end

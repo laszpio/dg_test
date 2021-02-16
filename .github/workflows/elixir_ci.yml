@@ -36,4 +36,5 @@ jobs:
         env:
           SOLR_URL: "http://localhost:8983/solr"
           SOLR_CMD: "docker exec dg_test_solr_1 solr"
+          SOLR_TIMEOUT: "15000"
         run: mix test
