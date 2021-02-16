@@ -12,24 +12,16 @@ defmodule DgTest.Solr do
   end
 
   @spec solr_url() :: binary
-  def solr_url do
-    Application.fetch_env!(:dg_test, :solr_url)
-  end
+  def solr_url, do: Application.fetch_env!(:dg_test, :solr_url)
 
   @spec solr_core() :: binary
-  def solr_core do
-    Application.fetch_env!(:dg_test, :solr_core)
-  end
+  def solr_core, do: Application.fetch_env!(:dg_test, :solr_core)
 
   @spec target_url() :: binary
-  def target_url do
-    solr_url() <> "/" <> solr_core()
-  end
+  def target_url, do: solr_url() <> "/" <> solr_core()
 
   @spec solr_cmd() :: binary
-  def solr_cmd do
-    Application.fetch_env!(:dg_test, :solr_cmd)
-  end
+  def solr_cmd, do: Application.fetch_env!(:dg_test, :solr_cmd)
 
   @spec solr_timeout() :: binary
   def solr_timeout do
