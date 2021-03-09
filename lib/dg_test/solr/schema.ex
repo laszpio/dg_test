@@ -28,6 +28,7 @@ defmodule DgTest.Solr.Schema do
     fields: []
   ]
 
+  @spec new(map) :: t
   def new(schema) do
     %__MODULE__{}
     |> Utils.to_struct(schema)
