@@ -102,11 +102,7 @@ defmodule DgTest.Solr.Schema do
     end
   end
 
-  def parse_response(%{"responseHeader" => %{"status" => 0}}) do
-    :ok
-  end
+  defp parse_response(%{"responseHeader" => %{"status" => 0}}), do: :ok
 
-  def parse_response(%{"error" => %{"details" => details}}) do
-    {:error, details}
-  end
+  defp parse_response(%{"error" => %{"details" => error}}), do: {:error, error}
 end
