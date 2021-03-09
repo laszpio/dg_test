@@ -44,9 +44,7 @@ defmodule DgTest.Solr.Schema do
   end
 
   @spec parse_info(map) :: {:ok, t}
-  def parse_info(%{"schema" => schema}) do
-    {:ok, new(schema)}
-  end
+  defp parse_info(%{"schema" => schema}), do: {:ok, new(schema)}
 
   @spec add_field(atom | binary, binary, binary, keyword) :: :ok | {:error, binary}
   def add_field(core, name, type, opts \\ []) do
