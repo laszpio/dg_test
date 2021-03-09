@@ -23,7 +23,7 @@ defmodule DgTest.Solr do
   @spec solr_cmd() :: binary
   def solr_cmd, do: Application.fetch_env!(:dg_test, :solr_cmd)
 
-  @spec solr_timeout() :: binary
+  @spec solr_timeout() :: pos_integer
   def solr_timeout do
     timeout = Application.fetch_env!(:dg_test, :solr_timeout)
 
