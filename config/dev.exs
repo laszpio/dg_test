@@ -1,6 +1,7 @@
 import Config
 
 config :dg_test,
+  ghost_domain: System.get_env("GHOST_DOMAIN"),
   ghost_api: System.get_env("GHOST_API"),
   ghost_key: System.get_env("GHOST_KEY"),
   solr_url: System.get_env("SOLR_URL"),
