@@ -10,11 +10,24 @@ defmodule DgTest.Ghost.ClientTest do
   @api_url "http://localhost/ghost/api/v3/content"
   @api_key "token"
 
+  defp wait_until(fun, attempts \\ 100)
+
+  defp wait_until(fun, 0), do: assert(fun.())
+
+  defp wait_until(fun, attempts) do
+    if fun.() do
+      assert true
+    else
+      Process.sleep(20)
+      wait_until(fun, attempts - 1)
+    end
+  end
+
   @middleware [
     {Tesla.Middleware.BaseUrl, :call, [@api_url]},
     {Tesla.Middleware.Query, :call, [[key: @api_key, include: "authors,tags"]]},
     {Tesla.Middleware.JSON, :call, [[]]},
-    {Tesla.Middleware.Logger, :call, [[log_level: :info]]}
+    {Tesla.Middleware.Logger, :call, [[level: :debug]]}
   ]
 
   describe "start_link/1" do
@@ -34,10 +47,12 @@ defmodule DgTest.Ghost.ClientTest do
       assert {:ok, pid} = start_supervised({Client, {@domain, @api_url, @api_key}})
       assert Registry.lookup(ClientRegistry, @domain) == [{pid, nil}]
 
+      ref = Process.monitor(pid)
       assert Client.stop(pid)
+      assert_receive {:DOWN, ^ref, :process, ^pid, _reason}
 
       refute Process.alive?(pid)
-      assert Registry.lookup(ClientRegistry, @domain) == []
+      wait_until(fn -> Registry.lookup(ClientRegistry, @domain) == [] end)
     end
   end
 

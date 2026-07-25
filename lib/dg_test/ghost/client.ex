@@ -44,7 +44,7 @@ defmodule DgTest.Ghost.Client do
       {Tesla.Middleware.BaseUrl, api},
       {Tesla.Middleware.Query, [key: key, include: "authors,tags"]},
       Tesla.Middleware.JSON,
-      {Tesla.Middleware.Logger, log_level: :debug}
+      {Tesla.Middleware.Logger, level: :debug}
     ]
 
     Tesla.client(middleware)

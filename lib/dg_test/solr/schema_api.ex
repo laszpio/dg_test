@@ -44,7 +44,7 @@ defmodule DgTest.Solr.SchemaApi do
     [
       {Tesla.Middleware.BaseUrl, Solr.solr_url()},
       {Tesla.Middleware.JSON, decode_content_types: ["text/plain"]},
-      {Tesla.Middleware.Logger, log_level: :info}
+      {Tesla.Middleware.Logger, level: :info}
     ]
   end
 end

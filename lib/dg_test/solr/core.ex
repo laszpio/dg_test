@@ -36,7 +36,7 @@ defmodule DgTest.Solr.Core do
   def parse_status(%{"status" => status}, core) do
     case Map.get(status, to_string(core)) do
       nil -> {:error, "Core '#{core}' doesn't exist."}
-      %{} -> {:error, "Core '#{core}' doesn't exist."}
+      value when map_size(value) == 0 -> {:error, "Core '#{core}' doesn't exist."}
       _ -> {:ok, status}
     end
   end

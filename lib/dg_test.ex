@@ -22,11 +22,7 @@ defmodule DgTest do
   end
 
   def target do
-    %Hui.URL{
-      url: target_url(),
-      handler: "update",
-      headers: [{"content-type", "application/json"}]
-    }
+    {target_url() <> "/update", [{"content-type", "application/json"}]}
   end
 
   @spec recreate_index() :: no_return()

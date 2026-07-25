@@ -9,6 +9,6 @@ config :dg_test,
   solr_cmd: System.get_env("SOLR_CMD"),
   solr_timeout: System.get_env("SOLR_TIMEOUT")
 
-config :logger, level: :warn
+config :logger, level: :warning
 
 # config :tesla, adapter: Tesla.Mock

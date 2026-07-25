@@ -38,7 +38,7 @@ defmodule DgTest.Solr.Client do
     middleware = [
       {Tesla.Middleware.BaseUrl, solr_url()},
       {Tesla.Middleware.JSON, decode_content_types: ["text/plain"]},
-      {Tesla.Middleware.Logger, log_level: :info}
+      {Tesla.Middleware.Logger, level: :info}
     ]
 
     Tesla.client(middleware)

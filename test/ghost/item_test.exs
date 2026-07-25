@@ -43,7 +43,12 @@ defmodule DgTest.Ghost.ItemTest do
     end
 
     test "returns Post" do
-      assert Item.new(@sample_source) == %Item{
+      item = Item.new(@sample_source)
+
+      assert is_binary(item.created_at)
+      assert item.created_at =~ ~r/^\d{4}-\d{2}-\d{2}T/
+
+      assert %{item | created_at: nil} == %Item{
                id: "1234-5678-90AB",
                domain: "http://test.local",
                slug: "title-1234-5678-90AB",
