@@ -56,6 +56,28 @@ defmodule DgTest.Solr.CoreTest do
     end
   end
 
+  describe "parse_status/2" do
+    test "returns :ok when the core key is present with data" do
+      status = %{"status" => %{"core_1" => %{"name" => "core_1"}}}
+      assert Core.parse_status(status, "core_1") == {:ok, status["status"]}
+    end
+
+    test "returns :error when the core key is absent (nil)" do
+      status = %{"status" => %{}}
+      assert Core.parse_status(status, "nocore") == {:error, "Core 'nocore' doesn't exist."}
+    end
+
+    test "returns :error when the core key maps to an empty map" do
+      status = %{"status" => %{"nocore" => %{}}}
+      assert Core.parse_status(status, "nocore") == {:error, "Core 'nocore' doesn't exist."}
+    end
+
+    test "normalises an atom core name to match string status keys" do
+      status = %{"status" => %{"core_1" => %{"name" => "core_1"}}}
+      assert Core.parse_status(status, :core_1) == {:ok, status["status"]}
+    end
+  end
+
   describe "cores" do
     test "cores/0 returns list of cores" do
       cores = Core.cores()

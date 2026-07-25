@@ -140,4 +140,26 @@ defmodule DgTest.Solr.SchemaTest do
                 ]}
     end
   end
+
+  describe "remove_copy_field" do
+    test "remove_copy_field/3 removes an existing copy field" do
+      assert Schema.add_field(@core, "test_field_f", "string") == :ok
+      assert Schema.add_field(@core, "test_field_g", "string") == :ok
+      assert Schema.add_copy_field(@core, "test_field_f", "test_field_g") == :ok
+
+      {:ok, schema_before} = Schema.info(@core)
+
+      assert Enum.any?(schema_before.copy_fields, fn cf ->
+               cf["source"] == "test_field_f" and cf["dest"] == "test_field_g"
+             end)
+
+      assert Schema.remove_copy_field(@core, "test_field_f", "test_field_g") == :ok
+
+      {:ok, schema_after} = Schema.info(@core)
+
+      refute Enum.any?(schema_after.copy_fields, fn cf ->
+               cf["source"] == "test_field_f" and cf["dest"] == "test_field_g"
+             end)
+    end
+  end
 end
