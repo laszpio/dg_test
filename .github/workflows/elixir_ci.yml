@@ -29,8 +29,21 @@ jobs:
       - name: Install dependencies
         run: mix deps.get
 
+      - name: Restore PLT cache
+        uses: actions/cache@v4
+        with:
+          path: _build/dev/*.plt*
+          key: ${{ runner.os }}-plt-${{ hashFiles('**/mix.lock') }}
+          restore-keys: ${{ runner.os }}-plt-
+
       - name: Check Formatting
         run: mix format --check-formatted
+
+      - name: Run Credo
+        run: mix credo --strict
+
+      - name: Run Dialyzer
+        run: mix dialyzer
 
       - name: Run tests
         env:
