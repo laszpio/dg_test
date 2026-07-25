@@ -1,4 +1,6 @@
 defmodule DgTest.Solr.Cmd do
+  @moduledoc false
+
   use GenServer
 
   alias DgTest.Solr

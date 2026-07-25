@@ -1,4 +1,6 @@
 defmodule DgTest.Ghost do
+  @moduledoc false
+
   use DynamicSupervisor
 
   def init(_arg) do

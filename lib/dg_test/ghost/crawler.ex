@@ -1,4 +1,6 @@
 defmodule DgTest.Ghost.Crawler do
+  @moduledoc false
+
   alias __MODULE__
 
   alias DgTest.Ghost.Resource

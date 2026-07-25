@@ -3,8 +3,8 @@ defmodule DgTest.Solr.CoreTest do
 
   import Mock
 
-  alias DgTest.Solr.Core
   alias DgTest.Solr.Cmd
+  alias DgTest.Solr.Core
 
   def prepare_solr do
     Core.create("core_1")

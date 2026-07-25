@@ -1,9 +1,9 @@
 defmodule DgTest.Solr.Schema do
   @moduledoc false
 
-  alias DgTest.Solr.Utils
   alias DgTest.Solr.Field
   alias DgTest.Solr.SchemaApi
+  alias DgTest.Solr.Utils
 
   @typedoc """
   Struct for the common and SolrCloud schema.

@@ -1,5 +1,7 @@
 defmodule DgTest.Ghost.Client do
-  use GenServer
+  @moduledoc false
+
+  use GenServer, restart: :temporary
 
   alias DgTest.Ghost.ClientRegistry
 

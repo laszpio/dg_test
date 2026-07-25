@@ -1,9 +1,9 @@
 defmodule DgTest.Solr.SchemaTest do
   use ExUnit.Case, async: true
 
-  alias DgTest.Solr.Schema
   alias DgTest.Solr.Core
   alias DgTest.Solr.Field
+  alias DgTest.Solr.Schema
 
   @core "test_schema_test"
 

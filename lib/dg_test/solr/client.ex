@@ -1,4 +1,6 @@
 defmodule DgTest.Solr.Client do
+  @moduledoc false
+
   use GenServer
 
   alias DgTest.Solr
@@ -33,8 +35,8 @@ defmodule DgTest.Solr.Client do
     end
   end
 
-  @spec client() :: %Tesla.Client{}
-  def client() do
+  @spec client() :: Tesla.Client.t()
+  def client do
     middleware = [
       {Tesla.Middleware.BaseUrl, solr_url()},
       {Tesla.Middleware.JSON, decode_content_types: ["text/plain"]},

@@ -2,8 +2,8 @@ defmodule DgTest do
   @moduledoc false
 
   import DgTest.Solr
-  alias DgTest.Solr.{Core, Schema}
   alias DgTest.Ghost.Crawler
+  alias DgTest.Solr.{Core, Schema}
 
   def reindex do
     Hui.update(target(), items())
