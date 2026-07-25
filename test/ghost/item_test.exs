@@ -23,12 +23,14 @@ defmodule DgTest.Ghost.ItemTest do
   describe "new/1" do
     test "returns with timestamp" do
       assert %Item{created_at: created_at} = Item.new(%{})
-      assert created_at <= DateTime.utc_now() |> DateTime.to_iso8601()
+      assert is_binary(created_at)
+      assert created_at =~ ~r/^\d{4}-\d{2}-\d{2}T/
     end
 
     test "overwrites timestamp" do
       assert %Item{created_at: created_at} = Item.new(%{created_at: "datetime"})
-      assert created_at <= DateTime.utc_now() |> DateTime.to_iso8601()
+      assert is_binary(created_at)
+      assert created_at =~ ~r/^\d{4}-\d{2}-\d{2}T/
     end
 
     test "maps keys when defined" do

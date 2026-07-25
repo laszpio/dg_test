@@ -34,9 +34,10 @@ defmodule DgTest.Ghost.Item do
 
   @spec new(map) :: t
   def new(source) do
+    source = Map.put_new(source, "created_at", utc_timestamp())
+
     Enum.reduce(Map.to_list(%Item{}), %Item{}, fn {k, default}, acc ->
       attr = (Keyword.get(@mapping, k) || k) |> Atom.to_string()
-      source = Map.merge(source, %{created_at: utc_timestamp()})
 
       case Map.fetch(source, attr) do
         {:ok, v} -> %{acc | k => extract(k, v, default)}

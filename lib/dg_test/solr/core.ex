@@ -34,9 +34,10 @@ defmodule DgTest.Solr.Core do
   end
 
   def parse_status(%{"status" => status}, core) do
-    case Map.get(status, core) == %{} do
-      true -> {:error, "Core '#{core}' doesn't exist."}
-      false -> {:ok, status}
+    case Map.get(status, to_string(core)) do
+      nil -> {:error, "Core '#{core}' doesn't exist."}
+      %{} -> {:error, "Core '#{core}' doesn't exist."}
+      _ -> {:ok, status}
     end
   end
 
@@ -53,15 +54,19 @@ defmodule DgTest.Solr.Core do
   def ping(core) do
     case Client.get!("/#{core}/admin/ping") do
       %Tesla.Env{status: 200} -> :ok
-      %Tesla.Env{status: 404} -> :error
+      %Tesla.Env{status: _} -> :error
     end
   end
 
   @spec create(binary) :: {:ok, binary} | {:error, binary}
   def create(core) do
-    case Cmd.run("create -c #{core}") do
-      {:ok, _} -> {:ok, "Created new core '#{core}'"}
-      {:error, _} -> {:error, "Core '#{core}' already exists"}
+    if valid_core_name?(core) do
+      case Cmd.run("create -c #{core}") do
+        {:ok, _} -> {:ok, "Created new core '#{core}'"}
+        {:error, _} -> {:error, "Core '#{core}' already exists"}
+      end
+    else
+      {:error, "Invalid core name"}
     end
   end
 
@@ -71,11 +76,15 @@ defmodule DgTest.Solr.Core do
     :ok
   end
 
-  @spec delete(binary) :: {:ok, binary} | {:ok, binary}
+  @spec delete(binary) :: {:ok, binary} | {:error, binary}
   def delete(core) do
-    case Cmd.run("delete -c #{core}") do
-      {:ok, _} -> {:ok, "Deleted core '#{core}'"}
-      {:error, _} -> {:error, "Failed to delete core '#{core}'"}
+    if valid_core_name?(core) do
+      case Cmd.run("delete -c #{core}") do
+        {:ok, _} -> {:ok, "Deleted core '#{core}'"}
+        {:error, _} -> {:error, "Failed to delete core '#{core}'"}
+      end
+    else
+      {:error, "Invalid core name"}
     end
   end
 
@@ -84,6 +93,8 @@ defmodule DgTest.Solr.Core do
     delete(core)
     :ok
   end
+
+  defp valid_core_name?(core), do: to_string(core) =~ ~r/^[a-zA-Z0-9_-]+$/
 
   @spec rename(binary, binary) :: :ok | {:error, binary}
   def rename(core, other) do

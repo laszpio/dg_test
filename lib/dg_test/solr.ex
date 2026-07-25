@@ -1,16 +1,4 @@
 defmodule DgTest.Solr do
-  use Application
-
-  def start(_type, _args) do
-    children = [
-      {DgTest.Solr.Client, []},
-      {DfTest.Solr.Cmd, []},
-      {DgTest.Solr.SchemaApi, []}
-    ]
-
-    Supervisor.start_link(children, strategy: :one_for_one)
-  end
-
   @spec solr_url() :: binary
   def solr_url, do: Application.fetch_env!(:dg_test, :solr_url)
 
@@ -25,11 +13,15 @@ defmodule DgTest.Solr do
 
   @spec solr_timeout() :: pos_integer
   def solr_timeout do
-    timeout = Application.fetch_env!(:dg_test, :solr_timeout)
+    case Application.fetch_env!(:dg_test, :solr_timeout) do
+      nil ->
+        5000
 
-    case Integer.parse(timeout) do
-      {t, _} -> t
-      :error -> 5000
+      timeout ->
+        case Integer.parse(timeout) do
+          {t, _} -> t
+          :error -> 5000
+        end
     end
   end
 end

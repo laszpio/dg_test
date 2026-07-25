@@ -27,7 +27,7 @@ defmodule DgTest.Solr.Cmd do
 
     case Kernel.apply(System, :cmd, [base, opts ++ String.split(cmd), @cmd_opts]) do
       {output, 0} -> {:ok, output}
-      {output, 1} -> {:error, output}
+      {output, _code} -> {:error, output}
     end
   end
 

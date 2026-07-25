@@ -23,15 +23,15 @@ defmodule DgTest.Ghost.Client do
 
   def get!(domain, path, query: query) do
     case Registry.lookup(ClientRegistry, domain) do
-      [{pid, _}] -> pid
-      _ -> nil
+      [{pid, _}] -> GenServer.call(pid, {:get!, path, query: query})
+      [] -> raise "No Ghost client running for domain #{domain}"
     end
-    |> GenServer.call({:get!, path, query: query})
   end
 
   def handle_call({:get!, path, query: query}, _from, client) do
     case Tesla.get!(client, path, query: query) do
       %Tesla.Env{status: 200, body: body} -> {:reply, body, client}
+      %Tesla.Env{status: status} -> {:reply, {:error, status}, client}
     end
   end
 
@@ -44,7 +44,7 @@ defmodule DgTest.Ghost.Client do
       {Tesla.Middleware.BaseUrl, api},
       {Tesla.Middleware.Query, [key: key, include: "authors,tags"]},
       Tesla.Middleware.JSON,
-      {Tesla.Middleware.Logger, log_level: :info}
+      {Tesla.Middleware.Logger, log_level: :debug}
     ]
 
     Tesla.client(middleware)

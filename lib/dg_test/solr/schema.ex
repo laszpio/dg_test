@@ -41,6 +41,7 @@ defmodule DgTest.Solr.Schema do
     case SchemaApi.info(core) do
       %Tesla.Env{status: 200, body: body} -> parse_info(body)
       %Tesla.Env{status: 404} -> {:error, "Core '#{core}' doesn't exist."}
+      %Tesla.Env{status: status} -> {:error, "Unexpected response status #{status}"}
     end
   end
 
@@ -84,7 +85,7 @@ defmodule DgTest.Solr.Schema do
   @spec remove_copy_field(binary, binary, binary) :: :ok | {:error, binary}
   def remove_copy_field(core, source, dest) do
     change = %{
-      "add-copy-field" => %{
+      "delete-copy-field" => %{
         source: source,
         dest: dest
       }
@@ -98,6 +99,7 @@ defmodule DgTest.Solr.Schema do
     case SchemaApi.change(core, change) do
       %Tesla.Env{status: 200, body: body} -> parse_response(body)
       %Tesla.Env{status: 400, body: body} -> parse_response(body)
+      %Tesla.Env{status: status} -> {:error, "Unexpected response status #{status}"}
     end
   end
 
