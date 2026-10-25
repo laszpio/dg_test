@@ -8,7 +8,7 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@v7
 
       - name: Set up Solr
         run: docker compose up -d
@@ -16,25 +16,25 @@ jobs:
       - name: Set up Elixir
         uses: erlef/setup-beam@v1
         with:
-          elixir-version: '1.18.1'
-          otp-version: '27.0'
+          version-file: .tool-versions
+          version-type: strict
 
       - name: Restore dependencies cache
-        uses: actions/cache@v4
+        uses: actions/cache@v6
         with:
           path: deps
-          key: ${{ runner.os }}-mix-${{ hashFiles('**/mix.lock') }}
-          restore-keys: ${{ runner.os }}-mix-
+          key: ${{ runner.os }}-mix-${{ hashFiles('.tool-versions', '**/mix.lock') }}
+          restore-keys: ${{ runner.os }}-mix-${{ hashFiles('.tool-versions') }}-
 
       - name: Install dependencies
         run: mix deps.get
 
       - name: Restore PLT cache
-        uses: actions/cache@v4
+        uses: actions/cache@v6
         with:
           path: _build/dev/*.plt*
-          key: ${{ runner.os }}-plt-${{ hashFiles('**/mix.lock') }}
-          restore-keys: ${{ runner.os }}-plt-
+          key: ${{ runner.os }}-plt-${{ hashFiles('.tool-versions', '**/mix.lock') }}
+          restore-keys: ${{ runner.os }}-plt-${{ hashFiles('.tool-versions') }}-
 
       - name: Check Formatting
         run: mix format --check-formatted
